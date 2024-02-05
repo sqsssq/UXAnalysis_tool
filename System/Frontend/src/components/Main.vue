@@ -3,7 +3,7 @@
  * @Author: Qing Shi
  * @Date: 2023-06-29 10:17:17
  * @LastEditors: Qing Shi
- * @LastEditTime: 2024-01-26 16:13:54
+ * @LastEditTime: 2024-02-04 16:45:37
 -->
 <template>
     <div id="navBar">
@@ -46,6 +46,9 @@
 import ControlList from './ControlList.vue';
 import MainView from './MainView.vue';
 import RecommendList from './RecommendList.vue';
+import { useDataStore } from "../stores/counter";
+
+import category_p from '../assets/AI_tool/category_p.json';
 export default {
     name: "APP",
     props: ["msgH"],
@@ -83,16 +86,16 @@ export default {
             },{
                 value: 'P10',
                 label: 'P10'
-            },{
-                value: 'P11',
-                label: 'P11'
             }]
         };
     },
     methods: {
     },
     created() {},
-    mounted() {},
+    mounted() {
+        let dataStore = useDataStore();
+        dataStore.categorySource = category_p;
+    },
     components: { ControlList, RecommendList, MainView }
 }
 </script>

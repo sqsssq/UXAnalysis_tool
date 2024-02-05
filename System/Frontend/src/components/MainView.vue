@@ -5,13 +5,6 @@
  * @LastEditors: Qing Shi
  * @LastEditTime: 2024-02-04 16:09:32
 -->
-<!--
- * @Description: Prediction Comparator View
- * @Author: Qing Shi
- * @Date: 2023-06-29 10:17:17
- * @LastEditors: Qing Shi
- * @LastEditTime: 2024-01-24 17:01:41
--->
 <template>
     <div class="frameworkBody">
         <div style=" height: 30px;text-align: left; font-size: 24px; color: white; font-weight: bold; justify-content: space-between; display: flex;">
@@ -76,16 +69,16 @@
             </el-dialog>
             <div id="mainView" ref="mainView" style="height: calc(100% - 95px); width: 100%;display:flex; justify-content:center; align-items:center;">
                 <div>
-                    <video-player src="../../public/AI_Tool/P1/video.mp4" playsinline :controls="false" :volume="0.2" :height="1 * videoHeight" :playback-rates="[0.7, 1.0, 1.5, 2.0]" @mounted="handleMounted" @ready="handleEvent($event)" @play="handleEvent($event)" @pause="handleEvent($event)"
+                    <video-player :src="config.src" playsinline :controls="false" :volume="0.2" :height="1 * videoHeight" :playback-rates="[0.7, 1.0, 1.5, 2.0]" @mounted="handleMounted" @ready="handleEvent($event)" @play="handleEvent($event)" @pause="handleEvent($event)"
                         @ended="handleEvent($event)" @loadeddata="handleEvent($event)" @waiting="handleEvent($event)" @playing="handleEvent($event)" @canplay="handleEvent($event)" @canplaythrough="handleEvent($event)" @timeupdate="handleEvent(player?.currentTime())"
                     /></div>
             </div>
             <div style="width: 100%; height: 85px; background-color: rgba(83, 83, 83, 0);">
                 <div style="height: 50px; width: 100%; padding: 0px 0px 0px 0px; display: flex; justify-content: center; align-items: center;">
                     <div style="height: 0px; width: 100%;display: flex; justify-content: center; align-items: center;">
-                        <div style="width: 100%; height: 8px; background-color: #5d5f67; border-radius: 20px;"></div>
-                        <div style="position: absolute; left: 0px; top: 8px;width: 100%; height: 3px; background-color: rgba(255, 255, 255); border-radius: 0px;"></div>
-                        <div style="position: absolute; left: 40%; top: 8px;width: 20%; height: 3px; background-color: #5d5f67; border-radius: 0px;"></div>
+                        <div id="progressBar" @click="clickBar" style="width: 100%; height: 8px; background-color: #5d5f67; border-radius: 20px;"></div>
+                        <div id="playBar" style="position: absolute; left: 0px; top: 8px;width: 100%; height: 3px; background-color: rgba(255, 255, 255); border-radius: 0px;"></div>
+                        <div  style="position: absolute; left: 40%; top: 8px;width: 20%; height: 3px; background-color: #5d5f67; border-radius: 0px;"></div>
                         <div :style="{position: 'absolute', left: '0px', width: (progressBar) + '%', height: '8px', backgroundColor: '#fff', borderRadius: '20px' }"></div>
                         <div :style="{backgroundColor: 'white', border: '1px solid #5d5f67', height: '12px', width: '12px', position: 'absolute', borderRadius: '12px', left: 'calc(' + (progressBar) + '% - 6px)'}"></div>
                         <div v-for="(d, i) in marker_data" :key="'main_' + i" :style="{backgroundColor: '#5a9cf8', height: '12px', width: '4px', position: 'absolute', 'border-radius': '4px', left: 'calc(' + d.percentage + '% - 2px)'}"></div>
@@ -145,6 +138,9 @@ export default {
     props: [],
     data() {
         return {
+            config: {
+                src: ''
+            },
             showTable: 0,
             select_video: '',
             main_data: [],
@@ -201,6 +197,10 @@ export default {
         };
     },
     methods: {
+        clickBar(event) {
+            let xPos = event.clientX;
+            console.log(xPos);
+        },
         translate(x, y, deg) {
             return `translate(${x}, ${y}) rotate(${deg})`;
         },
@@ -249,7 +249,8 @@ export default {
         this.select_video = 'P1';
 
         this.main_data = v_data[this.select_video];
-        console.log(v_data);
+        // console.log(v_data);
+        this.config.src = '../../public/AI_Tool/' + this.select_video + '/video.mp4'
 
         const dataStore = useDataStore();
         let _this = this;

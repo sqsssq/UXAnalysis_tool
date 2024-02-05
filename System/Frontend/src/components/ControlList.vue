@@ -1,4 +1,11 @@
 <!--
+ * @Description: 
+ * @Author: Qing Shi
+ * @Date: 2024-02-01 19:32:17
+ * @LastEditors: Qing Shi
+ * @LastEditTime: 2024-02-04 16:39:32
+-->
+<!--
  *                        _oo0oo_
  *                       o8888888o
  *                       88" . "88
@@ -24,22 +31,15 @@
  *            佛祖保佑     永不宕机     永无BUG
  -->
 
-<!--
- * @Description: Prediction Comparator View
- * @Author: Qing Shi
- * @Date: 2023-06-29 10:17:17
- * @LastEditors: Qing Shi
- * @LastEditTime: 2024-01-29 23:53:44
--->
 <template>
     <div class="frameworkBody">
-        <div>
+        <div style="height: 80px;">
             <div style="text-align: left; font-size: 24px; color: white; font-weight: bold;">
                 推荐设置
             </div>
             <el-switch v-model="recommendTag" class="mb-2" style="--el-switch-on-color: #409eff; --el-switch-off-color: #409eff" active-text="二级标签推荐" inactive-text="一级标签推荐" />
         </div>
-        <div id="problem_tag" style="margin-top: 10px;">
+        <div id="problem_tag" style="height: calc(100% - 80px)">
             <el-dialog v-model="addPoint" :title="'添加' + add_tag_level + '级标签'" width="15%" height="100px" :append-to="'#problems_tag'" :modal="false" :class="'add_dialog'">
                 <span>
                     <el-input v-model="tag_name" placeholder="Please input" />
@@ -51,10 +51,10 @@
                     </el-button>
                 </div>
             </el-dialog>
-            <div style="text-align: left; font-size: 24px; color: white; font-weight: bold;">
+            <div style="text-align: left; font-size: 24px; color: white; font-weight: bold; height: 40px;">
                 可用性问题标签
             </div>
-            <div style="text-align: left; padding-left: 24px; height: 35px;width: 100%; justify-content: space-between;">
+            <div style="text-align: left; padding-left: 24px; height: 45px;width: 100%; justify-content: space-between;">
                 <span>
                                     <el-checkbox label="全选" size="large" />
                                 </span>
@@ -62,16 +62,18 @@
                                     <el-button style="margin-top: -10px;" type="primary" @click="showDialog(1, dataSource)">添加一级标签</el-button>
                                 </span>
             </div>
+            <div style="width: 100%; height: calc(100% - 85px); overflow-y: auto;">
             <el-tree :data="dataSource" show-checkbox node-key="id" default-expand-all :expand-on-click-node="false">
                 <template #default="{ node, data }">
                                 <span class="custom-tree-node">
-                                    <span> <div :style="{float: 'left', 'margin': '5px 10px 0px 0px', width: '20px', height: '20px', 'background-color': colorMap[data.id], 'borderRadius': '20px'}"></div> {{ node.label }}</span>
+                                    <span> <div :style="{float: 'left', 'margin': '5px 10px 0px 0px', width: '20px', height: '20px', 'background-color': colorMap[data.id], 'borderRadius': node.level == 1 ? '20px' : '0px'}"></div> {{ node.label }}</span>
                                     <span style="padding-top: 5px;">
                                     <a @click="showDialog(2, data)"> <svg t="1706082110613" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4198" width="20" height="20"><path d="M832 1024H192c-106.048 0-192-86.016-192-192V192a192 192 0 0 1 192-192h640a192 192 0 0 1 192 192v640c0 105.984-85.952 192-192 192z m64-832a64 64 0 0 0-64-64H192a64 64 0 0 0-64 64v640c0 35.392 28.608 64 64 64h640c35.392 0 64-28.608 64-64V192z m-192 384h-128v128c0 35.392-28.608 64-64 64s-64-28.608-64-64v-128h-128a64 64 0 1 1 0-128h128v-128a64 64 0 1 1 128 0v128h128a64 64 0 1 1 0 128z" fill="white" p-id="4199"></path></svg> </a>
                                     </span>
                                 </span>
                 </template>
             </el-tree>
+        </div>
         </div>
     </div>
 </template>
@@ -93,62 +95,7 @@ export default {
             id_cnt: 12,
             selectData: [],
             colorMap: ['', '#F6D962', '#D5A138', '#EF753A', '#F08F70', '#EB7D81', '#B76E90', '#986EA4', '#9286B3', '#8796BC', '#A3BFCE', '#B4D3B4', '#D1EFFF', '#89D1FF', '#1B90FF', '#0057D2', '#002A86', '#E2D8FF', '#B894FF', '#7858FF', '#470CED', '#1C0C6E', '#FFDCF3', '#FF8AF0', '#F31DED', '#A100C2', '#510080', '#FFDCE8', '#FEADC8', '#FA4F96', '#BA066C', '#71014B', '#FFD5EA', '#FF8CB2', '#EE3939', '#AA0808', '#5A0404', '#FFF3B8', '#FFC933', '#E76500', '#A93E00', '#6D1900', '#EBF5CB', '#97DD40', '#36A41D', '#256F3A', '#164323', '#C2FCEE', '#2CE0BF', '#049F9A', '#046C7A', '#02414C', '#EAECEE', '#A9B4BE', '#5B738B', '#354A5F', '#1A2733'],
-            dataSource: [{
-                id: 1,
-                level: 1,
-                label: '界面设计',
-                children: []
-            }, {
-                id: 2,
-                level: 1,
-                label: '错误处理',
-                children: []
-            }, {
-                id: 3,
-                level: 1,
-                label: '性能问题',
-                children: []
-            }, {
-                id: 4,
-                level: 1,
-                label: '功能性问题',
-                children: []
-            }, {
-                id: 5,
-                level: 1,
-                label: '操作反馈',
-                children: []
-            }, {
-                id: 6,
-                level: 1,
-                label: '用户历史数据管理',
-                children: []
-            }, {
-                id: 7,
-                level: 1,
-                label: '用户界面反馈',
-                children: []
-            }, {
-                id: 8,
-                level: 1,
-                label: '输出结果不符',
-                children: []
-            }, {
-                id: 9,
-                level: 1,
-                label: '系统理解不足',
-                children: []
-            }, {
-                id: 10,
-                level: 1,
-                label: '美学和设计满意度',
-                children: []
-            }, {
-                id: 11,
-                level: 1,
-                label: '定制化和个性化问题',
-                children: []
-            }],
+            dataSource: [],
             recommendTag: false,
         };
     },
@@ -200,7 +147,10 @@ export default {
          * @return {*}
          */
         dataStore.$subscribe((mutations) => {
-
+            console.log(mutations);
+            if (mutations.events.key == 'categorySource') {
+                this.dataSource = mutations.events.newValue;
+            }
 
         });
     },
