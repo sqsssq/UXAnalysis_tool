@@ -56,7 +56,7 @@
                     <h2>
                         二级标签 (可选)
                     </h2>
-
+    
                     <h2>
                         其他相同标签问题：
                     </h2>
@@ -76,23 +76,26 @@
             <div style="width: 100%; height: 85px; background-color: rgba(83, 83, 83, 0);">
                 <div style="height: 50px; width: 100%; padding: 0px 0px 0px 0px; display: flex; justify-content: center; align-items: center;">
                     <div style="height: 0px; width: 100%;display: flex; justify-content: center; align-items: center;">
-                        <div id="progressBar" @click="clickBar" style="width: 100%; height: 8px; background-color: #5d5f67; border-radius: 20px;"></div>
-                        <div id="playBar" style="position: absolute; left: 0px; top: 8px;width: 100%; height: 3px; background-color: rgba(255, 255, 255); border-radius: 0px;"></div>
-                        <div  style="position: absolute; left: 40%; top: 8px;width: 20%; height: 3px; background-color: #5d5f67; border-radius: 0px;"></div>
-                        <div :style="{position: 'absolute', left: '0px', width: (progressBar) + '%', height: '8px', backgroundColor: '#fff', borderRadius: '20px' }"></div>
-                        <div :style="{backgroundColor: 'white', border: '1px solid #5d5f67', height: '12px', width: '12px', position: 'absolute', borderRadius: '12px', left: 'calc(' + (progressBar) + '% - 6px)'}"></div>
+                        <div @click="clickBar" style="width: 100%; height: 50px;display: flex; justify-content: center; align-items: center; cursor: pointer;">
+                            <div id="progressBar" ref="progressBar"  style="width: 100%; height: 8px; background-color: #5d5f67; border-radius: 20px;"></div>
+                            <div :style="{position: 'absolute', left: '0px', width: (progressBar) + '%', height: '8px', backgroundColor: '#fff', borderRadius: '20px' }"></div>
+                            <div :style="{backgroundColor: 'white', border: '1px solid #5d5f67', height: '12px', width: '12px', position: 'absolute', borderRadius: '12px', left: 'calc(' + (progressBar) + '% - 6px)'}"></div>
+                        </div>
                         <div v-for="(d, i) in marker_data" :key="'main_' + i" :style="{backgroundColor: '#5a9cf8', height: '12px', width: '4px', position: 'absolute', 'border-radius': '4px', left: 'calc(' + d.percentage + '% - 2px)'}"></div>
+    
+                        <div id="playBar" style="position: absolute; left: 0px; top: 8px;width: 100%; height: 3px; background-color: rgba(255, 255, 255); border-radius: 0px;"></div>
+                        <div style="position: absolute; left: 40%; top: 8px;width: 20%; height: 3px; background-color: #5d5f67; border-radius: 0px;"></div>
                     </div>
     
                     <div style="width: 100%; position: absolute; top: 1px;">
                         <div v-for="(tag_d, tag_i) in marker_data" :key="'marker' + tag_i" :style="{position: 'absolute', left: 'calc('+tag_d.percentage + '% - 8px)'}">
                             <div v-for="(d, i) in tag_d.tag" :key="'tag' + i" :style="{
-                                        height: '16px', width: '16px', backgroundColor: colorMap[d], borderRadius: '10px'
-                                    }"></div>
+                                            height: '16px', width: '16px', backgroundColor: colorMap[d], borderRadius: '10px'
+                                        }"></div>
                         </div>
                     </div>
                     <div style="width: 100%; position: absolute; top: 36px;">
-                        <div v-for="(d, i) in marker_data" :key="'warning' + i" :style="{position: 'absolute', left: 'calc(' + d.percentage + '% - 8px)'}">
+                        <div v-for="(d, i) in marker_data" :key="'warning' + i" :style="{position: 'absolute', left: 'calc(' + d.percentage + '% - 8px)', opacity: d.status == 2 ? 1 : 0}">
                             <svg t="1706257862659" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="9466" width="16" height="16"><path d="M512 64c126.677333 3.328 232.192 47.146667 316.501333 131.498667C912.853333 279.808 956.672 385.28 960 512c-3.328 126.677333-47.146667 232.192-131.498667 316.501333C744.192 912.853333 638.72 956.672 512 960c-126.677333-3.328-232.192-47.146667-316.501333-131.498667C111.146667 744.192 67.328 638.72 64 512c3.328-126.677333 47.146667-232.192 131.498667-316.501333C279.808 111.146667 385.28 67.328 512 64zM512 256c-17.322667 0-31.658667 6.357333-43.008 19.029333A58.197333 58.197333 0 0 0 453.973333 320l23.04 256a35.925333 35.925333 0 0 0 11.477334 22.485333 34.048 34.048 0 0 0 23.466666 8.533334 33.621333 33.621333 0 0 0 23.466667-8.533334 36.138667 36.138667 0 0 0 11.52-22.485333l23.04-256a57.984 57.984 0 0 0-15.018667-44.970667A55.381333 55.381333 0 0 0 511.914667 256H512z m0 512c14.677333-0.64 26.88-5.674667 36.522667-15.018667 9.642667-9.344 14.506667-21.333333 14.506666-35.968A49.578667 49.578667 0 0 0 512 665.984a49.493333 49.493333 0 0 0-50.986667 51.029333c0 14.677333 4.821333 26.666667 14.506667 35.968 9.642667 9.301333 21.802667 14.293333 36.48 15.018667z" fill="#ecb050" fill-opacity=".96" p-id="9467"></path></svg>
                         </div>
                     </div>
@@ -101,7 +104,7 @@
                     <div>
                         <div style="display: flex; justify-content: center; align-items: center; height: 30px;">
                             <a @click="playVideo()">
-                                        <svg v-if="playTag == 1" t="1706253575488" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4211" width="30" height="30"><path d="M817.088 484.96l-512-323.744C295.232 154.976 282.752 154.592 272.576 160.224 262.336 165.856 256 176.608 256 188.256l0 647.328c0 11.648 6.336 22.4 16.576 28.032 4.8 2.656 10.112 3.968 15.424 3.968 5.952 0 11.904-1.664 17.088-4.928l512-323.616C826.368 533.184 832 522.976 832 512 832 501.024 826.368 490.816 817.088 484.96z" fill="#ffffff" p-id="4212"></path></svg><svg v-else t="1706534722560" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4218" width="30" height="30"><path d="M304 176h80v672h-80zM712 176h-64c-4.4 0-8 3.6-8 8v656c0 4.4 3.6 8 8 8h64c4.4 0 8-3.6 8-8V184c0-4.4-3.6-8-8-8z" p-id="4219" fill="#ffffff"></path></svg></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                            <svg v-if="playTag == 1" t="1706253575488" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4211" width="30" height="30"><path d="M817.088 484.96l-512-323.744C295.232 154.976 282.752 154.592 272.576 160.224 262.336 165.856 256 176.608 256 188.256l0 647.328c0 11.648 6.336 22.4 16.576 28.032 4.8 2.656 10.112 3.968 15.424 3.968 5.952 0 11.904-1.664 17.088-4.928l512-323.616C826.368 533.184 832 522.976 832 512 832 501.024 826.368 490.816 817.088 484.96z" fill="#ffffff" p-id="4212"></path></svg><svg v-else t="1706534722560" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4218" width="30" height="30"><path d="M304 176h80v672h-80zM712 176h-64c-4.4 0-8 3.6-8 8v656c0 4.4 3.6 8 8 8h64c4.4 0 8-3.6 8-8V184c0-4.4-3.6-8-8-8z" p-id="4219" fill="#ffffff"></path></svg></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                             <svg t="1706254098018" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="5623" width="25" height="25"><path d="M483.157333 71.466667A32 32 0 0 1 512 53.333333c253.312 0 458.666667 205.354667 458.666667 458.666667S765.312 970.666667 512 970.666667 53.333333 765.312 53.333333 512c0-188.16 113.28-349.738667 275.2-420.48a32 32 0 1 1 25.6 58.624 394.666667 394.666667 0 1 0 229.632-26.325333l38.570667 48.213333a32 32 0 0 1-50.005333 39.978667l-85.333334-106.666667a32 32 0 0 1-3.84-33.877333z m-42.666666 262.357333a32 32 0 0 1 18.176 28.842667v298.666666a32 32 0 0 1-64 0v-232.106666l-54.656 43.776a32 32 0 0 1-40.021334-50.005334l106.666667-85.333333a32 32 0 0 1 33.877333-3.84zM608 394.666667a42.666667 42.666667 0 0 0-42.666667 42.666666v149.333334a42.666667 42.666667 0 1 0 85.333334 0v-149.333334a42.666667 42.666667 0 0 0-42.666667-42.666666z m-106.666667 42.666666a106.666667 106.666667 0 0 1 213.333334 0v149.333334a106.666667 106.666667 0 0 1-213.333334 0v-149.333334z" p-id="5624" fill="white"></path></svg>&nbsp;
                             <svg t="1706253984610" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4390" width="25" height="25"><path d="M53.333333 512C53.333333 258.688 258.688 53.333333 512 53.333333a32 32 0 0 1 25.002667 52.010667l-85.333334 106.666667a32 32 0 0 1-50.005333-40.021334l38.528-48.128C256.512 157.568 117.333333 318.549333 117.333333 512A394.666667 394.666667 0 1 0 669.866667 150.186667a32 32 0 0 1 25.6-58.666667A458.752 458.752 0 0 1 970.666667 512c0 253.312-205.354667 458.666667-458.666667 458.666667S53.333333 765.312 53.333333 512z m387.2-178.176a32 32 0 0 1 18.133334 28.842667v298.666666a32 32 0 0 1-64 0v-232.106666l-54.656 43.776a32 32 0 0 1-40.021334-50.005334l106.666667-85.333333a32 32 0 0 1 33.877333-3.84zM608 394.666667a42.666667 42.666667 0 0 0-42.666667 42.666666v149.333334a42.666667 42.666667 0 1 0 85.333334 0v-149.333334a42.666667 42.666667 0 0 0-42.666667-42.666666z m-106.666667 42.666666a106.666667 106.666667 0 0 1 213.333334 0v149.333334a106.666667 106.666667 0 0 1-213.333334 0v-149.333334z" p-id="4391" fill="#ffffff"></path></svg>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                             <div style="color: white;">{{ (parseInt(currentPlayTime / 60 / 24).toString().padStart(2, '0')) + ':' + (parseInt(currentPlayTime / 60).toString().padStart(2, '0')) + ':' + ((currentPlayTime % 60).toString().padStart(2, '0')) }}&nbsp;/&nbsp;{{ (parseInt(sumTime
@@ -155,42 +158,9 @@ export default {
             player: {},
             state: {},
             progressBar: 0,
-            colorMap: ['', '#F6D962', '#D5A138', '#EF753A', '#F08F70', '#EB7D81', '#B76E90', '#986EA4', '#9286B3', '#8796BC', '#A3BFCE', '#B4D3B4'],
-            dataSource: [{
-                id: 1,
-                label: '界面设计'
-            }, {
-                id: 2,
-                label: '错误处理'
-            }, {
-                id: 3,
-                label: '性能问题'
-            }, {
-                id: 4,
-                label: '功能性问题'
-            }, {
-                id: 5,
-                label: '操作反馈'
-            }, {
-                id: 6,
-                label: '用户历史数据管理'
-            }, {
-                id: 7,
-                label: '用户界面反馈'
-            }, {
-                id: 8,
-                label: '输出结果不符'
-            }, {
-                id: 9,
-                label: '系统理解不足'
-            }, {
-                id: 10,
-                label: '美学和设计满意度'
-            }, {
-                id: 11,
-                label: '定制化和个性化问题'
-            }],
-            showInfo: true,
+            colorMap: ['', '#F6D962', '#D5A138', '#EF753A', '#F08F70', '#EB7D81', '#B76E90', '#986EA4', '#9286B3', '#8796BC', '#A3BFCE', '#B4D3B4', '#D1EFFF', '#89D1FF', '#1B90FF', '#0057D2', '#002A86', '#E2D8FF', '#B894FF', '#7858FF', '#470CED', '#1C0C6E', '#FFDCF3', '#FF8AF0', '#F31DED', '#A100C2', '#510080', '#FFDCE8', '#FEADC8', '#FA4F96', '#BA066C', '#71014B', '#FFD5EA', '#FF8CB2', '#EE3939', '#AA0808', '#5A0404', '#FFF3B8', '#FFC933', '#E76500', '#A93E00', '#6D1900', '#EBF5CB', '#97DD40', '#36A41D', '#256F3A', '#164323', '#C2FCEE', '#2CE0BF', '#049F9A', '#046C7A', '#02414C', '#EAECEE', '#A9B4BE', '#5B738B', '#354A5F', '#1A2733'],
+            dataSource: [],
+            showInfo: false,
             info_data: {
                 tag: []
             }
@@ -200,6 +170,12 @@ export default {
         clickBar(event) {
             let xPos = event.clientX;
             console.log(xPos);
+            xPos -= 20;
+            let progress_width = this.$refs.progressBar.offsetWidth;
+            // console.log(progress_width);
+            let changePlayTime = Math.floor(this.sumTime * (xPos / progress_width))
+            this.player.currentTime(changePlayTime);
+
         },
         translate(x, y, deg) {
             return `translate(${x}, ${y}) rotate(${deg})`;
@@ -213,7 +189,7 @@ export default {
         },
         playVideo() {
             if (this.playTag) {
-                this.player.currentTime(500);
+                // this.player.currentTime(500);
                 this.player.play();
                 console.log('play');
                 // this.sumTime = parseInt(this.state.duration);
@@ -225,7 +201,7 @@ export default {
         },
         calcMarker(data, all_data) {
             let res_data = new Array();
-            
+
             for (const d of data['info']) {
                 let tmp = d;
                 tmp.percentage = d.time / this.sumTime * 100;
@@ -260,6 +236,9 @@ export default {
          */
         dataStore.$subscribe((mutations) => {
 
+            if (mutations.events.key == 'categorySource') {
+                this.dataSource = mutations.events.newValue;
+            }
 
         });
     },

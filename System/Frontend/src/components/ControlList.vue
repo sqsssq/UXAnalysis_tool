@@ -54,7 +54,8 @@
             <div style="text-align: left; font-size: 24px; color: white; font-weight: bold; height: 40px;">
                 可用性问题标签
             </div>
-            <div style="text-align: left; padding-left: 24px; height: 45px;width: 100%; justify-content: space-between;">
+            <div style="text-align: left; padding-left: 24px; height: 45px;width: 100%;">
+                <!-- justify-content: space-between; -->
                 <span>
                                     <el-checkbox label="全选" size="large" />
                                 </span>
@@ -63,12 +64,12 @@
                                 </span>
             </div>
             <div style="width: 100%; height: calc(100% - 85px); overflow-y: auto;">
-            <el-tree :data="dataSource" show-checkbox node-key="id" default-expand-all :expand-on-click-node="false">
+            <el-tree :data="dataSource" show-checkbox node-key="id" :default-expand-all="true" :expand-on-click-node="false">
                 <template #default="{ node, data }">
                                 <span class="custom-tree-node">
                                     <span> <div :style="{float: 'left', 'margin': '5px 10px 0px 0px', width: '20px', height: '20px', 'background-color': colorMap[data.id], 'borderRadius': node.level == 1 ? '20px' : '0px'}"></div> {{ node.label }}</span>
                                     <span style="padding-top: 5px;">
-                                    <a @click="showDialog(2, data)"> <svg t="1706082110613" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4198" width="20" height="20"><path d="M832 1024H192c-106.048 0-192-86.016-192-192V192a192 192 0 0 1 192-192h640a192 192 0 0 1 192 192v640c0 105.984-85.952 192-192 192z m64-832a64 64 0 0 0-64-64H192a64 64 0 0 0-64 64v640c0 35.392 28.608 64 64 64h640c35.392 0 64-28.608 64-64V192z m-192 384h-128v128c0 35.392-28.608 64-64 64s-64-28.608-64-64v-128h-128a64 64 0 1 1 0-128h128v-128a64 64 0 1 1 128 0v128h128a64 64 0 1 1 0 128z" fill="white" p-id="4199"></path></svg> </a>
+                                    <a v-if="node.level == 1" @click="showDialog(2, data)"> <svg t="1706082110613" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4198" width="20" height="20"><path d="M832 1024H192c-106.048 0-192-86.016-192-192V192a192 192 0 0 1 192-192h640a192 192 0 0 1 192 192v640c0 105.984-85.952 192-192 192z m64-832a64 64 0 0 0-64-64H192a64 64 0 0 0-64 64v640c0 35.392 28.608 64 64 64h640c35.392 0 64-28.608 64-64V192z m-192 384h-128v128c0 35.392-28.608 64-64 64s-64-28.608-64-64v-128h-128a64 64 0 1 1 0-128h128v-128a64 64 0 1 1 128 0v128h128a64 64 0 1 1 0 128z" fill="white" p-id="4199"></path></svg> </a>
                                     </span>
                                 </span>
                 </template>
@@ -147,11 +148,9 @@ export default {
          * @return {*}
          */
         dataStore.$subscribe((mutations) => {
-            console.log(mutations);
             if (mutations.events.key == 'categorySource') {
                 this.dataSource = mutations.events.newValue;
             }
-
         });
     },
     watch: {},
