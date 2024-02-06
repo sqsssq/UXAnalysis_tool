@@ -3,13 +3,13 @@
  * @Author: Qing Shi
  * @Date: 2024-01-24 17:02:12
  * @LastEditors: Qing Shi
- * @LastEditTime: 2024-02-04 16:09:32
+ * @LastEditTime: 2024-02-06 20:13:07
 -->
 <template>
     <div class="frameworkBody">
         <div style=" height: 30px;text-align: left; font-size: 24px; color: white; font-weight: bold; justify-content: space-between; display: flex;">
             <span>视频分析</span>
-            <span style="font-size: 20px;">P1: FL 性别: 女 年龄: 23</span>
+            <span style="font-size: 20px;">P1: {{ user_info.name }} 性别: {{ user_info.gender }} 年龄: {{ user_info.age }}</span>
         </div>
         <div style="width: 100%; height: calc(100% - 30px); margin-top: 10px;">
             <el-dialog v-model="showInfo" :title="(parseInt(info_data.time / 60 / 24).toString().padStart(2, '0')) + ':' + (parseInt(info_data.time / 60).toString().padStart(2, '0')) + ':' + ((info_data.time % 60).toString().padStart(2, '0'))" width="25%" :append-to="'#mainView'"
@@ -141,6 +141,11 @@ export default {
     props: [],
     data() {
         return {
+            user_info: {
+                name: '',
+                gender: '',
+                age: ''
+            },
             config: {
                 src: ''
             },
@@ -202,12 +207,18 @@ export default {
         calcMarker(data, all_data) {
             let res_data = new Array();
 
+            this.user_info = {
+                gender: data['gender'],
+                age: data['year'],
+                name: data['name']
+            };
+
             for (const d of data['info']) {
                 let tmp = d;
                 tmp.percentage = d.time / this.sumTime * 100;
                 res_data.push(tmp);
             }
-            this.info_data = res_data[0];
+            // this.info_data = res_data[0];
 
             return res_data;
         }
