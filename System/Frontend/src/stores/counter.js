@@ -31,7 +31,8 @@ export const useDataStore = defineStore("dataStore", {
         return {
             msg: 'Hello, Vue SQ',
             categorySource: [],
-            selectShowLevel: 1
+            selectShowLevel: 1,
+            noneDisabledTag: {}
         }
     },
     actions: {
