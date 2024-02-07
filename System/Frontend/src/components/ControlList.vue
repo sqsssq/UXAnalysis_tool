@@ -57,14 +57,14 @@
             <div style="text-align: left; padding-left: 24px; height: 45px;width: 100%;">
                 <!-- justify-content: space-between; -->
                 <span>
-                                                <el-checkbox label="全选" size="large" />
+                                                <el-checkbox label="全选" size="large" v-model="selectAll" />
                                             </span>
                 <span style=" position: absolute;top: 12px; right: 0px;">
                                                 <el-button style="margin-top: -10px;" type="primary" @click="showDialog(1, dataSource)">添加一级标签</el-button>
                                             </span>
             </div>
             <div style="width: 100%; height: calc(100% - 85px); overflow-y: auto;">
-                <el-tree v-if="showTree" :data="dataSource" show-checkbox node-key="id" :default-expand-all="expandTag" :expand-on-click-node="false" :props="defaultProps">
+                <el-tree ref="treeRef" v-if="showTree" :data="dataSource" show-checkbox node-key="id" :default-expand-all="expandTag" :expand-on-click-node="false" :props="defaultProps">
                     <template #default="{ node, data }">
                                 <span class="custom-tree-node">
                                     <span> <div :style="{float: 'left', 'margin': '5px 10px 0px 0px', width: '20px', height: '20px', 'background-color': colorMap[data.id], 'borderRadius': node.level == 1 ? '20px' : '0px'}"></div> {{ node.label }}</span>
@@ -72,7 +72,7 @@
                                         <a v-if="node.level == 1" @click="showDialog(2, data)"> <svg t="1706082110613" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4198" width="20" height="20"><path d="M832 1024H192c-106.048 0-192-86.016-192-192V192a192 192 0 0 1 192-192h640a192 192 0 0 1 192 192v640c0 105.984-85.952 192-192 192z m64-832a64 64 0 0 0-64-64H192a64 64 0 0 0-64 64v640c0 35.392 28.608 64 64 64h640c35.392 0 64-28.608 64-64V192z m-192 384h-128v128c0 35.392-28.608 64-64 64s-64-28.608-64-64v-128h-128a64 64 0 1 1 0-128h128v-128a64 64 0 1 1 128 0v128h128a64 64 0 1 1 0 128z" fill="white" p-id="4199"></path></svg> </a>
                                     </span>
                                 </span>
-</template>
+                    </template>
                 </el-tree>
             </div>
         </div>
@@ -93,6 +93,7 @@ export default {
             addPoint: false,
             expandTag: false,
             showTree: true,
+            selectAll: true,
             tag_name: "",
             add_tag_level: "",
             id_cnt: 12,
@@ -149,6 +150,9 @@ export default {
 
         const dataStore = useDataStore();
         this.dataSource = dataStore.categorySource;
+        if (this.selectAll) {
+            this.$refs.treeRef.setCheckedNodes(this.dataSource);
+        }
         let _this = this;
 
         /**
@@ -157,6 +161,9 @@ export default {
          */
         dataStore.$subscribe((mutations, state) => {
             this.dataSource = state.categorySource;
+            if (this.selectAll) {
+                this.$refs.treeRef.setCheckedNodes(this.dataSource);
+            }
         });
     },
     watch: {
@@ -174,6 +181,15 @@ export default {
                 this.$nextTick(() => {
                     this.showTree = true;
                 })
+            }
+        },
+        selectAll: {
+            handler() {
+                if (this.selectAll) {
+                    this.$refs.treeRef.setCheckedNodes(this.dataSource);
+                } else {
+                    this.$refs.treeRef.setCheckedKeys([], false);
+                }
             }
         }
     },
