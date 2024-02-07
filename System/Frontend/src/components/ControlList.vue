@@ -3,7 +3,7 @@
  * @Author: Qing Shi
  * @Date: 2024-02-01 19:32:17
  * @LastEditors: Qing Shi
- * @LastEditTime: 2024-02-04 16:39:32
+ * @LastEditTime: 2024-02-07 15:36:38
 -->
 <!--
  *                        _oo0oo_
@@ -42,8 +42,8 @@
         <div id="problem_tag" style="height: calc(100% - 80px)">
             <el-dialog v-model="addPoint" :title="'添加' + add_tag_level + '级标签'" width="15%" height="100px" :append-to="'#problems_tag'" :modal="false" :class="'add_dialog'">
                 <span>
-                    <el-input v-model="tag_name" placeholder="Please input" />
-                </span>
+                            <el-input v-model="tag_name" placeholder="Please input" />
+                        </span>
                 <div style="padding: 20px 0px 10px 0px;">
                     <el-button @click="addPoint = false">取消</el-button>
                     <el-button type="primary" @click="addTag()">
@@ -57,24 +57,24 @@
             <div style="text-align: left; padding-left: 24px; height: 45px;width: 100%;">
                 <!-- justify-content: space-between; -->
                 <span>
-                                    <el-checkbox label="全选" size="large" />
-                                </span>
+                                            <el-checkbox label="全选" size="large" />
+                                        </span>
                 <span style=" position: absolute;top: 12px; right: 0px;">
-                                    <el-button style="margin-top: -10px;" type="primary" @click="showDialog(1, dataSource)">添加一级标签</el-button>
-                                </span>
+                                            <el-button style="margin-top: -10px;" type="primary" @click="showDialog(1, dataSource)">添加一级标签</el-button>
+                                        </span>
             </div>
             <div style="width: 100%; height: calc(100% - 85px); overflow-y: auto;">
-            <el-tree :data="dataSource" show-checkbox node-key="id" :default-expand-all="true" :expand-on-click-node="false">
-                <template #default="{ node, data }">
-                                <span class="custom-tree-node">
-                                    <span> <div :style="{float: 'left', 'margin': '5px 10px 0px 0px', width: '20px', height: '20px', 'background-color': colorMap[data.id], 'borderRadius': node.level == 1 ? '20px' : '0px'}"></div> {{ node.label }}</span>
-                                    <span style="padding-top: 5px;">
+                <el-tree v-if="showTree" :data="dataSource" show-checkbox node-key="id" :default-expand-all="expandTag" :expand-on-click-node="false" :props="defaultProps">
+                    <template #default="{ node, data }">
+                            <span class="custom-tree-node">
+                                <span> <div :style="{float: 'left', 'margin': '5px 10px 0px 0px', width: '20px', height: '20px', 'background-color': colorMap[data.color], 'borderRadius': node.level == 1 ? '20px' : '0px'}"></div> {{ node.label }}</span>
+                                <span style="padding-top: 5px;">
                                     <a v-if="node.level == 1" @click="showDialog(2, data)"> <svg t="1706082110613" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4198" width="20" height="20"><path d="M832 1024H192c-106.048 0-192-86.016-192-192V192a192 192 0 0 1 192-192h640a192 192 0 0 1 192 192v640c0 105.984-85.952 192-192 192z m64-832a64 64 0 0 0-64-64H192a64 64 0 0 0-64 64v640c0 35.392 28.608 64 64 64h640c35.392 0 64-28.608 64-64V192z m-192 384h-128v128c0 35.392-28.608 64-64 64s-64-28.608-64-64v-128h-128a64 64 0 1 1 0-128h128v-128a64 64 0 1 1 128 0v128h128a64 64 0 1 1 0 128z" fill="white" p-id="4199"></path></svg> </a>
-                                    </span>
                                 </span>
-                </template>
-            </el-tree>
-        </div>
+                            </span>
+                    </template>
+                </el-tree>
+            </div>
         </div>
     </div>
 </template>
@@ -91,6 +91,8 @@ export default {
             elHeight: 0,
             elWidth: 0,
             addPoint: false,
+            expandTag: false,
+            showTree: true,
             tag_name: "",
             add_tag_level: "",
             id_cnt: 12,
@@ -98,6 +100,11 @@ export default {
             colorMap: ['', '#F6D962', '#D5A138', '#EF753A', '#F08F70', '#EB7D81', '#B76E90', '#986EA4', '#9286B3', '#8796BC', '#A3BFCE', '#B4D3B4', '#D1EFFF', '#89D1FF', '#1B90FF', '#0057D2', '#002A86', '#E2D8FF', '#B894FF', '#7858FF', '#470CED', '#1C0C6E', '#FFDCF3', '#FF8AF0', '#F31DED', '#A100C2', '#510080', '#FFDCE8', '#FEADC8', '#FA4F96', '#BA066C', '#71014B', '#FFD5EA', '#FF8CB2', '#EE3939', '#AA0808', '#5A0404', '#FFF3B8', '#FFC933', '#E76500', '#A93E00', '#6D1900', '#EBF5CB', '#97DD40', '#36A41D', '#256F3A', '#164323', '#C2FCEE', '#2CE0BF', '#049F9A', '#046C7A', '#02414C', '#EAECEE', '#A9B4BE', '#5B738B', '#354A5F', '#1A2733'],
             dataSource: [],
             recommendTag: false,
+            defaultProps: {
+                children: 'children',
+                label: 'label',
+                disabled: 'isShow',
+            }
         };
     },
     methods: {
@@ -141,6 +148,7 @@ export default {
         // this.elWidth = this.elHeight + 20;
 
         const dataStore = useDataStore();
+        this.dataSource = dataStore.categorySource;
         let _this = this;
 
         /**
@@ -153,11 +161,31 @@ export default {
             }
         });
     },
-    watch: {},
+    watch: {
+        recommendTag: {
+            handler() {
+                const dataStore = useDataStore();
+                this.showTree = false;
+                if (this.recommendTag == true) {
+                    dataStore.selectShowLevel = 2;
+                    this.expandTag = true;
+                } else {
+                    dataStore.selectShowLevel = 1;
+                    this.expandTag = false;
+                }
+                this.$nextTick(() => {
+                    this.showTree = true;
+                })
+            }
+        }
+    },
 };
 </script>
 
 <style>
+.el-checkbox__input.is-disabled .el-checkbox__inner {
+    background-color: #777;
+}
 .el-dialog__title {
     color: white;
 }

@@ -3,7 +3,7 @@
  * @Author: Qing Shi
  * @Date: 2023-06-29 10:17:17
  * @LastEditors: Qing Shi
- * @LastEditTime: 2024-01-23 17:02:27
+ * @LastEditTime: 2024-02-07 19:44:21
 -->
 <template>
     <VideoPlayer :dialogVisible="dialogVisible" @showDialog="showDialog" />
@@ -15,7 +15,7 @@
             <!-- <div style="width: 400px;"></div> -->
             <!-- <div style="width: 00px;"></div> -->
             <div style="height: calc(100% - 30px); ">
-                <img src="../assets/AI_tool/P1/fig.png" alt="" style="height: 95%;">
+                <img src="../../public/AI_Tool/P1/fig.png" alt="" style="height: 95%;">
                 <div class="play_button" @click="dialogVisible = true">
                     <div style="position: absolute; top: calc(30px + 50% - 40px); left: calc(50% - 40px); background-color: white; border-radius: 80px; height: 80px;">
                         <svg t="1705932141588" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4359" width="80" height="80"><path d="M374.272 333.312v355.328c0 30.208 20.992 40.448 45.568 26.112l288.768-175.104c25.088-15.872 25.088-40.448 0-54.784L419.84 309.76c-7.68-5.12-14.336-6.656-20.992-6.656-14.336-2.56-24.576 9.216-24.576 30.208zM1024 512c0 282.624-229.376 512-512 512S0 794.624 0 512 229.376 0 512 0s512 229.376 512 512z" p-id="4360" fill="#8a8a8a"></path></svg>
@@ -59,16 +59,17 @@ export default {
         },
         scrollToRight() {
             let video_width = document.getElementById('video_list').offsetWidth;
-            if (this.video_cnt * (this.elWidth / 2) < video_width * 10) {
+            if (this.video_cnt * (this.elWidth / 2) < video_width * 9) {
                 this.video_cnt += 1;
                 document.getElementById('recommendList').scrollTo({ top: 0, left: this.video_cnt * (this.elWidth / 2), behavior: 'smooth' });
             }
+            console.log(this.video_cnt * (this.elWidth / 2), video_width)
         },
         scrollToLeft() {
             let video_width = document.getElementById('video_list').offsetWidth;
             if (this.video_cnt > 0) {
                 this.video_cnt -= 1;
-                while (this.video_cnt * (this.elWidth / 2) >= video_width * 10)
+                while (this.video_cnt * (this.elWidth / 2) >= video_width * 9)
                     this.video_cnt--;
                 if (this.video_cnt < 0) this.video_cnt = 0;
                 document.getElementById('recommendList').scrollTo({ top: 0, left: this.video_cnt * (this.elWidth / 2), behavior: 'smooth' });
@@ -99,12 +100,12 @@ export default {
 .scroll-button {
     opacity: .5;
     transition: .5s;
-    cursor: hand;
+    cursor: pointer;
 }
 
 .scroll-button:hover {
     opacity: 1;
-    cursor: hand;
+    cursor: pointer;
 }
 
 .play_button {
