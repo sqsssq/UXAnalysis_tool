@@ -15,7 +15,7 @@ export default defineConfig({
   build: {
     chunkSizeWarningLimit: 1000,
   },
-  base: '/UXAnalysis_tool/',
+  base: './',
   css: {//去除@charset UTF-8规则影响
     postcss: {
       plugins: [
