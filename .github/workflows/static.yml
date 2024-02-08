@@ -28,8 +28,6 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
-      - name: enter Frontend
-        run: cd System
       - name: Checkout
         uses: actions/checkout@v3
       - name: Set up Node
@@ -37,8 +35,10 @@ jobs:
         with:
           node-version: 18
           cache: 'npm'
+          cache-dependency-path: 'System/Frontend/package-lock.json'
       - name: Install dependencies
         run: npm install
+        working-directory: System/Frontend
       - name: Build
         run: npm run build
       - name: Setup Pages
