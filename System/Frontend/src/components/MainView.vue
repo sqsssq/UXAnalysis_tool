@@ -438,7 +438,7 @@ export default {
 
         this.main_data = v_data[this.select_video];
         // console.log(v_data);
-        this.config.src = 'AI_Tool/' + this.select_video + '/video.mp4'
+        this.config.src = '/AI_Tool/' + this.select_video + '/video.mp4'
 
         const dataStore = useDataStore();
         this.dataSource = dataStore.categorySource;
