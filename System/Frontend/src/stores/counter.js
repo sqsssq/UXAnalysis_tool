@@ -33,7 +33,8 @@ export const useDataStore = defineStore("dataStore", {
             categorySource: [],
             selectShowLevel: 1,
             noneDisabledTag: {},
-            showTagList: []
+            showTagList: [],
+            isShowTagList: false
         }
     },
     actions: {

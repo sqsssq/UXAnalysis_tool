@@ -183,7 +183,7 @@
                                 <div v-for="(d, i) in tag_d.tag" :key="'tag' + i" :style="{ position: 'absolute', top: (-20 * i) + 'px', height: '16px', width: '16px', borderRadius: '0px', border: '0px solid #777'}">
                                     <div v-if="typeof tag_d.second_tag[d] != 'undefined' && tag_d.second_tag[d].length > 0">
                                         <div v-for="(dd, ii) in tag_d.second_tag[d]" :key="'sec_tag' + ii" :style="{ position: 'absolute', top: (-20 * (i * tag_d.second_tag[d].length + ii)) + 'px', left: '0px', height: '16px', width: '16px', borderRadius: '0px', border: '0px solid #777'}">
-                                            <div :style="{position: 'absolute', top: '0px', left: '-9px', height: '16px', width: '16px', backgroundColor: colorMap[dataSource[d - 1].id], borderRadius: '10px', border: '1px solid #777', opacity: showTagList.indexOf(dataSource[d - 1].id) != -1 ? 1 : .3}"></div>
+                                            <div :style="{position: 'absolute', top: '0px', left: '-9px', height: '16px', width: '16px', backgroundColor: colorMap[dataSource[d - 1].id], borderRadius: '10px', border: '1px solid #777', opacity: showTagList.indexOf(dataSource[d - 1].children[dd - 1].id) != -1 ? 1 : .3}"></div>
                                             <div :style="{position: 'absolute', top: '0px', left: '9px', height: '16px', width: '16px', backgroundColor: colorMap[dataSource[d - 1].children[dd - 1].id], borderRadius: '0px', border: '1px solid #777', opacity: showTagList.indexOf(dataSource[d - 1].children[dd - 1].id) != -1 ? 1 : .3}"></div>
                                         </div>
                                     </div>
@@ -458,17 +458,23 @@ export default {
             this.dataSource = state.categorySource;
             this.showTagList = state.showTagList;
             this.selectShowLevel = state.selectShowLevel;
-            if (this.defaultShowTag = 0 && this.showTagList.length == 0) {
+            if (this.defaultShowTag == 0 && this.showTagList.length == 0) {
                 let tagTmp = [];
                 for (let i in this.dataSource) {
                     tagTmp.push(this.dataSource[i].id);
                 }
                 this.showTagList = tagTmp;
                 this.defaultShowTag = 1;
+                dataStore.showTagList = this.showTagList
             }
         });
     },
     watch: {
+        showTagList: {
+            handler() {
+                console.log(this.showTagList)
+            }
+        },
         state: {
             handler() {
                 this.currentPlayTime = parseInt(this.state.currentTime);

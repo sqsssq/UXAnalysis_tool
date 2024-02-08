@@ -42,8 +42,8 @@
         <div id="problem_tag" style="height: calc(100% - 80px)">
             <el-dialog v-model="addPoint" :title="'添加' + add_tag_level + '级标签'" width="15%" height="100px" :append-to="'#problems_tag'" :modal="false" :class="'add_dialog'">
                 <span>
-                                            <el-input v-model="tag_name" placeholder="Please input" />
-                                        </span>
+                                                    <el-input v-model="tag_name" placeholder="Please input" />
+                                                </span>
                 <div style="padding: 20px 0px 10px 0px;">
                     <el-button @click="addPoint = false">取消</el-button>
                     <el-button type="primary" @click="addTag()">
@@ -57,21 +57,21 @@
             <div style="text-align: left; padding-left: 24px; height: 45px;width: 100%;">
                 <!-- justify-content: space-between; -->
                 <span>
-                                                            <el-checkbox label="全选" size="large" v-model="selectAll" />
-                                                        </span>
+                                                                    <el-checkbox label="全选" size="large" v-model="selectAll" />
+                                                                </span>
                 <span style=" position: absolute;top: 12px; right: 0px;">
-                                                            <el-button style="margin-top: -10px;" type="primary" @click="showDialog(1, dataSource)">添加一级标签</el-button>
-                                                        </span>
+                                                                    <el-button style="margin-top: -10px;" type="primary" @click="showDialog(1, dataSource)">添加一级标签</el-button>
+                                                                </span>
             </div>
             <div style="width: 100%; height: calc(100% - 85px); overflow-y: auto;">
                 <el-tree ref="treeRef" v-if="showTree" :data="dataSource" show-checkbox node-key="id" :default-expand-all="expandTag" :expand-on-click-node="false" :props="defaultProps" @check="checkStatus">
                     <template #default="{ node, data }">
-                                            <span class="custom-tree-node">
-                                                <span> <div :style="{float: 'left', 'margin': '5px 10px 0px 0px', width: '20px', height: '20px', 'background-color': colorMap[data.id], 'borderRadius': node.level == 1 ? '20px' : '0px'}"></div> {{ node.label }}</span>
-                                                <span style="padding-top: 5px;">
-                                                    <a v-if="node.level == 1" @click="showDialog(2, data)"> <svg t="1706082110613" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4198" width="20" height="20"><path d="M832 1024H192c-106.048 0-192-86.016-192-192V192a192 192 0 0 1 192-192h640a192 192 0 0 1 192 192v640c0 105.984-85.952 192-192 192z m64-832a64 64 0 0 0-64-64H192a64 64 0 0 0-64 64v640c0 35.392 28.608 64 64 64h640c35.392 0 64-28.608 64-64V192z m-192 384h-128v128c0 35.392-28.608 64-64 64s-64-28.608-64-64v-128h-128a64 64 0 1 1 0-128h128v-128a64 64 0 1 1 128 0v128h128a64 64 0 1 1 0 128z" fill="white" p-id="4199"></path></svg> </a>
-                                                </span>
-                                            </span>
+                                                    <span class="custom-tree-node">
+                                                        <span :style="{color: data.disabled == true ? '#777' : 'white'}"> <div :style="{float: 'left', 'margin': '5px 10px 0px 0px', width: '20px', height: '20px', 'background-color': colorMap[data.id], 'borderRadius': node.level == 1 ? '20px' : '0px', }"></div> {{ node.label }}</span>
+                                                        <span style="padding-top: 5px;">
+                                                            <a v-if="node.level == 1" @click="showDialog(2, data)"> <svg t="1706082110613" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4198" width="20" height="20"><path d="M832 1024H192c-106.048 0-192-86.016-192-192V192a192 192 0 0 1 192-192h640a192 192 0 0 1 192 192v640c0 105.984-85.952 192-192 192z m64-832a64 64 0 0 0-64-64H192a64 64 0 0 0-64 64v640c0 35.392 28.608 64 64 64h640c35.392 0 64-28.608 64-64V192z m-192 384h-128v128c0 35.392-28.608 64-64 64s-64-28.608-64-64v-128h-128a64 64 0 1 1 0-128h128v-128a64 64 0 1 1 128 0v128h128a64 64 0 1 1 0 128z" fill="white" p-id="4199"></path></svg> </a>
+                                                        </span>
+                                                    </span>
 </template>
                 </el-tree>
             </div>
@@ -104,7 +104,7 @@ export default {
             defaultProps: {
                 children: 'children',
                 label: 'label',
-                disabled: 'disabled',
+                disabled: 'is_dis'
             },
             showTagList: [],
             changeTag: false
@@ -116,6 +116,9 @@ export default {
         },
         checkStatus() {
             let showTagList = [...this.$refs.treeRef.getCheckedKeys(), ...this.$refs.treeRef.getHalfCheckedKeys()];
+            console.log(showTagList)
+            // this.$refs.treeRef.setCheckedKeys(showTagList);
+
             const dataStore = useDataStore();
             dataStore.showTagList = showTagList;
             this.showTagList = showTagList;
@@ -132,23 +135,23 @@ export default {
             }
         },
         addTag() {
-            this.addPoint = false;
-            if (this.add_tag_level == '一') {
-                this.selectData.push({
-                    id: this.id_cnt,
-                    level: 1,
-                    label: this.tag_name,
-                    children: []
-                })
-            } else {
-                this.selectData.children.push({
-                    id: this.id_cnt,
-                    level: 2,
-                    label: this.tag_name,
-                    children: []
-                })
-            }
-            this.id_cnt++;
+            // this.addPoint = false;
+            // if (this.add_tag_level == '一') {
+            //     this.selectData.push({
+            //         id: this.id_cnt,
+            //         level: 1,
+            //         label: this.tag_name,
+            //         children: []
+            //     })
+            // } else {
+            //     this.selectData.children.push({
+            //         id: this.id_cnt,
+            //         level: 2,
+            //         label: this.tag_name,
+            //         children: []
+            //     })
+            // }
+            // this.id_cnt++;
         }
     },
     created() {},
@@ -167,7 +170,7 @@ export default {
         }
         this.$refs.treeRef.setCheckedKeys(showTagList);
         this.showTagList = showTagList;
-            dataStore.showTagList = showTagList;
+        dataStore.showTagList = showTagList;
 
         /**
          * @description: watch the data changes in the store
@@ -200,11 +203,22 @@ export default {
                 }
 
                 let showTagList = [...this.$refs.treeRef.getCheckedKeys(), ...this.$refs.treeRef.getHalfCheckedKeys()];
-
+                // const _this = this;
+                // console.log('AAAA', showTagList);
                 dataStore.showTagList = showTagList;
+                this.showTagList = showTagList
                 this.$nextTick(() => {
                     this.showTree = true;
-                    this.changeTag = !this.changeTag;
+                    this.$nextTick(() => {
+                        // let tg = [1, 2, 3, 4, 5]
+                        for (let i in this.showTagList) {
+                            // for(let i in tg){
+                            this.$refs.treeRef.setChecked(this.showTagList[i], true, true);
+                            // this.$refs.treeRef.setChecked(tg[i], true, true);
+                            
+                        }
+                        console.log(this.showTagList, this.dataSource)
+                    })
                 })
             }
         },
@@ -223,13 +237,6 @@ export default {
                 const dataStore = useDataStore();
                 this.showTagList = showTagList;
                 dataStore.showTagList = showTagList;
-            }
-        },
-        changeTag: {
-            handler() {
-                console.log('change tag')
-                console.log(this.$refs.treeRef)
-                // this.$refs.treeRef.setCheckedKeys(this.showTagList);
             }
         }
         // showTagList: {
