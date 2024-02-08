@@ -177,14 +177,14 @@
                     <div style="width: 100%; position: absolute; top: 1px;">
                         <div v-for="(tag_d, tag_i) in calcMarkerData" :key="'marker' + tag_i" :style="{position: 'absolute', left: 'calc('+tag_d.percentage + '% - 8px)'}">
                             <div v-if="selectShowLevel == 1">
-                                <div v-for="(d, i) in tag_d.tag" :key="'tag' + i" :style="{ position: 'absolute', top: (-20 * i) + 'px', height: '16px', width: '16px', backgroundColor: colorMap[dataSource[d - 1].id], borderRadius: '10px', border: '1px solid #777'}"></div>
+                                <div v-for="(d, i) in tag_d.tag" :key="'tag' + i" :style="{ position: 'absolute', top: (-20 * i) + 'px', height: '16px', width: '16px', backgroundColor: colorMap[dataSource[d - 1].id], borderRadius: '10px', border: '1px solid #777', opacity: showTagList.indexOf(dataSource[d - 1].id) != -1 ? 1 : .3}"></div>
                             </div>
                             <div v-else>
                                 <div v-for="(d, i) in tag_d.tag" :key="'tag' + i" :style="{ position: 'absolute', top: (-20 * i) + 'px', height: '16px', width: '16px', borderRadius: '0px', border: '0px solid #777'}">
                                     <div v-if="typeof tag_d.second_tag[d] != 'undefined' && tag_d.second_tag[d].length > 0">
                                         <div v-for="(dd, ii) in tag_d.second_tag[d]" :key="'sec_tag' + ii" :style="{ position: 'absolute', top: (-20 * (i * tag_d.second_tag[d].length + ii)) + 'px', left: '0px', height: '16px', width: '16px', borderRadius: '0px', border: '0px solid #777'}">
-                                            <div :style="{position: 'absolute', top: '0px', left: '-9px', height: '16px', width: '16px', backgroundColor: colorMap[dataSource[d - 1].id], borderRadius: '10px', border: '1px solid #777'}"></div>
-                                            <div :style="{position: 'absolute', top: '0px', left: '9px', height: '16px', width: '16px', backgroundColor: colorMap[dataSource[d - 1].children[dd - 1].id], borderRadius: '0px', border: '1px solid #777'}"></div>
+                                            <div :style="{position: 'absolute', top: '0px', left: '-9px', height: '16px', width: '16px', backgroundColor: colorMap[dataSource[d - 1].id], borderRadius: '10px', border: '1px solid #777', opacity: showTagList.indexOf(dataSource[d - 1].id) != -1 ? 1 : .3}"></div>
+                                            <div :style="{position: 'absolute', top: '0px', left: '9px', height: '16px', width: '16px', backgroundColor: colorMap[dataSource[d - 1].children[dd - 1].id], borderRadius: '0px', border: '1px solid #777', opacity: showTagList.indexOf(dataSource[d - 1].children[dd - 1].id) != -1 ? 1 : .3}"></div>
                                         </div>
                                     </div>
                                 </div>
@@ -201,13 +201,13 @@
                     <div>
                         <div style="height: 30px;" class="align-class">
                             <a @click="playVideo()">
-                                                    <svg v-if="playTag == 1" t="1706253575488" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4211" width="30" height="30"><path d="M817.088 484.96l-512-323.744C295.232 154.976 282.752 154.592 272.576 160.224 262.336 165.856 256 176.608 256 188.256l0 647.328c0 11.648 6.336 22.4 16.576 28.032 4.8 2.656 10.112 3.968 15.424 3.968 5.952 0 11.904-1.664 17.088-4.928l512-323.616C826.368 533.184 832 522.976 832 512 832 501.024 826.368 490.816 817.088 484.96z" fill="#ffffff" p-id="4212"></path></svg>
-                                                    <svg v-else t="1706534722560" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4218" width="30" height="30"><path d="M304 176h80v672h-80zM712 176h-64c-4.4 0-8 3.6-8 8v656c0 4.4 3.6 8 8 8h64c4.4 0 8-3.6 8-8V184c0-4.4-3.6-8-8-8z" p-id="4219" fill="#ffffff"></path></svg>
-                                                </a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                                        <svg v-if="playTag == 1" t="1706253575488" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4211" width="30" height="30"><path d="M817.088 484.96l-512-323.744C295.232 154.976 282.752 154.592 272.576 160.224 262.336 165.856 256 176.608 256 188.256l0 647.328c0 11.648 6.336 22.4 16.576 28.032 4.8 2.656 10.112 3.968 15.424 3.968 5.952 0 11.904-1.664 17.088-4.928l512-323.616C826.368 533.184 832 522.976 832 512 832 501.024 826.368 490.816 817.088 484.96z" fill="#ffffff" p-id="4212"></path></svg>
+                                                        <svg v-else t="1706534722560" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4218" width="30" height="30"><path d="M304 176h80v672h-80zM712 176h-64c-4.4 0-8 3.6-8 8v656c0 4.4 3.6 8 8 8h64c4.4 0 8-3.6 8-8V184c0-4.4-3.6-8-8-8z" p-id="4219" fill="#ffffff"></path></svg>
+                                                    </a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                             <a @click="chooseTime(currentPlayTime - 10 >= 0 ? currentPlayTime - 10 : 0)">
-                                                <svg t="1706254098018" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="5623" width="25" height="25"><path d="M483.157333 71.466667A32 32 0 0 1 512 53.333333c253.312 0 458.666667 205.354667 458.666667 458.666667S765.312 970.666667 512 970.666667 53.333333 765.312 53.333333 512c0-188.16 113.28-349.738667 275.2-420.48a32 32 0 1 1 25.6 58.624 394.666667 394.666667 0 1 0 229.632-26.325333l38.570667 48.213333a32 32 0 0 1-50.005333 39.978667l-85.333334-106.666667a32 32 0 0 1-3.84-33.877333z m-42.666666 262.357333a32 32 0 0 1 18.176 28.842667v298.666666a32 32 0 0 1-64 0v-232.106666l-54.656 43.776a32 32 0 0 1-40.021334-50.005334l106.666667-85.333333a32 32 0 0 1 33.877333-3.84zM608 394.666667a42.666667 42.666667 0 0 0-42.666667 42.666666v149.333334a42.666667 42.666667 0 1 0 85.333334 0v-149.333334a42.666667 42.666667 0 0 0-42.666667-42.666666z m-106.666667 42.666666a106.666667 106.666667 0 0 1 213.333334 0v149.333334a106.666667 106.666667 0 0 1-213.333334 0v-149.333334z" p-id="5624" fill="white"></path></svg></a>&nbsp;
+                                                    <svg t="1706254098018" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="5623" width="25" height="25"><path d="M483.157333 71.466667A32 32 0 0 1 512 53.333333c253.312 0 458.666667 205.354667 458.666667 458.666667S765.312 970.666667 512 970.666667 53.333333 765.312 53.333333 512c0-188.16 113.28-349.738667 275.2-420.48a32 32 0 1 1 25.6 58.624 394.666667 394.666667 0 1 0 229.632-26.325333l38.570667 48.213333a32 32 0 0 1-50.005333 39.978667l-85.333334-106.666667a32 32 0 0 1-3.84-33.877333z m-42.666666 262.357333a32 32 0 0 1 18.176 28.842667v298.666666a32 32 0 0 1-64 0v-232.106666l-54.656 43.776a32 32 0 0 1-40.021334-50.005334l106.666667-85.333333a32 32 0 0 1 33.877333-3.84zM608 394.666667a42.666667 42.666667 0 0 0-42.666667 42.666666v149.333334a42.666667 42.666667 0 1 0 85.333334 0v-149.333334a42.666667 42.666667 0 0 0-42.666667-42.666666z m-106.666667 42.666666a106.666667 106.666667 0 0 1 213.333334 0v149.333334a106.666667 106.666667 0 0 1-213.333334 0v-149.333334z" p-id="5624" fill="white"></path></svg></a>&nbsp;
                             <a @click="chooseTime(currentPlayTime + 10 <= sumTime ? currentPlayTime + 10 : sumTime)">
-                                                <svg t="1706253984610" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4390" width="25" height="25"><path d="M53.333333 512C53.333333 258.688 258.688 53.333333 512 53.333333a32 32 0 0 1 25.002667 52.010667l-85.333334 106.666667a32 32 0 0 1-50.005333-40.021334l38.528-48.128C256.512 157.568 117.333333 318.549333 117.333333 512A394.666667 394.666667 0 1 0 669.866667 150.186667a32 32 0 0 1 25.6-58.666667A458.752 458.752 0 0 1 970.666667 512c0 253.312-205.354667 458.666667-458.666667 458.666667S53.333333 765.312 53.333333 512z m387.2-178.176a32 32 0 0 1 18.133334 28.842667v298.666666a32 32 0 0 1-64 0v-232.106666l-54.656 43.776a32 32 0 0 1-40.021334-50.005334l106.666667-85.333333a32 32 0 0 1 33.877333-3.84zM608 394.666667a42.666667 42.666667 0 0 0-42.666667 42.666666v149.333334a42.666667 42.666667 0 1 0 85.333334 0v-149.333334a42.666667 42.666667 0 0 0-42.666667-42.666666z m-106.666667 42.666666a106.666667 106.666667 0 0 1 213.333334 0v149.333334a106.666667 106.666667 0 0 1-213.333334 0v-149.333334z" p-id="4391" fill="#ffffff"></path></svg></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                                    <svg t="1706253984610" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4390" width="25" height="25"><path d="M53.333333 512C53.333333 258.688 258.688 53.333333 512 53.333333a32 32 0 0 1 25.002667 52.010667l-85.333334 106.666667a32 32 0 0 1-50.005333-40.021334l38.528-48.128C256.512 157.568 117.333333 318.549333 117.333333 512A394.666667 394.666667 0 1 0 669.866667 150.186667a32 32 0 0 1 25.6-58.666667A458.752 458.752 0 0 1 970.666667 512c0 253.312-205.354667 458.666667-458.666667 458.666667S53.333333 765.312 53.333333 512z m387.2-178.176a32 32 0 0 1 18.133334 28.842667v298.666666a32 32 0 0 1-64 0v-232.106666l-54.656 43.776a32 32 0 0 1-40.021334-50.005334l106.666667-85.333333a32 32 0 0 1 33.877333-3.84zM608 394.666667a42.666667 42.666667 0 0 0-42.666667 42.666666v149.333334a42.666667 42.666667 0 1 0 85.333334 0v-149.333334a42.666667 42.666667 0 0 0-42.666667-42.666666z m-106.666667 42.666666a106.666667 106.666667 0 0 1 213.333334 0v149.333334a106.666667 106.666667 0 0 1-213.333334 0v-149.333334z" p-id="4391" fill="#ffffff"></path></svg></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                             <div style="color: white;">{{ (parseInt(currentPlayTime / 60 / 24).toString().padStart(2, '0')) + ':' + (parseInt(currentPlayTime / 60).toString().padStart(2, '0')) + ':' + ((currentPlayTime % 60).toString().padStart(2, '0')) }}&nbsp;/&nbsp;{{ (parseInt(sumTime
                                 / 60 / 24).toString().padStart(2, '0')) + ':' + (parseInt(sumTime / 60).toString().padStart(2, '0')) + ':' + ((sumTime % 60).toString().padStart(2, '0')) }}</div>
                         </div>
@@ -252,6 +252,7 @@ export default {
                 src: '',
                 videoHeight: 1
             },
+            defaultShowTag: 0,
             noneDisabledTag: {},
             select_video: '',
             main_data: [],
@@ -277,7 +278,8 @@ export default {
                 nowTime: -1,
                 timeSlot: [],
                 lastTime: -1
-            }
+            },
+            showTagList: []
         };
     },
     methods: {
@@ -439,6 +441,14 @@ export default {
 
         const dataStore = useDataStore();
         this.dataSource = dataStore.categorySource;
+        if (this.showTagList.length == 0) {
+            let tagTmp = [];
+            for (let i in this.dataSource) {
+                tagTmp.push(this.dataSource[i].id);
+            }
+            this.showTagList = tagTmp;
+        }
+        // this.showTagList = 
         let _this = this;
         /**
          * @description: watch the data changes in the store
@@ -446,7 +456,16 @@ export default {
          */
         dataStore.$subscribe((mutations, state) => {
             this.dataSource = state.categorySource;
+            this.showTagList = state.showTagList;
             this.selectShowLevel = state.selectShowLevel;
+            if (this.defaultShowTag = 0 && this.showTagList.length == 0) {
+                let tagTmp = [];
+                for (let i in this.dataSource) {
+                    tagTmp.push(this.dataSource[i].id);
+                }
+                this.showTagList = tagTmp;
+                this.defaultShowTag = 1;
+            }
         });
     },
     watch: {
@@ -504,7 +523,7 @@ export default {
             }
         },
         noneDisabledTag: {
-            handler () {
+            handler() {
                 for (const i in this.dataSource) {
                     if (this.noneDisabledTag[this.dataSource[i].id] > 0) {
                         this.dataSource[i].disabled = false
