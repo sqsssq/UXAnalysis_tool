@@ -51,10 +51,10 @@
                                 最多选择2个标签，建议选择一个
                             </div>
                             <div style="display: flex; flex-wrap: wrap;">
-                                <div v-for="d in dataSource" :key="'type_tag' + d" class="align-class" :style="{backgroundColor: colorMap[d.id] + '40', padding: '3px 8px 3px 5px', 'border-radius': '100px', marginRight: '10px', marginTop: '5px', 'font-size': '15px', cursor: 'pointer'}"
-                                    @click="selectTag(info_data.tag, d.id, info_data, d.id)">
+                                <div v-for="(d, i) in dataSource" :key="'type_tag' + d" class="align-class" :style="{backgroundColor: colorMap[d.id] + '40', padding: '3px 8px 3px 5px', 'border-radius': '100px', marginRight: '10px', marginTop: '5px', 'font-size': '15px', cursor: 'pointer'}"
+                                    @click="selectTag(info_data.tag, d.l_id, info_data, d.l_id)">
                                     <div :style="{backgroundColor: colorMap[d.id], width: '15px', height: '15px', 'margin': '0px 3px 0px 3px', borderRadius: '20px'}">
-                                        <svg v-if="info_data.tag.indexOf(d.id)!=-1" style="position: absolute; top: 0px;" t="1706630009026" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4218" width="15" height="15"><path d="M431.47 793.782c-11.365 0-22.332-4.378-30.589-12.286l-235.495-225.535c-17.64-16.894-18.245-44.891-1.35-62.528 16.894-17.64 44.891-18.245 62.532-1.351l201.055 192.552 364.692-443.171c15.519-18.86 43.39-21.567 62.253-6.049 18.861 15.519 21.568 43.39 6.048 62.251l-394.992 479.993c-7.821 9.504-19.248 15.319-31.534 16.047-0.874 0.052-1.748 0.078-2.621 0.078z" fill="#fff" p-id="4219"></path></svg>
+                                        <svg v-if="info_data.tag.indexOf(d.l_id)!=-1" style="position: absolute; top: 0px;" t="1706630009026" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4218" width="15" height="15"><path d="M431.47 793.782c-11.365 0-22.332-4.378-30.589-12.286l-235.495-225.535c-17.64-16.894-18.245-44.891-1.35-62.528 16.894-17.64 44.891-18.245 62.532-1.351l201.055 192.552 364.692-443.171c15.519-18.86 43.39-21.567 62.253-6.049 18.861 15.519 21.568 43.39 6.048 62.251l-394.992 479.993c-7.821 9.504-19.248 15.319-31.534 16.047-0.874 0.052-1.748 0.078-2.621 0.078z" fill="#fff" p-id="4219"></path></svg>
                                     </div>
                                     <div>
                                         {{ d.label }}</div>
@@ -215,7 +215,7 @@
                     <div>
                         <div class="align-class" style="height: 30px;">
                             <svg t="1706256096074" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="5231" width="25" height="25"><path d="M949.418667 502.369524v64.024381c-10.800762 120.539429-82.115048 223.646476-183.344762 278.723047L732.330667 780.190476A280.30781 280.30781 0 0 0 877.714286 534.381714a280.380952 280.380952 0 0 0-153.941334-250.319238l33.694477-64.926476c105.764571 53.808762 180.833524 159.305143 191.951238 283.233524z m-145.627429 24.576a218.819048 218.819048 0 0 1-105.618286 187.66019l-33.889523-65.097143a145.700571 145.700571 0 0 0 66.364952-122.563047 145.700571 145.700571 0 0 0-68.583619-124.001524l33.792-65.048381a218.819048 218.819048 0 0 1 107.934476 189.049905zM611.547429 205.04381V829.19619c0 49.859048-61.561905 74.044952-96.060953 37.741715l-160.353524-146.383238H159.305143a73.142857 73.142857 0 0 1-73.142857-73.142857V403.407238a73.142857 73.142857 0 0 1 68.827428-73.020952l4.924953-0.121905 197.680762 3.291429 157.915428-166.229334c34.474667-36.327619 96.060952-12.117333 96.060953 37.741714z" p-id="5232" fill="#ffffff"></path></svg>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                            <svg t="1706256389483" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="7089" width="25" height="25"><path d="M554.016 88v84q92 12 164.992 67.008t108 139.008 24.992 176q-16 116-99.008 199.008t-199.008 96.992v86.016q116-12 208-79.008t139.008-170.016 35.008-216.992q-8-100-60.992-184t-136.992-136.992-184-63.008v2.016z m-312 754.016q100 82.016 228 96v-84q-92-12-168-70.016l-60 58.016zM302.016 244q74.016-58.016 168-70.016V87.968q-130.016 12-228 94.016l60 62.016zM242.016 302.016L182.016 242.016q-82.016 98.016-94.016 228h84q14.016-94.016 70.016-168z m-68 252H88q12 128 94.016 228l60-60q-58.016-76-68-168zM426.016 704l256-192-256-192v384z" p-id="7090" fill="#ffffff"></path></svg>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            <!-- <svg t="1706256389483" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="7089" width="25" height="25"><path d="M554.016 88v84q92 12 164.992 67.008t108 139.008 24.992 176q-16 116-99.008 199.008t-199.008 96.992v86.016q116-12 208-79.008t139.008-170.016 35.008-216.992q-8-100-60.992-184t-136.992-136.992-184-63.008v2.016z m-312 754.016q100 82.016 228 96v-84q-92-12-168-70.016l-60 58.016zM302.016 244q74.016-58.016 168-70.016V87.968q-130.016 12-228 94.016l60 62.016zM242.016 302.016L182.016 242.016q-82.016 98.016-94.016 228h84q14.016-94.016 70.016-168z m-68 252H88q12 128 94.016 228l60-60q-58.016-76-68-168zM426.016 704l256-192-256-192v384z" p-id="7090" fill="#ffffff"></path></svg>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -->
                             <el-button type="primary">
                                 添加可用性问题
                             </el-button>
@@ -299,6 +299,7 @@ export default {
             }
         },
         selectTag(data, id, info, unique_id) {
+            console.log(id, unique_id, data)
             const index = data.indexOf(id);
             // console.log()
             if (index == -1) {
@@ -437,7 +438,7 @@ export default {
 
         this.main_data = v_data[this.select_video];
         // console.log(v_data);
-        this.config.src = '../../public/AI_Tool/' + this.select_video + '/video.mp4'
+        this.config.src = 'AI_Tool/' + this.select_video + '/video.mp4'
 
         const dataStore = useDataStore();
         this.dataSource = dataStore.categorySource;
@@ -472,7 +473,7 @@ export default {
     watch: {
         showTagList: {
             handler() {
-                console.log(this.showTagList)
+                // console.log(this.showTagList)
             }
         },
         state: {
