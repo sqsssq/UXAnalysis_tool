@@ -252,6 +252,7 @@ export default {
                 src: '',
                 videoHeight: 1
             },
+            pathSetting: '/',
             defaultShowTag: 0,
             noneDisabledTag: {},
             select_video: '',
@@ -438,7 +439,7 @@ export default {
 
         this.main_data = v_data[this.select_video];
         // console.log(v_data);
-        this.config.src = '/AI_Tool/' + this.select_video + '/video.mp4'
+        // this.config.src = this.pathSetting + 'AI_Tool/' + this.select_video + '/video.mp4'
 
         const dataStore = useDataStore();
         this.dataSource = dataStore.categorySource;
@@ -449,8 +450,6 @@ export default {
             }
             this.showTagList = tagTmp;
         }
-        // this.showTagList = 
-        let _this = this;
         /**
          * @description: watch the data changes in the store
          * @return {*}
@@ -473,7 +472,7 @@ export default {
     watch: {
         showTagList: {
             handler() {
-                // console.log(this.showTagList)
+                console.log(this.showTagList)
             }
         },
         state: {
