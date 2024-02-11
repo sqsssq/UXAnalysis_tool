@@ -1,13 +1,5 @@
-<!--
- * @Description: Main Interface
- * @Author: Qing Shi
- * @Date: 2023-06-29 10:17:17
- * @LastEditors: Qing Shi
- * @LastEditTime: 2024-02-04 16:45:37
--->
 <template>
     <div id="navBar">
-        <!-- <img src="../assets/logo/logo.png" width="35" alt="" style="margin-top: 5px;"> -->
         <span style="font-weight: 800; padding-left: 10px;position: absolute;">UX Analysis Tool</span>
         <span style="position: absolute; right: 10px; top: 
                     0px;"><span style="position: absolute; left: -90px;top: 6px; font-size: 20px;">视频选择</span>

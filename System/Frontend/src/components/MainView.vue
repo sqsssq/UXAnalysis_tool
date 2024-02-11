@@ -197,13 +197,13 @@
                         </div>
                     </div>
                 </div>
-                <div style=" justify-content: space-between; display: flex;position: absolute; bottom: 0px; height: 30px; width: 100%;">
+                <div style="justify-content: space-between; display: flex; position: absolute; bottom: 0px; height: 30px; width: 100%;">
                     <div>
                         <div style="height: 30px;" class="align-class">
                             <a @click="playVideo()">
-                                                                <svg v-if="playTag == 1" t="1706253575488" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4211" width="30" height="30"><path d="M817.088 484.96l-512-323.744C295.232 154.976 282.752 154.592 272.576 160.224 262.336 165.856 256 176.608 256 188.256l0 647.328c0 11.648 6.336 22.4 16.576 28.032 4.8 2.656 10.112 3.968 15.424 3.968 5.952 0 11.904-1.664 17.088-4.928l512-323.616C826.368 533.184 832 522.976 832 512 832 501.024 826.368 490.816 817.088 484.96z" fill="#ffffff" p-id="4212"></path></svg>
-                                                                <svg v-else t="1706534722560" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4218" width="30" height="30"><path d="M304 176h80v672h-80zM712 176h-64c-4.4 0-8 3.6-8 8v656c0 4.4 3.6 8 8 8h64c4.4 0 8-3.6 8-8V184c0-4.4-3.6-8-8-8z" p-id="4219" fill="#ffffff"></path></svg>
-                                                            </a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                <svg v-if="playTag == 1" t="1706253575488" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4211" width="30" height="30"><path d="M817.088 484.96l-512-323.744C295.232 154.976 282.752 154.592 272.576 160.224 262.336 165.856 256 176.608 256 188.256l0 647.328c0 11.648 6.336 22.4 16.576 28.032 4.8 2.656 10.112 3.968 15.424 3.968 5.952 0 11.904-1.664 17.088-4.928l512-323.616C826.368 533.184 832 522.976 832 512 832 501.024 826.368 490.816 817.088 484.96z" fill="#ffffff" p-id="4212"></path></svg>
+                                <svg v-else t="1706534722560" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4218" width="30" height="30"><path d="M304 176h80v672h-80zM712 176h-64c-4.4 0-8 3.6-8 8v656c0 4.4 3.6 8 8 8h64c4.4 0 8-3.6 8-8V184c0-4.4-3.6-8-8-8z" p-id="4219" fill="#ffffff"></path></svg>
+                            </a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                             <a @click="chooseTime(currentPlayTime - 10 >= 0 ? currentPlayTime - 10 : 0)">
                                                             <svg t="1706254098018" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="5623" width="25" height="25"><path d="M483.157333 71.466667A32 32 0 0 1 512 53.333333c253.312 0 458.666667 205.354667 458.666667 458.666667S765.312 970.666667 512 970.666667 53.333333 765.312 53.333333 512c0-188.16 113.28-349.738667 275.2-420.48a32 32 0 1 1 25.6 58.624 394.666667 394.666667 0 1 0 229.632-26.325333l38.570667 48.213333a32 32 0 0 1-50.005333 39.978667l-85.333334-106.666667a32 32 0 0 1-3.84-33.877333z m-42.666666 262.357333a32 32 0 0 1 18.176 28.842667v298.666666a32 32 0 0 1-64 0v-232.106666l-54.656 43.776a32 32 0 0 1-40.021334-50.005334l106.666667-85.333333a32 32 0 0 1 33.877333-3.84zM608 394.666667a42.666667 42.666667 0 0 0-42.666667 42.666666v149.333334a42.666667 42.666667 0 1 0 85.333334 0v-149.333334a42.666667 42.666667 0 0 0-42.666667-42.666666z m-106.666667 42.666666a106.666667 106.666667 0 0 1 213.333334 0v149.333334a106.666667 106.666667 0 0 1-213.333334 0v-149.333334z" p-id="5624" fill="white"></path></svg></a>&nbsp;
                             <a @click="chooseTime(currentPlayTime + 10 <= sumTime ? currentPlayTime + 10 : sumTime)">
@@ -231,11 +231,10 @@
 import { useDataStore } from "../stores/counter";
 
 import { VideoPlayer } from '@videojs-player/vue'
-import 'video.js/dist/video-js.css'
-import videojs from 'video.js'
+// import 'video.js/dist/video-js.css'
 import 'video.js/dist/video-js.css'
 
-import v_data from '../assets/AI_tool/info.json';
+import p_data from '../assets/AI_tool/info.json';
 
 export default {
     name: "PCV",
@@ -372,10 +371,8 @@ export default {
         },
         playVideo() {
             if (this.playTag) {
-                // this.player.currentTime(500);
                 this.player.play();
                 console.log('play');
-                // this.sumTime = parseInt(this.state.duration);
             } else {
                 this.player.pause();
                 console.log('pause');
@@ -424,6 +421,9 @@ export default {
             this.noneDisabledTag = noneDisabledTag;
             // dataStore.noneDisabledTag = this.none
             return [res_data, time_data];
+        },
+        calcAllTag(data) {
+
         }
     },
     components: { VideoPlayer },
@@ -442,14 +442,14 @@ export default {
             this.config.videoHeight = this.elHeight;
         }
         // this.select_video = 'P1';
-        // console.log(v_data)
+        // console.log(p_data)
         const dataStore = useDataStore();
         this.dataSource = dataStore.categorySource;
         this.select_video = dataStore.select_video;
         // console.log(this.select_video)
         if (this.select_video != '')
             this.config.src = this.pathSetting + 'AI_Tool/' + this.select_video + '/video.mp4'
-        this.main_data = v_data[this.select_video];
+        this.main_data = p_data[this.select_video];
         if (this.showTagList.length == 0) {
             let tagTmp = [];
             for (let i in this.dataSource) {
@@ -468,7 +468,7 @@ export default {
             this.select_video = dataStore.select_video;
             if (this.select_video != '') {
                 this.config.src = this.pathSetting + 'AI_Tool/' + this.select_video + '/video.mp4'
-                this.main_data = v_data[this.select_video];
+                this.main_data = p_data[this.select_video];
             }
             if (this.showTagList.length == 0) {
                 let tagTmp = [];
@@ -545,7 +545,7 @@ export default {
         },
         sumTime: {
             handler() {
-                [this.marker_data, this.marker_time] = this.calcMarker(this.main_data, v_data);
+                [this.marker_data, this.marker_time] = this.calcMarker(this.main_data, p_data);
             }
         },
         noneDisabledTag: {
