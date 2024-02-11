@@ -107,7 +107,8 @@ export default {
                 disabled: 'is_dis'
             },
             showTagList: [],
-            changeTag: false
+            changeTag: false,
+            noneDisabledTag: {}
         };
     },
     methods: {
@@ -187,9 +188,20 @@ export default {
                 this.$refs.treeRef.setCheckedKeys(showTagList);
                 this.showTagList = showTagList;
             }
+            this.noneDisabledTag = state.noneDisabledTag;
         });
     },
     watch: {
+        noneDisabledTag: {
+            handler() {
+                // this.showTree = false;
+                // this.$nextTick(() => {
+                //     this.show
+                // })
+                // console.log('ban list', this.noneDisabledTag)
+            },
+            deep: true
+        },
         recommendTag: {
             handler() {
                 const dataStore = useDataStore();

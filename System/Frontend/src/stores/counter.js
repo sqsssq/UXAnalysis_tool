@@ -33,8 +33,11 @@ export const useDataStore = defineStore("dataStore", {
             categorySource: [],
             selectShowLevel: 1,
             noneDisabledTag: {},
+            emptyTag: 0,
             showTagList: [],
-            isShowTagList: false
+            isShowTagList: false,
+            select_video: '',
+            noneDisabledTag: {}
         }
     },
     actions: {

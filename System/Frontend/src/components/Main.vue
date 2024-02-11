@@ -101,7 +101,16 @@ export default {
     created() {},
     mounted() {
         let dataStore = useDataStore();
-        dataStore.categorySource = category_p;
+    },
+    watch: {
+        video_select: {
+            handler() {
+                const dataStore = useDataStore();
+                dataStore.select_video = this.video_select;
+                dataStore.categorySource = category_p;
+                console.log(this.video_select);
+            }
+        }
     },
     components: { ControlList, RecommendList, MainView }
 }
