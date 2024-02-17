@@ -121,6 +121,24 @@
                     <h2>
                         其他相同标签问题：
                     </h2>
+                    <div>
+                        <div v-for="d in info_data.tag" :key="'type_tag' + d">
+                            <div class="align-class" style="justify-content: left;">
+                                <div :style="{backgroundColor: colorMap[dataSource[d - 1].id], width: '15px', height: '15px', 'margin': '0px 3px 0px 3px', borderRadius: '20px'}">
+                                </div>
+                                {{ dataSource[d - 1].label }}
+                            </div>
+                            <div v-for="(td, ti) in allTagTimeData[this.dataSource[d].id]" :key="'time_t' + ti" style="font-size: 16px;">
+                                {{ ti }}: <span v-for="(t_d, t_i) in td" :key="'time_td' + t_i">
+                                    <a :style="{textDecoration: 'underline', color: t_d.status == 0 ? 'white' : 'blue'}">
+                                        {{ (parseInt(t_d.time / 60 / 24).toString().padStart(2, '0')) + ':' + (parseInt(t_d.time / 60).toString().padStart(2, '0')) + ':' + ((t_d.time % 60).toString().padStart(2, '0')) }}
+                                    </a>
+                                    <span v-if="t_i != td.length - 1">, </span>
+                                </span>
+                            </div>
+
+                        </div>
+                    </div>
                 </div>
                 <div style="padding: 5px 0px 10px 0px;">
                     <el-button type="primary" @click="chooseTime(info_data.time)">
@@ -241,6 +259,7 @@ export default {
     props: [],
     data() {
         return {
+            all_data: [],
             selectShowLevel: 1,
             user_info: {
                 name: '',
@@ -279,7 +298,8 @@ export default {
                 timeSlot: [],
                 lastTime: -1
             },
-            showTagList: []
+            showTagList: [],
+            allTagTimeData: {}
         };
     },
     methods: {
@@ -310,6 +330,7 @@ export default {
                     }
                     this.noneDisabledTag[unique_id]++;
                 }
+                // if (typeof this.allTagTimeData[this.dataSource])
             } else {
                 data.splice(index, 1);
                 if (typeof info != "number") {
@@ -423,7 +444,34 @@ export default {
             return [res_data, time_data];
         },
         calcAllTag(data) {
-
+            // console.log(data);
+            let res_data = {};
+            for (const p in data) {
+                const p_code = p;
+                for (const d of data[p].info) {
+                    for (const t of d.tag) {
+                        // console.log(t, d.tag, this.dataSource);
+                        if (typeof res_data[this.dataSource[t - 1].id] == 'undefined') {
+                            res_data[this.dataSource[t - 1].id] = {};
+                        }
+                        if (typeof res_data[this.dataSource[t - 1].id][p_code] == 'undefined') {
+                            res_data[this.dataSource[t - 1].id][p_code] = [];
+                        }
+                        res_data[this.dataSource[t - 1].id][p_code].push(d);
+                        for (const st of d.second_tag[t]) {
+                            if (typeof res_data[this.dataSource[t - 1].children[st - 1].id] == 'undefined') {
+                                res_data[this.dataSource[t - 1].children[st - 1].id] = {};
+                            }
+                            if (typeof res_data[this.dataSource[t - 1].children[st - 1].id][p_code] == 'undefined') {
+                                res_data[this.dataSource[t - 1].children[st - 1].id][p_code] = [];
+                            }
+                            res_data[this.dataSource[t - 1].children[st - 1].id][p_code].push(d);
+                        }
+                    }
+                }
+            }
+            console.log(res_data)
+            return res_data;
         }
     },
     components: { VideoPlayer },
@@ -441,15 +489,16 @@ export default {
         } else {
             this.config.videoHeight = this.elHeight;
         }
-        // this.select_video = 'P1';
-        // console.log(p_data)
+        this.all_data = p_data;
         const dataStore = useDataStore();
         this.dataSource = dataStore.categorySource;
         this.select_video = dataStore.select_video;
+        if (this.dataSource.length != 0){
+            this.allTagTimeData = this.calcAllTag(this.all_data);}
         // console.log(this.select_video)
         if (this.select_video != '')
             this.config.src = this.pathSetting + 'AI_Tool/' + this.select_video + '/video.mp4'
-        this.main_data = p_data[this.select_video];
+        this.main_data = this.all_data[this.select_video];
         if (this.showTagList.length == 0) {
             let tagTmp = [];
             for (let i in this.dataSource) {
@@ -463,12 +512,14 @@ export default {
          */
         dataStore.$subscribe((mutations, state) => {
             this.dataSource = state.categorySource;
+            if (this.dataSource.length != 0){
+                this.allTagTimeData = this.calcAllTag(this.all_data);}
             this.showTagList = state.showTagList;
             this.selectShowLevel = state.selectShowLevel;
             this.select_video = dataStore.select_video;
             if (this.select_video != '') {
                 this.config.src = this.pathSetting + 'AI_Tool/' + this.select_video + '/video.mp4'
-                this.main_data = p_data[this.select_video];
+                this.main_data = this.all_data[this.select_video];
             }
             if (this.showTagList.length == 0) {
                 let tagTmp = [];
@@ -545,7 +596,7 @@ export default {
         },
         sumTime: {
             handler() {
-                [this.marker_data, this.marker_time] = this.calcMarker(this.main_data, p_data);
+                [this.marker_data, this.marker_time] = this.calcMarker(this.main_data, this.all_data);
             }
         },
         noneDisabledTag: {
