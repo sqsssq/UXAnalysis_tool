@@ -252,8 +252,6 @@ import { VideoPlayer } from '@videojs-player/vue'
 // import 'video.js/dist/video-js.css'
 import 'video.js/dist/video-js.css'
 
-import p_data from '../assets/AI_tool/info.json';
-
 export default {
     name: "PCV",
     props: [],
@@ -440,7 +438,6 @@ export default {
                 }
             }
             this.noneDisabledTag = noneDisabledTag;
-            // dataStore.noneDisabledTag = this.none
             return [res_data, time_data];
         },
         calcAllTag(data) {
@@ -489,8 +486,8 @@ export default {
         } else {
             this.config.videoHeight = this.elHeight;
         }
-        this.all_data = p_data;
         const dataStore = useDataStore();
+        this.all_data = dataStore.all_data;
         this.dataSource = dataStore.categorySource;
         this.select_video = dataStore.select_video;
         if (this.dataSource.length != 0){
@@ -511,6 +508,7 @@ export default {
          * @return {*}
          */
         dataStore.$subscribe((mutations, state) => {
+            this.all_data = state.all_data;
             this.dataSource = state.categorySource;
             if (this.dataSource.length != 0){
                 this.allTagTimeData = this.calcAllTag(this.all_data);}

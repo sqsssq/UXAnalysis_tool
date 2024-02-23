@@ -27,7 +27,7 @@
             {
                 "l_id": 3,
                 "level": 2,
-                "disabled": true,
+                "disabled": false,
                 "label": "功能完整性",
                 "description": "用户完成任务所需功能的缺失或不足，如语法检查功能或风格一致性。",
                 "cnt": 3,

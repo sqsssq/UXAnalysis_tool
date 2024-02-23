@@ -8,14 +8,14 @@
 <template>
     <VideoPlayer :dialogVisible="dialogVisible" @showDialog="showDialog" />
     <div ref="recommendList" id="recommendList" style="height: 100%; overflow-x: hidden; width: 100%; display: flex;">
-        <div v-for="i in 10" :key="'video' + i" id="video_list" style="border: 0px solid white; height: 100%; color: white; font-size: 20px; padding: 3px 10px 5px 10px;">
+        <div v-for="(d, i) in video_list" ref="video_element" :key="'video' + i" id="video_list" style="border: 0px solid white; height: 100%; color: white; font-size: 20px; padding: 3px 10px 5px 10px;">
             <div style="height: 30px; float: left;">
-                {{ 'P' + i }}
+                {{ d.id }}
             </div>
             <!-- <div style="width: 400px;"></div> -->
             <!-- <div style="width: 00px;"></div> -->
             <div style="height: calc(100% - 30px); ">
-                <img src="../../public/AI_Tool/P1/fig.png" alt="" style="height: 95%;">
+                <img :src="'../../public/AI_Tool/' + d.id + '/fig.png'" alt="" style="height: 95%;">
                 <div class="play_button" @click="dialogVisible = true">
                     <div style="position: absolute; top: calc(30px + 50% - 40px); left: calc(50% - 40px); background-color: white; border-radius: 80px; height: 80px;">
                         <svg t="1705932141588" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4359" width="80" height="80"><path d="M374.272 333.312v355.328c0 30.208 20.992 40.448 45.568 26.112l288.768-175.104c25.088-15.872 25.088-40.448 0-54.784L419.84 309.76c-7.68-5.12-14.336-6.656-20.992-6.656-14.336-2.56-24.576 9.216-24.576 30.208zM1024 512c0 282.624-229.376 512-512 512S0 794.624 0 512 229.376 0 512 0s512 229.376 512 512z" p-id="4360" fill="#8a8a8a"></path></svg>
@@ -44,9 +44,10 @@ export default {
     data() {
         return {
             video_cnt: 0,
+            select_video: '',
             elHeight: 0,
             elWidth: 0,
-            image_url: [''],
+            video_list: [],
             dialogVisible: false,
         };
     },
@@ -54,26 +55,73 @@ export default {
         translate(x, y, deg) {
             return `translate(${x}, ${y}) rotate(${deg})`;
         },
-        showDialog (data) {
+        showDialog(data) {
             this.dialogVisible = data;
         },
         scrollToRight() {
             let video_width = document.getElementById('video_list').offsetWidth;
-            if (this.video_cnt * (this.elWidth / 2) < video_width * 9) {
+            let cnt = parseInt(video_width * (this.video_list.length) / (this.elWidth)) + 1;
+            if (this.video_cnt < cnt) {
                 this.video_cnt += 1;
                 document.getElementById('recommendList').scrollTo({ top: 0, left: this.video_cnt * (this.elWidth / 2), behavior: 'smooth' });
             }
-            console.log(this.video_cnt * (this.elWidth / 2), video_width)
+            console.log(this.video_cnt * (this.elWidth / 2), this.video_cnt)
         },
         scrollToLeft() {
             let video_width = document.getElementById('video_list').offsetWidth;
             if (this.video_cnt > 0) {
                 this.video_cnt -= 1;
-                while (this.video_cnt * (this.elWidth / 2) >= video_width * 9)
+                while (this.video_cnt * (this.elWidth / 2) >= (video_width * (this.video_list.length - 2)))
                     this.video_cnt--;
                 if (this.video_cnt < 0) this.video_cnt = 0;
                 document.getElementById('recommendList').scrollTo({ top: 0, left: this.video_cnt * (this.elWidth / 2), behavior: 'smooth' });
             }
+            console.log(this.video_cnt)
+        },
+        jaccardSimilarity(set1, set2) {
+            const intersectionSize = this.intersection(set1, set2).size;
+            const unionSize = this.union(set1, set2).size;
+            return intersectionSize / unionSize;
+        },
+        intersection(set1, set2) {
+            let uni_set1 = new Set(set1.map(JSON.stringify));
+            let uni_set2 = new Set(set2.map(JSON.stringify));
+            return new Set([...uni_set2].filter(x => {
+                return uni_set1.has(x)
+            }));
+        },
+        union(set1, set2) {
+            let uni_set1 = new Set(set1.map(JSON.stringify));
+            let uni_set2 = new Set(set2.map(JSON.stringify))
+            return new Set([...uni_set1, ...uni_set2]);
+        },
+        calcSimilarity(data) {
+            let pre_data = new Array();
+            let test_data = {};
+            for (let i in data) {
+                let tmp = new Array();
+                for (let j in data[i].info) {
+                    tmp.push(data[i].info[j].tag);
+                }
+                if (i == this.select_video) {
+                    test_data = {
+                        id: i,
+                        data: tmp
+                    };
+                } else {
+                    pre_data.push({
+                        id: i,
+                        data: tmp
+                    });
+                }
+            }
+            // console.log(test_data, pre_data)
+            for (let i in pre_data) {
+                let similarity_data = this.jaccardSimilarity((test_data.data), (pre_data[i].data));
+                pre_data[i].similarity = similarity_data;
+            }
+            pre_data.sort((a, b) => b.similarity - a.similarity);
+            return pre_data;
         }
     },
     created() {},
@@ -87,8 +135,12 @@ export default {
          * @description: watch the data changes in the store
          * @return {*}
          */
-        dataStore.$subscribe((mutations) => {
 
+        dataStore.$subscribe((mutations) => {
+            this.select_video = dataStore.select_video;
+            if (this.select_video != '') {
+                this.video_list = this.calcSimilarity(dataStore.all_data);
+            }
 
         });
     },

@@ -39,7 +39,7 @@
             </div>
             <el-switch v-model="recommendTag" class="mb-2" style="--el-switch-on-color: #409eff; --el-switch-off-color: #409eff" active-text="二级标签推荐" inactive-text="一级标签推荐" />
         </div>
-        <div id="problem_tag" style="height: calc(100% - 80px)">
+        <div ref="wholeWidth" id="problem_tag" style="height: calc(100% - 80px)">
             <el-dialog v-model="addPoint" :title="'添加' + add_tag_level + '级标签'" width="15%" height="100px" :append-to="'#problems_tag'" :modal="false" :class="'add_dialog'">
                 <span>
                         <el-input v-model="tag_name" placeholder="Please input" />
@@ -49,8 +49,41 @@
                     <el-button type="primary" @click="addTag()">确定</el-button>
                 </div>
             </el-dialog>
-            <div style="text-align: left; font-size: 24px; color: white; font-weight: bold; height: 40px;">
-                可用性问题标签
+            <div style="text-align: left; font-size: 24px; color: white; font-weight: bold; height: 40px; display: flex;">
+                <span>可用性问题标签</span> &nbsp;
+                <span>
+                <el-popover
+                    placement="bottom"
+                    title="标签解释"
+                    :width="elWidth * .8"
+                    trigger="click"
+                    :popper-class="'tag_description'"
+                >
+                    <template #reference>
+                    <a><svg t="1708679239889" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1495" width="30" height="35"><path d="M536 480v192a16 16 0 0 1-16 16h-16a16 16 0 0 1-16-16V480a16 16 0 0 1 16-16h16a16 16 0 0 1 16 16z m-32-128h16a16 16 0 0 1 16 16v32a16 16 0 0 1-16 16h-16a16 16 0 0 1-16-16v-32a16 16 0 0 1 16-16z m8 448c159.056 0 288-128.944 288-288s-128.944-288-288-288-288 128.944-288 288 128.944 288 288 288z m0 48c-185.568 0-336-150.432-336-336s150.432-336 336-336 336 150.432 336 336-150.432 336-336 336z" fill="#ffffff" p-id="1496"></path></svg></a>
+                    </template>
+                    <div :style="{ height: (elHeight * .8) + 'px', fontSize: '20px', lineHeight: 1.5}">
+                        <div style="color: #777;">
+                            灰色字体代表当前视频中未出现此标签
+                        </div>
+                        <div style="overflow: auto; height: calc(100% - 30px);">
+                        <div v-for="(data, i) in dataSource" :key="'description_' + i" :style="{color: data.disabled == true ? '#777' : 'white'}">
+                            <div :style="{ display: 'flex', alignItems: 'center'}"><div :style="{float: 'left', 'margin': '0px 10px 0px 0px', width: '20px', height: '20px', 'background-color': colorMap[data.id], 'borderRadius': data.level == 1 ? '20px' : '0px', }"></div> {{ (i + 1) + '   ' + data.label }}</div>
+                            <div style="font-size: 18px; padding-right: 10px;">
+                                {{ data.description }}
+                            </div>
+                            <div v-for="(child, j) in data.children">
+                                <div :style="{ display: 'flex', alignItems: 'center'}"><div :style="{float: 'left', 'margin': '0px 10px 0px 0px', width: '20px', height: '20px', 'background-color': colorMap[child.id], 'borderRadius': child.level == 1 ? '20px' : '0px', }"></div> {{ (i + 1) + '-' + (j + 1) +  '   ' + child.label }}</div>
+                                <div style="font-size: 18px; padding-right: 10px;">
+                                    {{ child.description }}
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+                </el-popover>
+            </span>
             </div>
             <div style="text-align: left; padding-left: 24px; height: 45px;width: 100%;">
                 <span>
@@ -105,7 +138,8 @@ export default {
             },
             showTagList: [],
             changeTag: false,
-            noneDisabledTag: {}
+            noneDisabledTag: {},
+            all_data: []
         };
     },
     methods: {
@@ -168,6 +202,8 @@ export default {
 
     },
     mounted() {
+        this.elWidth = this.$refs.wholeWidth.offsetWidth;
+        this.elHeight = this.$refs.wholeWidth.offsetHeight;
         const dataStore = useDataStore();
         this.dataSource = dataStore.categorySource;
         let showTagList = [];
@@ -249,19 +285,19 @@ export default {
                 dataStore.showTagList = showTagList;
             }
         }
-        // showTagList: {
-        //     handler() {
-        //         // console.log(1);
-        //         const dataStore = useDataStore();
-        //         dataStore.showTagList = this.showTagList
-        //     },
-        //     deep: true
-        // }
     },
 };
 </script>
 
 <style>
+.tag_description {
+    margin-top: -15px;
+}
+.el-popover__title {
+    color: white;
+    font-size: 24px;
+    font-weight: bold;
+}
 .el-checkbox__input.is-disabled .el-checkbox__inner {
     background-color: #777;
 }

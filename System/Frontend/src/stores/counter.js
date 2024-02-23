@@ -37,7 +37,9 @@ export const useDataStore = defineStore("dataStore", {
             showTagList: [],
             isShowTagList: false,
             select_video: '',
-            noneDisabledTag: {}
+            select_dataset: '',
+            noneDisabledTag: {},
+            all_data: []
         }
     },
     actions: {
