@@ -6,7 +6,7 @@
  */
 import {
     fetchAllData,
-    fetchHello, uploadData
+    fetchHello, uploadData, queryRecommendation
 } from "../service/module/dataService";
 import {
     ref,
@@ -63,6 +63,11 @@ export const useDataStore = defineStore("dataStore", {
                 this.system_data = resp.data;
                 console.log("Fetch Data: ", new Date() - st);
             });
+        },
+        async queryRecommendation(param) {
+            const st = new Date();
+            const data = await queryRecommendation(param);
+            return data;
         }
     }
 })

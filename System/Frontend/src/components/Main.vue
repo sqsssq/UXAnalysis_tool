@@ -70,7 +70,7 @@ export default {
     data() {
         return {
             msg1: "Hello, main!",
-            leftShow: 0,
+            leftShow: 1,
             video_select: '',
             dataset_select: '',
             dataset_options: [{
@@ -148,7 +148,6 @@ export default {
             handler() {
                 const dataStore = useDataStore();
                 dataStore.select_video = this.video_select;
-                dataStore.categorySource = category_p;
                 console.log(this.video_select);
             }
         }

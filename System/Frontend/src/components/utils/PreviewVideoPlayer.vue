@@ -6,19 +6,22 @@
  * @LastEditTime: 2024-01-24 15:13:23
 -->
 <template>
-    <el-dialog ref="videoDialog" v-model="visible" title="Tips" width="50%">
+    <el-dialog ref="videoDialog" v-model="visible" :title="'视频预览 ' + video_name" width="50%"  :class="'show_info_dialog'">
         <div :style="{width: '100%', 'padding-left': (.5 * .05 * elWidth - 20) + 'px'}">
-            <video-player src="../../../src/assets/AI_tool/P1/video.mp4" playsinline controls :volume="0.2" :width=".5 * .9 * elWidth" :playback-rates="[0.7, 1.0, 1.5, 2.0]" @mounted="handleMounted" @ready="handleEvent($event)" @play="handleEvent($event)" @pause="handleEvent($event)"
+            <video-player :src="video_url" playsinline controls :volume="0.2" :width=".5 * .9 * elWidth" :playback-rates="[0.7, 1.0, 1.5, 2.0]" @mounted="handleMounted" @ready="handleEvent($event)" @play="handleEvent($event)" @pause="handleEvent($event)"
                 @ended="handleEvent($event)" @loadeddata="handleEvent($event)" @waiting="handleEvent($event)" @playing="handleEvent($event)" @canplay="handleEvent($event)" @canplaythrough="handleEvent($event)" @timeupdate="handleEvent(player?.currentTime())"
             />
         </div>
-        <!-- <template #footer>
-                    <span class="dialog-footer">
+        <template #footer>
+                    <span class="dialog-footer" style="display: flex; justify-content: center;">
+                        <el-button type="success" @click="visible = false">
+                            分析
+                        </el-button>
                         <el-button type="primary" @click="visible = false">
-                            Close
+                            关闭
                         </el-button>
                     </span>
-</template> -->
+</template>
     </el-dialog>
 </template>
 
@@ -30,14 +33,16 @@ import 'video.js/dist/video-js.css'
 
 export default {
     name: "PCV",
-    props: ['dialogVisible'],
+    props: ['dialogVisible', 'config'],
     components: { VideoPlayer },
     data() {
         return {
             elHeight: 0,
             elWidth: 0,
             visible: false,
-            player: {}
+            player: {},
+            video_url: '',
+            video_name: ''
         };
     },
     methods: {
@@ -61,12 +66,26 @@ export default {
         dialogVisible: {
             handler(newVal) {
                 this.visible = newVal;
+                // this.visible = false;
             }
         },
         visible: {
             handler(newVal) {
+                // console.log(this.visible)
+                if (!this.visible) this.player.pause()
                 this.$emit("showDialog", newVal);
             }
+        },
+        config: {
+            handler(newVal) {
+                console.log(this.config)
+                this.video_url = '/AI_tool/' + this.config.video_id + '/video.mp4';
+                this.video_name = this.config.name;
+                this.$nextTick(() => {
+                    this.player.currentTime(this.config.time);
+                })
+            },
+            deep: true
         }
     },
 };

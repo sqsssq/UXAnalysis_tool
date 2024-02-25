@@ -6,7 +6,7 @@
  * @LastEditTime: 2024-02-07 19:44:21
 -->
 <template>
-    <VideoPlayer :dialogVisible="dialogVisible" @showDialog="showDialog" />
+    <PreviewVideoPlayer :dialogVisible="dialogVisible" :config="config" @showDialog="showDialog" />
     <div ref="recommendList" id="recommendList" style="height: 100%; overflow-x: hidden; width: 100%; display: flex;">
         <div v-for="(d, i) in video_list" ref="video_element" :key="'video' + i" id="video_list" style="border: 0px solid white; height: 100%; color: white; font-size: 20px; padding: 3px 10px 5px 10px;">
             <div style="height: 30px; float: left;">
@@ -16,7 +16,7 @@
             <!-- <div style="width: 00px;"></div> -->
             <div style="height: calc(100% - 30px); ">
                 <img :src="'../../public/AI_Tool/' + d.id + '/fig.png'" alt="" style="height: 95%;">
-                <div class="play_button" @click="dialogVisible = true">
+                <div class="play_button" @click="showPreview(d.id)">
                     <div style="position: absolute; top: calc(30px + 50% - 40px); left: calc(50% - 40px); background-color: white; border-radius: 80px; height: 80px;">
                         <svg t="1705932141588" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4359" width="80" height="80"><path d="M374.272 333.312v355.328c0 30.208 20.992 40.448 45.568 26.112l288.768-175.104c25.088-15.872 25.088-40.448 0-54.784L419.84 309.76c-7.68-5.12-14.336-6.656-20.992-6.656-14.336-2.56-24.576 9.216-24.576 30.208zM1024 512c0 282.624-229.376 512-512 512S0 794.624 0 512 229.376 0 512 0s512 229.376 512 512z" p-id="4360" fill="#8a8a8a"></path></svg>
                     </div>
@@ -35,12 +35,12 @@
 
 <script>
 import { useDataStore } from "../stores/counter";
-import VideoPlayer from './utils/VideoPlayer.vue';
+import PreviewVideoPlayer from './utils/PreviewVideoPlayer.vue';
 
 export default {
     name: "PCV",
     props: [],
-    components: { VideoPlayer },
+    components: { PreviewVideoPlayer },
     data() {
         return {
             video_cnt: 0,
@@ -48,12 +48,23 @@ export default {
             elHeight: 0,
             elWidth: 0,
             video_list: [],
+            config: {},
+            category: [],
+            showTagList: [],
             dialogVisible: false,
         };
     },
     methods: {
         translate(x, y, deg) {
             return `translate(${x}, ${y}) rotate(${deg})`;
+        },
+        showPreview(id) {
+            this.dialogVisible = true;
+            this.config = {
+                time: 0,
+                video_id: id,
+                name: id
+            }
         },
         showDialog(data) {
             this.dialogVisible = data;
@@ -65,7 +76,6 @@ export default {
                 this.video_cnt += 1;
                 document.getElementById('recommendList').scrollTo({ top: 0, left: this.video_cnt * (this.elWidth / 2), behavior: 'smooth' });
             }
-            console.log(this.video_cnt * (this.elWidth / 2), this.video_cnt)
         },
         scrollToLeft() {
             let video_width = document.getElementById('video_list').offsetWidth;
@@ -76,7 +86,6 @@ export default {
                 if (this.video_cnt < 0) this.video_cnt = 0;
                 document.getElementById('recommendList').scrollTo({ top: 0, left: this.video_cnt * (this.elWidth / 2), behavior: 'smooth' });
             }
-            console.log(this.video_cnt)
         },
         jaccardSimilarity(set1, set2) {
             const intersectionSize = this.intersection(set1, set2).size;
@@ -115,10 +124,22 @@ export default {
                     });
                 }
             }
-            // console.log(test_data, pre_data)
+            if (!(this.showTagList.length == 0 || (Math.max(...this.showTagList) == this.showTagList.length))){
             for (let i in pre_data) {
                 let similarity_data = this.jaccardSimilarity((test_data.data), (pre_data[i].data));
                 pre_data[i].similarity = similarity_data;
+            }} else {
+                for (let i in pre_data) {
+                    let cnt = 0;
+                    let tmp_data = pre_data[i].data;
+                    for (let j in tmp_data) {
+                        for (let k in tmp_data[j]) {
+                            if (this.showTagList.indexOf(tmp_data[j][k]) != -1)
+                                cnt++;
+                        }
+                    }
+                    pre_data[i].similarity = cnt;
+                }
             }
             pre_data.sort((a, b) => b.similarity - a.similarity);
             return pre_data;
@@ -138,10 +159,11 @@ export default {
 
         dataStore.$subscribe((mutations) => {
             this.select_video = dataStore.select_video;
+            this.category = dataStore.categorySource;
+            this.showTagList = dataStore.showTagList;
             if (this.select_video != '') {
                 this.video_list = this.calcSimilarity(dataStore.all_data);
             }
-
         });
     },
     watch: {},

@@ -8,7 +8,7 @@
 import axios from 'axios';
 
 // axios.defaults.withCredentials = true
-const TEST_URL_PREFIX = 'http://127.0.0.1:5000/api/test';
+const TEST_URL_PREFIX = 'http://43.153.168.84:8000/apis';
 
 export function fetchHello(param, callback) {
     const url = `${TEST_URL_PREFIX}/hello/`;
@@ -38,4 +38,23 @@ export function fetchAllData(param, callback) {
     }, errResponse => {
         console.log(errResponse);
     })
+}
+
+export async function queryRecommendation(param, callback) {
+    const url = `${TEST_URL_PREFIX}/Recommendation`;
+    const jsonString = JSON.stringify(param)
+    const data = await axios({
+        method: "post",
+        url: url,
+        headers: {
+            "Content-Type": "application/json",
+        },
+        data: jsonString
+    })
+    return data;
+    // .then(response => {
+    //     callback(response);
+    // }, errResponse => {
+    //     console.log(errResponse)
+    // })
 }

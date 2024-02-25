@@ -42,8 +42,8 @@
         <div ref="wholeWidth" id="problem_tag" style="height: calc(100% - 80px)">
             <el-dialog v-model="addPoint" :title="'添加' + add_tag_level + '级标签'" width="15%" height="100px" :append-to="'#problems_tag'" :modal="false" :class="'add_dialog'">
                 <span>
-                        <el-input v-model="tag_name" placeholder="Please input" />
-                    </span>
+                                <el-input v-model="tag_name" placeholder="Please input" />
+                            </span>
                 <div style="padding: 20px 0px 10px 0px;">
                     <el-button @click="addPoint = false">取消</el-button>
                     <el-button type="primary" @click="addTag()">确定</el-button>
@@ -52,16 +52,16 @@
             <div style="text-align: left; font-size: 24px; color: white; font-weight: bold; height: 40px; display: flex;">
                 <span>可用性问题标签</span> &nbsp;
                 <span>
-                <el-popover
-                    placement="bottom"
-                    title="标签解释"
-                    :width="elWidth * .8"
-                    trigger="click"
-                    :popper-class="'tag_description'"
-                >
-                    <template #reference>
-                    <a><svg t="1708679239889" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1495" width="30" height="35"><path d="M536 480v192a16 16 0 0 1-16 16h-16a16 16 0 0 1-16-16V480a16 16 0 0 1 16-16h16a16 16 0 0 1 16 16z m-32-128h16a16 16 0 0 1 16 16v32a16 16 0 0 1-16 16h-16a16 16 0 0 1-16-16v-32a16 16 0 0 1 16-16z m8 448c159.056 0 288-128.944 288-288s-128.944-288-288-288-288 128.944-288 288 128.944 288 288 288z m0 48c-185.568 0-336-150.432-336-336s150.432-336 336-336 336 150.432 336 336-150.432 336-336 336z" fill="#ffffff" p-id="1496"></path></svg></a>
-                    </template>
+                        <el-popover
+                            placement="bottom"
+                            title="标签解释"
+                            :width="elWidth * .8"
+                            trigger="click"
+                            :popper-class="'tag_description'"
+                        >
+                            <template #reference>
+                            <a><svg t="1708679239889" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1495" width="30" height="35"><path d="M536 480v192a16 16 0 0 1-16 16h-16a16 16 0 0 1-16-16V480a16 16 0 0 1 16-16h16a16 16 0 0 1 16 16z m-32-128h16a16 16 0 0 1 16 16v32a16 16 0 0 1-16 16h-16a16 16 0 0 1-16-16v-32a16 16 0 0 1 16-16z m8 448c159.056 0 288-128.944 288-288s-128.944-288-288-288-288 128.944-288 288 128.944 288 288 288z m0 48c-185.568 0-336-150.432-336-336s150.432-336 336-336 336 150.432 336 336-150.432 336-336 336z" fill="#ffffff" p-id="1496"></path></svg></a>
+                            </template>
                     <div :style="{ height: (elHeight * .8) + 'px', fontSize: '20px', lineHeight: 1.5}">
                         <div style="color: #777;">
                             灰色字体代表当前视频中未出现此标签
@@ -83,7 +83,7 @@
                     </div>
                     </div>
                 </el-popover>
-            </span>
+                </span>
             </div>
             <div style="text-align: left; padding-left: 24px; height: 45px;width: 100%;">
                 <span>
@@ -95,13 +95,13 @@
             </div>
             <div style="width: 100%; height: calc(100% - 85px); overflow-y: auto;">
                 <el-tree ref="treeRef" v-if="showTree" :data="dataSource" show-checkbox node-key="id" :default-expand-all="expandTag" :expand-on-click-node="false" :props="defaultProps" @check="checkStatus">
-                    <template #default="{ node, data }">
-                                                        <span class="custom-tree-node">
-                                                            <span :style="{color: data.disabled == true ? '#777' : 'white'}"> <div :style="{float: 'left', 'margin': '5px 10px 0px 0px', width: '20px', height: '20px', 'background-color': colorMap[data.id], 'borderRadius': node.level == 1 ? '20px' : '0px', }"></div> {{ node.label }}</span>
-                                                            <span style="padding-top: 5px;">
-                                                                <a v-if="node.level == 1" @click="showDialog(2, data)"> <svg t="1706082110613" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4198" width="20" height="20"><path d="M832 1024H192c-106.048 0-192-86.016-192-192V192a192 192 0 0 1 192-192h640a192 192 0 0 1 192 192v640c0 105.984-85.952 192-192 192z m64-832a64 64 0 0 0-64-64H192a64 64 0 0 0-64 64v640c0 35.392 28.608 64 64 64h640c35.392 0 64-28.608 64-64V192z m-192 384h-128v128c0 35.392-28.608 64-64 64s-64-28.608-64-64v-128h-128a64 64 0 1 1 0-128h128v-128a64 64 0 1 1 128 0v128h128a64 64 0 1 1 0 128z" fill="white" p-id="4199"></path></svg> </a>
-                                                            </span>
-                                                        </span>
+<template #default="{ node, data }">
+    <span class="custom-tree-node">
+                                                                    <span :style="{color: data.disabled == true ? '#777' : 'white'}"> <div :style="{float: 'left', 'margin': '5px 10px 0px 0px', width: '20px', height: '20px', 'background-color': colorMap[data.id], 'borderRadius': node.level == 1 ? '20px' : '0px', }"></div> {{ node.label }}</span>
+    <span style="padding-top: 5px;">
+                                                                        <a v-if="node.level == 1" @click="showDialog(2, data)"> <svg t="1706082110613" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4198" width="20" height="20"><path d="M832 1024H192c-106.048 0-192-86.016-192-192V192a192 192 0 0 1 192-192h640a192 192 0 0 1 192 192v640c0 105.984-85.952 192-192 192z m64-832a64 64 0 0 0-64-64H192a64 64 0 0 0-64 64v640c0 35.392 28.608 64 64 64h640c35.392 0 64-28.608 64-64V192z m-192 384h-128v128c0 35.392-28.608 64-64 64s-64-28.608-64-64v-128h-128a64 64 0 1 1 0-128h128v-128a64 64 0 1 1 128 0v128h128a64 64 0 1 1 0 128z" fill="white" p-id="4199"></path></svg> </a>
+                                                                    </span>
+    </span>
 </template>
                 </el-tree>
             </div>
@@ -119,7 +119,9 @@ export default {
         return {
             showTable: 0,
             elHeight: 0,
+            all_data: [],
             elWidth: 0,
+            select_video: '',
             addPoint: false,
             expandTag: false,
             showTree: true,
@@ -148,12 +150,10 @@ export default {
         },
         checkStatus() {
             let showTagList = [...this.$refs.treeRef.getCheckedKeys(), ...this.$refs.treeRef.getHalfCheckedKeys()];
-            console.log(showTagList)
-            // this.$refs.treeRef.setCheckedKeys(showTagList);
-
             const dataStore = useDataStore();
             dataStore.showTagList = showTagList;
             this.showTagList = showTagList;
+            console.log(showTagList)
         },
         showDialog(tag_type, data) {
             this.tag_name = "";
@@ -195,6 +195,34 @@ export default {
                 })
             }
             // this.id_cnt++;
+        },
+        calcDisabledData(data) {
+            let noneDisabledTag = {};
+            for (const i in data) {
+                if (this.select_video == '' || i == this.select_video) {
+                    for (const d of data[i].info) {
+                        for (const t of d.tag) {
+                            // console.log(t, this.dataSource[t - 1].id);
+                            let t1 = this.dataSource[t - 1].id;
+                            if (typeof noneDisabledTag[t1] == 'undefined') {
+                                noneDisabledTag[t1] = 0;
+                            }
+                            noneDisabledTag[t1]++;
+                            if (typeof d.second_tag[t] != 'undefined') {
+                                for (const st of d.second_tag[t]) {
+                                    let st1 = this.dataSource[t - 1].children[st - 1].id;
+                                    if (typeof noneDisabledTag[st1] == 'undefined') {
+                                        noneDisabledTag[st1] = 0;
+                                    }
+                                    noneDisabledTag[st1]++;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            // console.log(noneDisabledTag)
+            return noneDisabledTag;
         }
     },
     created() {},
@@ -213,33 +241,45 @@ export default {
         this.$refs.treeRef.setCheckedKeys(showTagList);
         this.showTagList = showTagList;
         dataStore.showTagList = showTagList;
-
+        this.select_video = dataStore.select_video;
+        this.all_data = dataStore.all_data;
+        this.noneDisabledTag = this.calcDisabledData(this.all_data);
         /**
          * @description: watch the data changes in the store
          * @return {*}
          */
         dataStore.$subscribe((mutations, state) => {
             this.dataSource = state.categorySource;
+            this.select_video = dataStore.select_video;
+            this.all_data = dataStore.all_data;
+            this.noneDisabledTag = this.calcDisabledData(this.all_data);
             if (this.selectAll) {
                 let showTagList = [];
                 for (const d of this.dataSource) {
                     showTagList.push(d.id);
                 }
-                // this.$refs.treeRef.setCheckedNodes(this.dataSource);
                 this.$refs.treeRef.setCheckedKeys(showTagList);
                 this.showTagList = showTagList;
             }
-            this.noneDisabledTag = state.noneDisabledTag;
         });
     },
     watch: {
         noneDisabledTag: {
             handler() {
-                // this.showTree = false;
-                // this.$nextTick(() => {
-                //     this.show
-                // })
-                // console.log('ban list', this.noneDisabledTag)
+                for (const i in this.dataSource) {
+                    if (this.noneDisabledTag[this.dataSource[i].id] > 0) {
+                        this.dataSource[i].disabled = false;
+                    } else {
+                        this.dataSource[i].disabled = true;
+                    }
+                    for (const j in this.dataSource[i].children) {
+                        if (this.noneDisabledTag[this.dataSource[i].children[j].id] > 0) {
+                            this.dataSource[i].children[j].disabled = false;
+                        } else {
+                            this.dataSource[i].children[j].disabled = true;
+                        }
+                    }
+                }
             },
             deep: true
         },
@@ -255,7 +295,7 @@ export default {
                     this.expandTag = false;
                 }
                 let showTagList = [...this.$refs.treeRef.getCheckedKeys(), ...this.$refs.treeRef.getHalfCheckedKeys()];
-                
+
                 dataStore.showTagList = showTagList;
                 this.showTagList = showTagList
                 this.$nextTick(() => {
@@ -293,11 +333,13 @@ export default {
 .tag_description {
     margin-top: -15px;
 }
+
 .el-popover__title {
     color: white;
     font-size: 24px;
     font-weight: bold;
 }
+
 .el-checkbox__input.is-disabled .el-checkbox__inner {
     background-color: #777;
 }
