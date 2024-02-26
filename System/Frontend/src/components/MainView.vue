@@ -6,11 +6,12 @@
  * @LastEditTime: 2024-02-07 20:21:37
 -->
 <template>
+    <PreviewVideoPlayer :dialogVisible="dialogVisible" :config="preview_config" @showDialog="showDialog" />
     <div class="frameworkBody">
         <div style=" height: 30px;text-align: left; font-size: 24px; color: white; font-weight: bold; justify-content: space-between; display: flex;">
             <span>视频分析</span>
             <span v-show="select_video != ''" style="font-size: 20px;">编号: {{ select_video }} 姓名: {{ user_info.name }} 性别:
-                                    {{ user_info.gender }} 年龄: {{ user_info.age }}</span>
+                                            {{ user_info.gender }} 年龄: {{ user_info.age }}</span>
         </div>
         <div style="width: 100%; height: calc(100% - 30px); margin-top: 10px;">
             <el-dialog v-model="showInfo" :title="(parseInt(info_data.time / 60 / 60).toString().padStart(2, '0')) + ':' + (parseInt(info_data.time / 60).toString().padStart(2, '0')) + ':' + ((info_data.time % 60).toString().padStart(2, '0'))" width="25%" :append-to="'#mainView'"
@@ -20,15 +21,15 @@
                     <h2>
                         问题描述
                         <span>
-                                                <el-popover placement="bottom" title="" :width="200" trigger="click"
-                                                    :popper-class="'marker_description'">
-                                                    <template #reference>
-                                                        <a style="position: absolute; margin-top: 1px;"><svg t="1708679239889" class="icon" viewBox="0 0 1024 1024" version="1.1"
-                                                                xmlns="http://www.w3.org/2000/svg" p-id="1495" width="30" height="30">
-                                                                <path
-                                                                    d="M536 480v192a16 16 0 0 1-16 16h-16a16 16 0 0 1-16-16V480a16 16 0 0 1 16-16h16a16 16 0 0 1 16 16z m-32-128h16a16 16 0 0 1 16 16v32a16 16 0 0 1-16 16h-16a16 16 0 0 1-16-16v-32a16 16 0 0 1 16-16z m8 448c159.056 0 288-128.944 288-288s-128.944-288-288-288-288 128.944-288 288 128.944 288 288 288z m0 48c-185.568 0-336-150.432-336-336s150.432-336 336-336 336 150.432 336 336-150.432 336-336 336z"
-                                                                    fill="#ffffff" p-id="1496"></path>
-                                                            </svg></a>
+                                                        <el-popover placement="bottom" title="" :width="200" trigger="click"
+                                                            :popper-class="'marker_description'">
+                                                            <template #reference>
+                                                                <a style="position: absolute; margin-top: 1px;"><svg t="1708679239889" class="icon" viewBox="0 0 1024 1024" version="1.1"
+                                                                        xmlns="http://www.w3.org/2000/svg" p-id="1495" width="30" height="30">
+                                                                        <path
+                                                                            d="M536 480v192a16 16 0 0 1-16 16h-16a16 16 0 0 1-16-16V480a16 16 0 0 1 16-16h16a16 16 0 0 1 16 16z m-32-128h16a16 16 0 0 1 16 16v32a16 16 0 0 1-16 16h-16a16 16 0 0 1-16-16v-32a16 16 0 0 1 16-16z m8 448c159.056 0 288-128.944 288-288s-128.944-288-288-288-288 128.944-288 288 128.944 288 288 288z m0 48c-185.568 0-336-150.432-336-336s150.432-336 336-336 336 150.432 336 336-150.432 336-336 336z"
+                                                                            fill="#ffffff" p-id="1496"></path>
+                                                                    </svg></a>
 </template>
                                 <div :style="{ fontSize: '16px', lineHeight: 1.5, color: 'white' }">
                                     {{ '"' + info_data.user_said + '"' }}
@@ -100,7 +101,7 @@
 
                             </div>
                             <el-button style="margin-top: 10px;" type="primary"
-                                @click="showDialog(1, dataSource)">添加一级标签</el-button>
+                                @click="showAddDialog(1, dataSource)">添加一级标签</el-button>
                         </div>
                     </el-collapse-transition>
                     <h2>
@@ -176,7 +177,7 @@
 
                                     </div>
                                     <el-button style="margin-top: 10px;" type="primary"
-                                        @click="showDialog(1, dataSource)">添加二级标签</el-button>
+                                        @click="showAddDialog(2, dataSource[d - 1])">添加二级标签</el-button>
                                 </div>
                             </el-collapse-transition>
                         </div>
@@ -196,7 +197,7 @@
                                 <div v-for="(td, ti) in allTagTimeData[dataSource[d - 1].id]" :key="'time_t' + ti"
                                     style="font-size: 16px;">
                                     {{ ti }}: <span v-for="(t_d, t_i) in td" :key="'time_td' + t_i">
-                                        <a
+                                        <a @click="selectPreview(t_d, ti)"
                                             :style="{ textDecoration: 'underline', color: t_d.status == 0 ? 'white' : 'blue' }">
                                             {{ (parseInt(t_d.time / 60 / 60).toString().padStart(2, '0')) + ':' + (parseInt(t_d.time / 60).toString().padStart(2, '0')) + ':' + ((t_d.time % 60).toString().padStart(2, '0')) }}
                                         </a>
@@ -217,7 +218,7 @@
                                         :key="'time_t' + ti" style="font-size: 16px;">
                                         {{ ti }}:
                                         <span v-for="(t_d, t_i) in td" :key="'time_td' + t_i">
-                                            <a
+                                            <a @click="selectPreview(t_d, ti)"
                                                 :style="{ textDecoration: 'underline', color: t_d.status == 0 ? 'white' : 'blue' }">
                                                 {{ (parseInt(t_d.time / 60 / 60).toString().padStart(2, '0')) + ':' + (parseInt(t_d.time / 60).toString().padStart(2, '0')) + ':' + ((t_d.time % 60).toString().padStart(2, '0')) }}
                                             </a>
@@ -297,7 +298,7 @@
                                 d="M511.6 63.6c-246.9 0-448 201.2-448 448 0 247.3 201.2 448 448 448s448-200.7 448-448c0-246.9-200.7-448-448-448z m259.9 318.5L474.6 699.3c-7 7.3-16.5 12.1-27.4 12.1-10.5 0-20.5-4.7-27.4-12.1L252 520c-7-7.3-11.5-17.8-11.5-29.4 0-23.1 17.5-41.4 38.9-41.4 10.5 0 20.5 4.7 27.4 12.1l140.7 149.9 270-287.8c7-7.3 16.5-12.1 27.4-12.1 21.5 0 38.9 18.3 38.9 41.4-0.8 11.6-5.3 22.1-12.3 29.4z m0 0"
                                 p-id="11130" fill="#ffffff"></path>
                         </svg>&nbsp;
-                        提交
+                        确认
                     </el-button>
                     <el-button type="danger" @click="clickDecision(3)">
                         <svg t="1707272411978" class="icon" viewBox="0 0 1024 1024" version="1.1"
@@ -308,6 +309,17 @@
                         </svg>&nbsp;
                         取消
                     </el-button>
+                </div>
+            </el-dialog>
+            <el-dialog v-model="tagConfig.addPoint" :title="'添加' + tagConfig.add_tag_level + '级标签'" width="15%" height="100px" :append-to="'#problems_tag'" :modal="false" :class="'add_main_dialog'">
+                <div v-loading="tagConfig.loadingTag"  element-loading-background="rgba(122, 122, 122, 0.8)" style="width: 100%; height: 40px;">
+                <span>
+                                <el-input v-model="tagConfig.tag_name" placeholder="Please input" />
+                            </span>
+                </div>
+                <div style="padding: 20px 0px 10px 0px;">
+                    <el-button @click="tagConfig.addPoint = false">取消</el-button>
+                    <el-button type="primary" @click="addTag()">确定</el-button>
                 </div>
             </el-dialog>
             <div id="mainView" ref="mainView" class="align-class" style="height: calc(100% - 95px); width: 100%;">
@@ -452,6 +464,7 @@ import { useDataStore } from "../stores/counter";
 import { VideoPlayer } from '@videojs-player/vue'
 // import 'video.js/dist/video-js.css'
 import 'video.js/dist/video-js.css'
+import PreviewVideoPlayer from './utils/PreviewVideoPlayer.vue';
 
 export default {
     name: "PCV",
@@ -459,6 +472,7 @@ export default {
     data() {
         return {
             all_data: [],
+            dialogVisible: false,
             selectShowLevel: 1,
             loadingTag: false,
             user_info: {
@@ -499,10 +513,105 @@ export default {
                 lastTime: -1
             },
             showTagList: [],
-            allTagTimeData: {}
+            allTagTimeData: {},
+            preview_config: {},
+            tagConfig: {
+                addPoint: false,
+                loadingTag: false,
+                tag_name: '',
+                add_tag_level: '',
+                selectData: []
+            },
         };
     },
     methods: {
+        showAddDialog(tag_type, data) {
+            this.tagConfig.tag_name = "";
+            this.tagConfig.addPoint = true;
+            this.tagConfig.selectData = data;
+
+            if (tag_type == 1) {
+                this.tagConfig.add_tag_level = '一';
+            } else {
+                this.tagConfig.add_tag_level = '二';
+            }
+            this.player.pause();
+            this.playTag = 1;
+        },
+        async addTag() {
+            let id_cnt = -1;
+            for (const d of this.dataSource) {
+                id_cnt = Math.max(id_cnt, d.id);
+                for (const dd of d.children) {
+                    id_cnt = Math.max(id_cnt, dd.id);
+                }
+            }
+            id_cnt += 1;
+
+            // this.id_cnt++;
+            let jsonData = {
+                tag: this.tagConfig.tag_name,
+                id: id_cnt,
+                parent_id: this.tagConfig.add_tag_level == '一' ? 0 : this.tagConfig.selectData.id,
+                level: this.tagConfig.add_tag_level == '一' ? 1 : 2,
+                category: this.dataSource,
+                info: this.all_data,
+                test: 0
+            };
+            this.tagConfig.loadingTag = true;
+            // const dataStore = useDataStore();
+            // const data = await dataStore.queryNewTag(jsonData);
+            // let new_data = data.data.info;
+            // for (let i in this.all_data) {
+            //     for (let j in this.all_data[i].info) {
+            //         this.all_data[i].info[j].tag = new_data[i].info[j].tag;
+            //         this.all_data[i].info[j].second_tag = new_data[i].info[j].second_tag;
+            //     }
+            // }
+            if (this.tagConfig.add_tag_level == '一') {
+                let l_id_cnt = this.dataSource.length + 1;
+                this.tagConfig.selectData.push({
+                    id: id_cnt,
+                    l_id: l_id_cnt,
+                    level: 1,
+                    label: this.tagConfig.tag_name,
+                    description: this.tagConfig.tag_name,
+                    disabled: false,
+                    children: []
+                })
+            } else {
+                let cnt = this.tagConfig.selectData.children.length + 1;
+                this.tagConfig.selectData.children.push({
+                    id: id_cnt,
+                    l_id: 1,
+                    cnt: cnt,
+                    level: 2,
+                    label: this.tagConfig.tag_name,
+                    description: this.tagConfig.tag_name,
+                    disabled: false,
+                    children: []
+                })
+            }
+            this.tagConfig.addPoint = false;
+            this.tagConfig.loadingTag = false;
+        },
+        showDialog(data) {
+            this.dialogVisible = data;
+        },
+        selectPreview(data, id) {
+            // console.log(data);
+            this.player.pause();
+            this.playTag = 1;
+            const time = data.time;
+            const video_id = id;
+            const name = id + ' ' + (parseInt(time / 60 / 60).toString().padStart(2, '0')) + ':' + (parseInt(time / 60).toString().padStart(2, '0')) + ':' + ((time % 60).toString().padStart(2, '0'));
+            this.preview_config = {
+                time: time,
+                video_id: video_id,
+                name: name
+            };
+            this.dialogVisible = !this.dialogVisible;
+        },
         focusTag(id) {
             if (id == 'main') {
                 this.showLevelTag.showFirstTag = !this.showLevelTag.showFirstTag;
@@ -704,22 +813,22 @@ export default {
                         }
                         res_data[this.dataSource[t - 1].id][p_code].push(d);
                         if (typeof d.second_tag[t] != 'undefined')
-                        for (const st of d.second_tag[t]) {
-                            if (typeof res_data[this.dataSource[t - 1].children[st - 1].id] == 'undefined') {
-                                res_data[this.dataSource[t - 1].children[st - 1].id] = {};
+                            for (const st of d.second_tag[t]) {
+                                if (typeof res_data[this.dataSource[t - 1].children[st - 1].id] == 'undefined') {
+                                    res_data[this.dataSource[t - 1].children[st - 1].id] = {};
+                                }
+                                if (typeof res_data[this.dataSource[t - 1].children[st - 1].id][p_code] == 'undefined') {
+                                    res_data[this.dataSource[t - 1].children[st - 1].id][p_code] = [];
+                                }
+                                res_data[this.dataSource[t - 1].children[st - 1].id][p_code].push(d);
                             }
-                            if (typeof res_data[this.dataSource[t - 1].children[st - 1].id][p_code] == 'undefined') {
-                                res_data[this.dataSource[t - 1].children[st - 1].id][p_code] = [];
-                            }
-                            res_data[this.dataSource[t - 1].children[st - 1].id][p_code].push(d);
-                        }
                     }
                 }
             }
             return res_data;
         }
     },
-    components: { VideoPlayer },
+    components: { VideoPlayer, PreviewVideoPlayer },
     created() {},
     computed: {
         calcMarkerData() {
@@ -742,8 +851,8 @@ export default {
             this.allTagTimeData = this.calcAllTag(this.all_data);
         }
         // console.log(this.select_video)
-        if (this.select_video != '')
-            this.config.src = this.pathSetting + 'AI_Tool/' + this.select_video + '/video.mp4'
+        // if (this.select_video != '')
+        //     this.config.src = this.pathSetting + 'AI_Tool/' + this.select_video + '/video.mp4'
         this.main_data = this.all_data[this.select_video];
         if (this.showTagList.length == 0) {
             let tagTmp = [];
@@ -765,10 +874,7 @@ export default {
             this.showTagList = state.showTagList;
             this.selectShowLevel = state.selectShowLevel;
             this.select_video = dataStore.select_video;
-            if (this.select_video != '') {
-                this.config.src = this.pathSetting + 'AI_Tool/' + this.select_video + '/video.mp4'
-                this.main_data = this.all_data[this.select_video];
-            }
+
             if (this.showTagList.length == 0) {
                 let tagTmp = [];
                 for (let i in this.dataSource) {
@@ -812,6 +918,14 @@ export default {
                         };
                     }
                     this.already_time = this.all_data[newVal]['already_time']
+                }
+                const dataStore = useDataStore();
+                if (this.select_video != '') {
+                    this.config.src = this.pathSetting + 'AI_Tool/' + this.select_video + '/video.mp4'
+                    this.main_data = this.all_data[this.select_video];
+                    this.$nextTick(() => {
+                        this.player.currentTime(dataStore.currentPlayTime);
+                    })
                 }
             }
         },
@@ -913,6 +1027,15 @@ export default {
     top: calc(5%);
     border-radius: 15px;
     /* left: 100px; */
+}
+
+.add_main_dialog {
+    --el-dialog-bg-color: #454647;
+    color: white;
+    position: absolute;
+    left: calc(35vw - 7.5%);
+    top: calc(15%);
+    border-radius: 15px;
 }
 
 .marker_description {

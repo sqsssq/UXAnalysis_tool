@@ -6,7 +6,7 @@
  */
 import {
     fetchAllData,
-    fetchHello, uploadData, queryRecommendation
+    fetchHello, uploadData, queryRecommendation, queryNewTag
 } from "../service/module/dataService";
 import {
     ref,
@@ -39,7 +39,9 @@ export const useDataStore = defineStore("dataStore", {
             select_video: '',
             select_dataset: '',
             noneDisabledTag: {},
-            all_data: []
+            all_data: [],
+            currentPlayTime: 0,
+            leftShow: 1
         }
     },
     actions: {
@@ -67,6 +69,10 @@ export const useDataStore = defineStore("dataStore", {
         async queryRecommendation(param) {
             const st = new Date();
             const data = await queryRecommendation(param);
+            return data;
+        },
+        async queryNewTag(param) {
+            const data = await queryNewTag(param);
             return data;
         }
     }

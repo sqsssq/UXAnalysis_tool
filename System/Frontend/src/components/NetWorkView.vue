@@ -9,18 +9,21 @@
     <PreviewVideoPlayer :dialogVisible="dialogVisible" :config="config" @showDialog="showDialog" />
     <div class="frameworkBody">
         <div style=" height: 30px;text-align: left; font-size: 24px; color: white; font-weight: bold; justify-content: space-between; display: flex;">
-            <span>网络分析</span>
+            <span>总体分析</span>
             <span style="font-size: 20px;">
-                <el-button type="success" @click="overviewTag = true">
-                    概览模式
-                </el-button>
-                <el-button type="primary" @click="overviewTag = false">
-                    筛选模式
-                </el-button>
-            </span>
+                    <el-button type="warning" @click="viewTag = !viewTag">
+                        {{ viewTag == false ? '网络图':'旭日图'}}
+                    </el-button>
+                    <el-button type="success" @click="overviewTag = true">
+                        概览模式
+                    </el-button>
+                    <el-button type="primary" @click="overviewTag = false">
+                        筛选模式
+                    </el-button>
+                </span>
         </div>
         <div style="width: 100%; height: calc(100% - 30px); margin-top: 10px;">
-            <div id="networkView" ref="networkView" class="align-class" style="height: calc(100% - 20px); width: 100%; border: 1px solid white">
+            <div id="networkView" ref="networkView" class="align-class" style="height: calc(100% - 20px); width: 100%; border: 0px solid white">
                 <svg id="networkSvg" height="100%" width="100%"></svg>
             </div>
         </div>
@@ -42,11 +45,12 @@ export default {
         return {
             elWidth: 0,
             elHeight: 0,
+            viewTag: true,
             select_video: '',
             all_data: [],
             category_data: [],
             pathSetting: '/',
-            network_data: [],
+            chart_data: [],
             showTagList: [],
             selectShowLevel: 1,
             dialogVisible: false,
@@ -325,6 +329,258 @@ export default {
                 sentence.attr("transform", d => `translate(${d.x - 10},${d.y})`);
             });
             // invalidation.then(() => simulation.stop());
+        },
+        calcSun(data) {
+            // console.log(data);
+            let res_data = {
+                name: 'all',
+                text: '所有视频',
+                color: '#222c44',
+                children: []
+            };
+            let t_data = new Object();
+            if (this.selectShowLevel == 1) {
+                for (const i in this.all_data) {
+                    if (this.overviewTag || this.select_video == '' || this.select_video == i) {
+                        for (const j in this.all_data[i].info) {
+                            for (const k in this.all_data[i].info[j].tag) {
+                                const tag = this.all_data[i].info[j].tag[k] - 1;
+                                if (this.overviewTag || this.showTagList.indexOf(this.category_data[tag].id) != -1) {
+                                    const time = this.all_data[i].info[j].time;
+                                    const source_name = i + ' ' + (parseInt(time / 60 / 60).toString().padStart(2, '0')) + ':' + (parseInt(time / 60).toString().padStart(2, '0')) + ':' + ((time % 60).toString().padStart(2, '0'));
+                                    const target_name = this.category_data[tag].label;
+                                    const target_id = this.category_data[tag].id;
+                                    const status = this.all_data[i].info[j].status
+                                    if (status != 3) {
+                                        let status_color = ['#5a9cf8', '#00FF7F', '#ecb050'];
+                                        if (typeof t_data[target_id] == 'undefined') {
+                                            t_data[target_id] = {
+                                                name: target_id,
+                                                text: target_name,
+                                                children: [],
+                                                color: this.colorMap[this.category_data[tag].id],
+                                                type: 1
+                                            }
+                                        }
+                                        t_data[target_id].children.push({
+                                            name: source_name,
+                                            text: source_name,
+                                            value: 1,
+                                            color: status_color[status],
+                                            config: {
+                                                time: time,
+                                                video_id: i,
+                                                name: source_name
+                                            },
+                                            type: 0
+                                        })
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                for (const i in t_data) {
+                    res_data.children.push(t_data[i]);
+                }
+                console.log(res_data);
+            } else {
+                for (const i in this.all_data) {
+                    if (this.overviewTag || this.select_video == '' || this.select_video == i) {
+                        for (const j in this.all_data[i].info) {
+                            for (const k in this.all_data[i].info[j].tag) {
+                                for (const tk in this.all_data[i].info[j].second_tag[this.all_data[i].info[j].tag[k]]) {
+                                    const tag = this.all_data[i].info[j].tag[k] - 1;
+                                    const sec_tag = this.all_data[i].info[j].second_tag[this.all_data[i].info[j].tag[k]][tk] - 1;
+                                    if (this.overviewTag || this.showTagList.indexOf(this.category_data[tag].children[sec_tag].id) != -1) {
+                                        const time = this.all_data[i].info[j].time;
+                                        const source_name = i + ' ' + (parseInt(time / 60 / 60).toString().padStart(2, '0')) + ':' + (parseInt(time / 60).toString().padStart(2, '0')) + ':' + ((time % 60).toString().padStart(2, '0'));
+                                        const target_name = this.category_data[tag].label;
+                                        const target_id = this.category_data[tag].id;
+                                        const sec_target_name = this.category_data[tag].children[sec_tag].label;
+                                        const sec_target_id = this.category_data[tag].children[sec_tag].id;
+                                        const status = this.all_data[i].info[j].status
+                                        if (status != 3) {
+                                            let status_color = ['#5a9cf8', '#00FF7F', '#ecb050'];
+
+                                            if (typeof t_data[target_id] == 'undefined') {
+                                                t_data[target_id] = {
+                                                    name: target_id,
+                                                    text: target_name,
+                                                    children: [],
+                                                    color: this.colorMap[this.category_data[tag].id],
+                                                    type: 1,
+                                                    sub: {}
+                                                }
+                                            }
+
+                                            if (typeof t_data[target_id].sub[sec_target_id] == 'undefined') {
+                                                t_data[target_id].sub[sec_target_id] = {
+                                                    name: sec_target_id,
+                                                    text: sec_target_name,
+                                                    children: [],
+                                                    color: this.colorMap[this.category_data[tag].children[sec_tag].id],
+                                                    type: 2
+                                                }
+                                            }
+
+                                            t_data[target_id].sub[sec_target_id].children.push({
+                                                name: source_name,
+                                                text: source_name,
+                                                value: 1,
+                                                color: status_color[status],
+                                                config: {
+                                                    time: time,
+                                                    video_id: i,
+                                                    name: source_name
+                                                },
+                                                type: 0
+                                            })
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                for (let i in t_data) {
+                    for (let j in t_data[i].sub) {
+                        t_data[i].children.push(t_data[i].sub[j]);
+                    }
+                    res_data.children.push(t_data[i]);
+                }
+            }
+            return res_data;
+        },
+        paintSunBurst(data) {
+            console.log(data)
+            const width = (this.elWidth > this.elHeight ? this.elHeight : this.elWidth) / 2 * .95;
+            const height = width;
+            const radius = width / (this.selectShowLevel + 2);
+
+
+            // Compute the layout.
+            const hierarchy = d3.hierarchy(data)
+                .sum(d => d.value)
+                .sort((a, b) => b.value - a.value);
+            const root = d3.partition()
+                .size([2 * Math.PI, hierarchy.height + 1])
+                (hierarchy);
+            root.each(d => d.current = d);
+            console.log(root, hierarchy)
+
+            // Create the arc generator.
+            const arc = d3.arc()
+                .startAngle(d => d.x0)
+                .endAngle(d => d.x1)
+                .padAngle(d => Math.min((d.x1 - d.x0) / 2, 0.005))
+                .padRadius(radius * 1.5)
+                .innerRadius(d => d.y0 * radius)
+                .outerRadius(d => Math.max(d.y0 * radius, d.y1 * radius - 1))
+
+
+            d3.selectAll('#all-network').remove();
+
+            const svg = d3.select('#networkSvg').append('g').attr('id', 'all-network').attr('transform', `translate(${this.elWidth / 2}, ${this.elHeight / 2})`);
+            const path = svg.append("g")
+                .selectAll("path")
+                .data(root.descendants())
+                .join("path")
+                .attr("fill", d => { return d.data.color; })
+                .attr("fill-opacity", d => arcVisible(d.current) ? (d.children ? .6 : .6) : .6)
+                .attr("pointer-events", d => arcVisible(d.current) ? "auto" : "none")
+                .attr("d", d => {
+                    return arc(d.current)
+                });
+
+            // Make them clickable if they have children.
+            path.filter(d => d.children)
+                .style("cursor", "pointer")
+                .on("click", clicked);
+
+            const format = d3.format(",d");
+            path.append("title")
+                .text(d => `${d.ancestors().map(d => d.data.name).reverse().join("/")}\n${format(d.value)}`);
+
+            const label = svg.append("g")
+                .attr("pointer-events", "none")
+                .attr("text-anchor", "middle")
+                .style("user-select", "none")
+                .selectAll("text")
+                .data(root.descendants())
+                .join("text")
+                .attr("dy", "0.35em")
+                .attr("fill-opacity", d => {
+                    // console.log(+labelVisible(d.current), labelVisible(d.current))
+                    return +labelVisible(d.current)
+                })
+                .attr("transform", d => labelTransform(d.current))
+                .attr('fill', 'white')
+                .text(d => {
+                    console.log(d.data.text)
+                    return d.data.text
+                });
+
+            const parent = svg.append("circle")
+                .datum(root)
+                .attr("r", radius)
+                .attr("fill", "none")
+                .attr("pointer-events", "all")
+                .on("click", clicked);
+
+            // Handle zoom on click.
+            function clicked(event, p) {
+                parent.datum(p.parent || root);
+
+                root.each(d => d.target = {
+                    x0: Math.max(0, Math.min(1, (d.x0 - p.x0) / (p.x1 - p.x0))) * 2 * Math.PI,
+                    x1: Math.max(0, Math.min(1, (d.x1 - p.x0) / (p.x1 - p.x0))) * 2 * Math.PI,
+                    y0: Math.max(0, d.y0 - p.depth),
+                    y1: Math.max(0, d.y1 - p.depth)
+                });
+
+                const t = svg.transition().duration(750);
+
+                // Transition the data on all arcs, even the ones that aren’t visible,
+                // so that if this transition is interrupted, entering arcs will start
+                // the next transition from the desired position.
+                path.transition(t)
+                    .tween("data", d => {
+                        const i = d3.interpolate(d.current, d.target);
+                        return t => d.current = i(t);
+                    })
+                    .filter(function(d) {
+                        return +this.getAttribute("fill-opacity") || arcVisible(d.target);
+                    })
+                    .attr("fill-opacity", d => arcVisible(d.target) ? (d.children ? .6 : .6) : .6)
+                    .attr("pointer-events", d => arcVisible(d.target) ? "auto" : "none")
+
+                    .attrTween("d", d => () => arc(d.current));
+
+                label.filter(function(d) {
+                        return +this.getAttribute("fill-opacity") || labelVisible(d.target);
+                    }).transition(t)
+                    .attr("fill-opacity", d => {
+                        console.log(+labelVisible(d.target), labelVisible(d.target))
+                        return +labelVisible(d.target)
+                    })
+                    .attrTween("transform", d => () => labelTransform(d.current));
+            }
+
+            function arcVisible(d) {
+                return d.y1 <= 3 && d.y0 >= 1 && d.x1 > d.x0;
+            }
+
+            function labelVisible(d) {
+                return d.y1 <= 3 && d.y0 >= 1 && (d.y1 - d.y0) * (d.x1 - d.x0) > 0.03;
+            }
+
+            function labelTransform(d) {
+                const x = (d.x0 + d.x1) / 2 * 180 / Math.PI;
+                const y = (d.y0 + d.y1) / 2 * radius;
+                return `rotate(${x - 90}) translate(${y},0) rotate(${x < 180 ? 0 : 180})`;
+            }
         }
     },
     components: { PreviewVideoPlayer },
@@ -346,8 +602,13 @@ export default {
             }
             this.showTagList = tagTmp;
         }
-        this.network_data = this.calcNetwork(this.all_data);
-        this.paintNetwork(this.network_data);
+        if (this.viewTag) {
+            this.chart_data = this.calcNetwork(this.all_data);
+            this.paintNetwork(this.chart_data);
+        } else {
+            this.chart_data = this.calcSun(this.all_data);
+            this.paintSunBurst(this.chart_data);
+        }
         dataStore.$subscribe((mutations, states) => {
             this.all_data = states.all_data;
             this.category_data = states.categorySource;
@@ -362,17 +623,38 @@ export default {
                 }
                 this.showTagList = tagTmp;
             }
-            this.network_data = this.calcNetwork(this.all_data);
-            this.paintNetwork(this.network_data);
+            if (this.viewTag) {
+                this.chart_data = this.calcNetwork(this.all_data);
+                this.paintNetwork(this.chart_data);
+            } else {
+                this.chart_data = this.calcSun(this.all_data);
+                this.paintSunBurst(this.chart_data);
+            }
         });
     },
     watch: {
         overviewTag: {
             handler() {
-                this.network_data = this.calcNetwork(this.all_data);
-                this.paintNetwork(this.network_data);
+                if (this.viewTag) {
+                    this.chart_data = this.calcNetwork(this.all_data);
+                    this.paintNetwork(this.chart_data);
+                } else {
+                    this.chart_data = this.calcSun(this.all_data);
+                    this.paintSunBurst(this.chart_data);
+                }
             },
             deep: true
+        },
+        viewTag: {
+            handler() {
+                if (this.viewTag) {
+                    this.chart_data = this.calcNetwork(this.all_data);
+                    this.paintNetwork(this.chart_data);
+                } else {
+                    this.chart_data = this.calcSun(this.all_data);
+                    this.paintSunBurst(this.chart_data);
+                }
+            }
         }
     },
 };

@@ -40,9 +40,9 @@ export function fetchAllData(param, callback) {
     })
 }
 
-export async function queryRecommendation(param, callback) {
+export async function queryRecommendation(param) {
     const url = `${TEST_URL_PREFIX}/Recommendation`;
-    const jsonString = JSON.stringify(param)
+    const jsonString = JSON.stringify(param);
     const data = await axios({
         method: "post",
         url: url,
@@ -52,9 +52,18 @@ export async function queryRecommendation(param, callback) {
         data: jsonString
     })
     return data;
-    // .then(response => {
-    //     callback(response);
-    // }, errResponse => {
-    //     console.log(errResponse)
-    // })
+}
+
+export async function queryNewTag(param) {
+    const url = `${TEST_URL_PREFIX}/NewTag`;
+    const jsonString = JSON.stringify(param);
+    const data = await axios({
+        method: "post",
+        url: url,
+        headers: {
+            "Content-Type": "application/json",
+        },
+        data: jsonString
+    })
+    return data;
 }

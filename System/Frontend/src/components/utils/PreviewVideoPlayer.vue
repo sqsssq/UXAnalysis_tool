@@ -14,7 +14,7 @@
         </div>
         <template #footer>
                     <span class="dialog-footer" style="display: flex; justify-content: center;">
-                        <el-button type="success" @click="visible = false">
+                        <el-button type="success" @click="analysisVideo">
                             分析
                         </el-button>
                         <el-button type="primary" @click="visible = false">
@@ -30,6 +30,7 @@ import { VideoPlayer } from '@videojs-player/vue'
 import 'video.js/dist/video-js.css'
 import videojs from 'video.js'
 import 'video.js/dist/video-js.css'
+import { useDataStore } from '../../stores/counter';
 
 export default {
     name: "PCV",
@@ -48,6 +49,13 @@ export default {
     methods: {
         translate(x, y, deg) {
             return `translate(${x}, ${y}) rotate(${deg})`;
+        },
+        analysisVideo() {
+            this.visible = false;
+            const dataStore = useDataStore();
+            dataStore.select_video = this.config.video_id;
+            dataStore.currentPlayTime = this.config.time;
+            dataStore.leftShow = 1;
         },
         handleEvent(log) {
             console.log(log);

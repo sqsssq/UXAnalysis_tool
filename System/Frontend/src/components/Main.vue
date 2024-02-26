@@ -2,42 +2,33 @@
     <div id="navBar">
         <span style="font-weight: 800; padding-left: 10px;position: absolute;">UX Analysis Tool</span>
         <span style="position: absolute; right: 10px; top: 0px; display: flex;">
-            <span>
-            <span style="font-size: 20px;">数据集</span>&nbsp;
-            <el-select v-model="dataset_select" class="m-2" placeholder="Select" style="width: 120px;" :teleported="false">
-                <!-- <el-option-group v-for="group in dataset_options" :key="group.label" :label="group.label">
-                    <el-option v-for="item in group.options" :key="item.value" :label="item.label" :value="item.value" />
-                </el-option-group> -->
-                <el-option
-                    v-for="item in dataset_options"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value"
-                />
-            </el-select> 
-            </span>
-            &nbsp;&nbsp;
-            <span>
-            <span style="font-size: 20px;">视频</span>&nbsp;
-            <el-select v-model="video_select" class="m-2" placeholder="Select" style="width: 100px;" :teleported="false">
-                <!-- <el-option-group v-for="group in video_options" :key="group.label" :label="group.label">
-                    <el-option v-for="item in group.options" :key="item.value" :label="item.label" :value="item.value" />
-                </el-option-group> -->
-                <el-option
-                    v-for="item in video_options"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value"
-                />
-            </el-select> 
-            </span>
-            &nbsp;&nbsp;
-            <span>
-            <el-button type="primary" @click="leftShow = !leftShow">
-                <svg t="1705547152904" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1711" width="20" height="20"><path d="M912.290909 0c-61.607564 0-111.709091 50.101527-111.709091 111.709091 0 19.269818 4.896582 37.403927 13.5168 53.248l-182.998109 182.998109a147.884218 147.884218 0 0 0-182.365091-0.018618l-142.782836-142.782837A73.485964 73.485964 0 0 0 316.509091 167.563636c0-41.071709-33.401018-74.472727-74.472727-74.472727S167.563636 126.491927 167.563636 167.563636s33.401018 74.472727 74.472728 74.472728c13.777455 0 26.512291-4.002909 37.590109-10.556509l142.782836 142.782836a148.0704 148.0704 0 0 0 0 182.365091L186.628655 792.427055A111.169164 111.169164 0 0 0 111.709091 763.345455c-61.607564 0-111.709091 50.101527-111.709091 111.70909s50.101527 111.709091 111.709091 111.709091 111.709091-50.101527 111.709091-111.709091a111.076073 111.076073 0 0 0-13.5168-53.248l238.852654-238.852654a148.0704 148.0704 0 0 0 72.573673 30.142836v189.160728c-52.745309 8.899491-93.090909 54.774691-93.090909 110.033454 0 61.607564 50.101527 111.709091 111.709091 111.709091s111.709091-50.101527 111.709091-111.709091c0-55.240145-40.3456-101.115345-93.090909-110.033454V613.096727a148.0704 148.0704 0 0 0 72.573672-30.142836l142.782837 142.782836A73.448727 73.448727 0 0 0 763.345455 763.345455c0 41.071709 33.401018 74.472727 74.472727 74.472727s74.472727-33.401018 74.472727-74.472727-33.401018-74.472727-74.472727-74.472728c-13.777455 0-26.512291 4.002909-37.590109 10.556509l-142.782837-142.782836a148.0704 148.0704 0 0 0 0-182.365091l179.944728-179.944727A111.094691 111.094691 0 0 0 912.290909 223.418182c61.607564 0 111.709091-50.101527 111.709091-111.709091s-50.101527-111.709091-111.709091-111.709091zM204.8 167.563636c0-20.535855 16.700509-37.236364 37.236364-37.236363s37.236364 16.700509 37.236363 37.236363-16.700509 37.236364-37.236363 37.236364-37.236364-16.700509-37.236364-37.236364zM111.709091 949.527273c-41.071709 0-74.472727-33.401018-74.472727-74.472728s33.401018-74.472727 74.472727-74.472727 74.472727 33.401018 74.472727 74.472727-33.401018 74.472727-74.472727 74.472728z m502.690909-37.236364c0 41.071709-33.401018 74.472727-74.472727 74.472727s-74.472727-33.401018-74.472728-74.472727 33.401018-74.472727 74.472728-74.472727 74.472727 33.401018 74.472727 74.472727z m-74.472727-335.127273c-61.607564 0-111.709091-50.101527-111.709091-111.709091s50.101527-111.709091 111.709091-111.70909 111.709091 50.101527 111.709091 111.70909-50.101527 111.709091-111.709091 111.709091z m335.127272 186.181819c0 20.535855-16.700509 37.236364-37.236363 37.236363s-37.236364-16.700509-37.236364-37.236363 16.700509-37.236364 37.236364-37.236364 37.236364 16.700509 37.236363 37.236364z m37.236364-577.163637c-41.071709 0-74.472727-33.401018-74.472727-74.472727s33.401018-74.472727 74.472727-74.472727 74.472727 33.401018 74.472727 74.472727-33.401018 74.472727-74.472727 74.472727z" fill="#ffffff" p-id="1712"></path></svg>&nbsp;
-                标签视图
-            </el-button>
-            </span>
+                <span>
+                <span style="font-size: 20px;">数据集</span>&nbsp;
+        <el-select v-model="dataset_select" class="m-2" placeholder="Select" style="width: 120px;" :teleported="false">
+            <!-- <el-option-group v-for="group in dataset_options" :key="group.label" :label="group.label">
+                        <el-option v-for="item in group.options" :key="item.value" :label="item.label" :value="item.value" />
+                    </el-option-group> -->
+            <el-option v-for="item in dataset_options" :key="item.value" :label="item.label" :value="item.value" />
+        </el-select>
+        </span>
+        &nbsp;&nbsp;
+        <span>
+                <span style="font-size: 20px;">视频</span>&nbsp;
+        <el-select v-model="video_select" class="m-2" placeholder="Select" style="width: 100px;" :teleported="false">
+            <!-- <el-option-group v-for="group in video_options" :key="group.label" :label="group.label">
+                        <el-option v-for="item in group.options" :key="item.value" :label="item.label" :value="item.value" />
+                    </el-option-group> -->
+            <el-option v-for="item in video_options" :key="item.value" :label="item.label" :value="item.value" />
+        </el-select>
+        </span>
+        &nbsp;&nbsp;
+        <span>
+                <el-button type="primary" @click="switchView()">
+                    <svg t="1705547152904" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1711" width="20" height="20"><path v-if="leftShow == 1" d="M912.290909 0c-61.607564 0-111.709091 50.101527-111.709091 111.709091 0 19.269818 4.896582 37.403927 13.5168 53.248l-182.998109 182.998109a147.884218 147.884218 0 0 0-182.365091-0.018618l-142.782836-142.782837A73.485964 73.485964 0 0 0 316.509091 167.563636c0-41.071709-33.401018-74.472727-74.472727-74.472727S167.563636 126.491927 167.563636 167.563636s33.401018 74.472727 74.472728 74.472728c13.777455 0 26.512291-4.002909 37.590109-10.556509l142.782836 142.782836a148.0704 148.0704 0 0 0 0 182.365091L186.628655 792.427055A111.169164 111.169164 0 0 0 111.709091 763.345455c-61.607564 0-111.709091 50.101527-111.709091 111.70909s50.101527 111.709091 111.709091 111.709091 111.709091-50.101527 111.709091-111.709091a111.076073 111.076073 0 0 0-13.5168-53.248l238.852654-238.852654a148.0704 148.0704 0 0 0 72.573673 30.142836v189.160728c-52.745309 8.899491-93.090909 54.774691-93.090909 110.033454 0 61.607564 50.101527 111.709091 111.709091 111.709091s111.709091-50.101527 111.709091-111.709091c0-55.240145-40.3456-101.115345-93.090909-110.033454V613.096727a148.0704 148.0704 0 0 0 72.573672-30.142836l142.782837 142.782836A73.448727 73.448727 0 0 0 763.345455 763.345455c0 41.071709 33.401018 74.472727 74.472727 74.472727s74.472727-33.401018 74.472727-74.472727-33.401018-74.472727-74.472727-74.472728c-13.777455 0-26.512291 4.002909-37.590109 10.556509l-142.782837-142.782836a148.0704 148.0704 0 0 0 0-182.365091l179.944728-179.944727A111.094691 111.094691 0 0 0 912.290909 223.418182c61.607564 0 111.709091-50.101527 111.709091-111.709091s-50.101527-111.709091-111.709091-111.709091zM204.8 167.563636c0-20.535855 16.700509-37.236364 37.236364-37.236363s37.236364 16.700509 37.236363 37.236363-16.700509 37.236364-37.236363 37.236364-37.236364-16.700509-37.236364-37.236364zM111.709091 949.527273c-41.071709 0-74.472727-33.401018-74.472727-74.472728s33.401018-74.472727 74.472727-74.472727 74.472727 33.401018 74.472727 74.472727-33.401018 74.472727-74.472727 74.472728z m502.690909-37.236364c0 41.071709-33.401018 74.472727-74.472727 74.472727s-74.472727-33.401018-74.472728-74.472727 33.401018-74.472727 74.472728-74.472727 74.472727 33.401018 74.472727 74.472727z m-74.472727-335.127273c-61.607564 0-111.709091-50.101527-111.709091-111.709091s50.101527-111.709091 111.709091-111.70909 111.709091 50.101527 111.709091 111.70909-50.101527 111.709091-111.709091 111.709091z m335.127272 186.181819c0 20.535855-16.700509 37.236364-37.236363 37.236363s-37.236364-16.700509-37.236364-37.236363 16.700509-37.236364 37.236364-37.236364 37.236364 16.700509 37.236363 37.236364z m37.236364-577.163637c-41.071709 0-74.472727-33.401018-74.472727-74.472727s33.401018-74.472727 74.472727-74.472727 74.472727 33.401018 74.472727 74.472727-33.401018 74.472727-74.472727 74.472727z" fill="#ffffff" p-id="1712"></path><path v-if="leftShow != 1" d="M864 643.296l-77.504-53.056v-125.376L864 412.32v230.976zM192 735.968V288.032L191.968 288 512 288.032h210.496v158.432c-0.032 0.512-0.192 1.024-0.192 1.536v256c0 0.384 0.224 0.704 0.224 1.088V736L192 735.968z m719.008-412.224a31.968 31.968 0 0 0-32.96 1.76l-91.552 62.048v-99.52A64.064 64.064 0 0 0 722.528 224H191.968A64.064 64.064 0 0 0 128 288.032V735.968C128 771.296 156.704 800 191.968 800h530.56a64.064 64.064 0 0 0 63.968-64.032v-42.592l0.384-25.312 91.04 62.336A32 32 0 0 0 928 704V352a32 32 0 0 0-16.992-28.256z" fill="white" p-id="3558"></path><path v-if="leftShow != 1" d="M304 352a48 48 0 1 0 0.032 96.032A48 48 0 0 0 304 352" fill="white" p-id="3559"></path></svg>
+                    &nbsp;
+                    {{ leftShow == 1 ? '标签视图' : '分析视图'}}
+                </el-button>
+                </span>
         </span>
     </div>
     <div style="height: calc(100vh - 40px); width: calc(100% - 0px);">
@@ -62,8 +53,10 @@ import MainView from './MainView.vue';
 import RecommendList from './RecommendList.vue';
 import NetworkView from './NetWorkView.vue';
 import { useDataStore } from "../stores/counter";
-import p_data from '../assets/AI_tool/info.json';
+import p_data from '../assets/AI_tool/info_p.json';
+import t_data from '../assets/AI_tool/info_t.json';
 import category_p from '../assets/AI_tool/category_p.json';
+import category_t from '../assets/AI_tool/category_t.json';
 export default {
     name: "APP",
     props: ["msgH"],
@@ -129,10 +122,19 @@ export default {
             }]
         };
     },
-    methods: {},
+    methods: {
+        switchView() {
+            const dataStore = useDataStore();
+            this.leftShow = !this.leftShow
+            dataStore.leftShow = this.leftShow;
+        }
+    },
     created() {},
     mounted() {
-        // let dataStore = useDataStore();
+        let dataStore = useDataStore();
+        dataStore.$subscribe(() => {
+            this.leftShow = dataStore.leftShow;
+        })
     },
     watch: {
         dataset_select: {
@@ -140,14 +142,20 @@ export default {
                 this.video_options = this.all_video_options[this.dataset_select].options;
                 const dataStore = useDataStore();
                 // dataStore.select_video = this.video_select;
-                dataStore.categorySource = category_p;
-                dataStore.all_data = p_data;
+                if (this.dataset_select == 1) {
+                    dataStore.categorySource = category_p;
+                    dataStore.all_data = p_data;
+                } else {
+                    dataStore.categorySource = category_t;
+                    dataStore.all_data = t_data;
+                }
             }
         },
         video_select: {
             handler() {
                 const dataStore = useDataStore();
                 dataStore.select_video = this.video_select;
+                dataStore.currentPlayTime = 0;
                 console.log(this.video_select);
             }
         }

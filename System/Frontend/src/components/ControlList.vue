@@ -41,9 +41,11 @@
         </div>
         <div ref="wholeWidth" id="problem_tag" style="height: calc(100% - 80px)">
             <el-dialog v-model="addPoint" :title="'添加' + add_tag_level + '级标签'" width="15%" height="100px" :append-to="'#problems_tag'" :modal="false" :class="'add_dialog'">
+                <div v-loading="loadingTag"  element-loading-background="rgba(122, 122, 122, 0.8)" style="width: 100%; height: 40px;">
                 <span>
                                 <el-input v-model="tag_name" placeholder="Please input" />
                             </span>
+                </div>
                 <div style="padding: 20px 0px 10px 0px;">
                     <el-button @click="addPoint = false">取消</el-button>
                     <el-button type="primary" @click="addTag()">确定</el-button>
@@ -124,6 +126,7 @@ export default {
             select_video: '',
             addPoint: false,
             expandTag: false,
+            loadingTag: false,
             showTree: true,
             selectAll: true,
             tag_name: "",
@@ -166,10 +169,38 @@ export default {
                 this.add_tag_level = '二';
             }
         },
-        addTag() {
-            let id_cnt = [...this.dataSource].length;
+        async addTag() {
+            let id_cnt = -1;
+            for (const d of this.dataSource) {
+                id_cnt = Math.max(id_cnt, d.id);
+                for (const dd of d.children) {
+                    id_cnt = Math.max(id_cnt, dd.id);
+                }
+            }
+            id_cnt += 1;
 
-            this.addPoint = false;
+            // this.id_cnt++;
+            let jsonData = {
+                tag: this.tag_name,
+                id: id_cnt,
+                parent_id: this.add_tag_level == '一' ? 0 : this.selectData.id,
+                level: this.add_tag_level == '一' ? 1 : 2,
+                category: this.dataSource,
+                info: this.all_data,
+                test: 0
+            };
+            this.loadingTag = true;
+            const dataStore = useDataStore();
+            const data = await dataStore.queryNewTag(jsonData);
+            console.log(data);
+            // let new_data = data.data.info;
+            // for (let i in this.all_data) {
+            //     for (let j in this.all_data[i].info) {
+            //         this.all_data[i].info[j].tag = new_data[i].info[j].tag;
+            //         this.all_data[i].info[j].second_tag = new_data[i].info[j].second_tag;
+            //     }
+            // }
+            // this.addPoint = false;
             if (this.add_tag_level == '一') {
                 let l_id_cnt = this.dataSource.length + 1;
                 this.selectData.push({
@@ -178,7 +209,7 @@ export default {
                     level: 1,
                     label: this.tag_name,
                     description: this.tag_name,
-                    disabled: true,
+                    disabled: false,
                     children: []
                 })
             } else {
@@ -190,11 +221,14 @@ export default {
                     level: 2,
                     label: this.tag_name,
                     description: this.tag_name,
-                    disabled: true,
+                    disabled: false,
                     children: []
                 })
             }
-            // this.id_cnt++;
+            this.noneDisabledTag = this.calcDisabledData(this.all_data);
+            this.addPoint = false;
+            
+            this.loadingTag = false;
         },
         calcDisabledData(data) {
             let noneDisabledTag = {};
@@ -202,7 +236,6 @@ export default {
                 if (this.select_video == '' || i == this.select_video) {
                     for (const d of data[i].info) {
                         for (const t of d.tag) {
-                            // console.log(t, this.dataSource[t - 1].id);
                             let t1 = this.dataSource[t - 1].id;
                             if (typeof noneDisabledTag[t1] == 'undefined') {
                                 noneDisabledTag[t1] = 0;
