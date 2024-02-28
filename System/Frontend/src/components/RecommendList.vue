@@ -7,7 +7,12 @@
 -->
 <template>
     <PreviewVideoPlayer :dialogVisible="dialogVisible" :config="config" @showDialog="showDialog" />
-    <div ref="recommendList" id="recommendList" style="height: 100%; overflow-x: hidden; width: 100%; display: flex;">
+    <div class="frameworkBody">
+        <div style=" height: 30px;text-align: left; font-size: 24px; color: white; font-weight: bold; justify-content: space-between; display: flex;">
+            <span>视频推荐</span>
+            <span style="font-size: 20px;">相似度：高 → 低</span>
+        </div>
+    <div ref="recommendList" id="recommendList" style="height: calc(100% - 40px); margin-top: 10px; overflow-x: hidden; width: 100%; display: flex;">
         <div v-for="(d, i) in video_list" ref="video_element" :key="'video' + i" id="video_list" style="border: 0px solid white; height: 100%; color: white; font-size: 20px; padding: 3px 10px 5px 10px;">
             <div style="height: 30px; float: left;">
                 {{ d.id }}
@@ -23,13 +28,15 @@
                 </div>
             </div>
         </div>
-    </div>
-    <div style="position: absolute; top: calc(0px); left: 0px; width:50px; height: 100%; background-color: rgba(0, 0, 0, .7);  border-radius: 0px;" class="scroll-button" @click="scrollToLeft">
+        <div style="position: absolute; top: calc(0px); left: 0px; width:50px; height: 100%; background-color: rgba(0, 0, 0, .7);  border-radius: 0px;" class="scroll-button" @click="scrollToLeft">
         <svg style="position: absolute; top: calc(50% - 25px); left: 10px;" t="1705561614491" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4198" width="25" height="50"><path fill="white" d="M609.408 149.376 277.76 489.6a32 32 0 0 0 0 44.672l331.648 340.352a29.12 29.12 0 0 0 41.728 0 30.592 30.592 0 0 0 0-42.752L339.264 511.936l311.872-319.872a30.592 30.592 0 0 0 0-42.688 29.12 29.12 0 0 0-41.728 0z"></path></svg>
     </div>
     
     <div style="position: absolute; top: calc(0px); right: 0px; width:50px; height: 100%; background-color: rgba(0, 0, 0, .7); border-radius: 0px;" class="scroll-button" @click="scrollToRight">
         <svg style="position: absolute; top: calc(50% - 25px); right: 10px;" t="1705561614491" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4198" width="25" height="50"><path fill="white" d="M340.864 149.312a30.592 30.592 0 0 0 0 42.752L652.736 512 340.864 831.872a30.592 30.592 0 0 0 0 42.752 29.12 29.12 0 0 0 41.728 0L714.24 534.336a32 32 0 0 0 0-44.672L382.592 149.376a29.12 29.12 0 0 0-41.728 0z"></path></svg>
+    </div>
+    </div>
+    
     </div>
 </template>
 

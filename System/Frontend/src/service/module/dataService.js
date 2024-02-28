@@ -67,3 +67,17 @@ export async function queryNewTag(param) {
     })
     return data;
 }
+
+export async function saveData(params) {
+    const url = `${TEST_URL_PREFIX}/NewTag`;
+    const jsonString = JSON.stringify(param);
+    const data = await axios({
+        method: "post",
+        url: url,
+        headers: {
+            "Content-Type": "application/json",
+        },
+        data: jsonString
+    })
+    return data;
+}

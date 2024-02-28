@@ -1,6 +1,11 @@
 <template>
     <div id="navBar">
-        <span style="font-weight: 800; padding-left: 10px;position: absolute;">UX Analysis Tool</span>
+        <span style="font-weight: 800; padding-left: 10px;position: absolute;">
+            UX Analysis Tool
+            <span id="version">
+            <a id="version" style="font-size: 16px; font-style: italic;">Baseline Version</a>
+        </span>
+        </span>
         <span style="position: absolute; right: 10px; top: 0px; display: flex;">
                 <span>
                 <span style="font-size: 20px;">数据集</span>&nbsp;
@@ -29,6 +34,15 @@
                     {{ leftShow == 1 ? '标签视图' : '分析视图'}}
                 </el-button>
                 </span>
+                &nbsp; | &nbsp;
+                <span>
+                <el-button type="primary" @click="saveData()">
+                    <svg t="1709028086913" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4219" width="20" height="20"><path d="M708.388571 121.904762L902.095238 320.804571V828.952381a73.142857 73.142857 0 0 1-73.142857 73.142857H195.047619a73.142857 73.142857 0 0 1-73.142857-73.142857V195.047619a73.142857 73.142857 0 0 1 73.142857-73.142857h513.340952zM292.571429 195.023238L195.047619 195.047619v633.904762l97.52381-0.024381V536.380952h438.857142v292.547048L828.952381 828.952381V350.549333l-97.52381-100.156952V365.714286H292.571429V195.023238zM658.285714 609.52381H365.714286v219.40419h292.571428V609.52381z m-48.761904 73.142857v73.142857h-195.04762v-73.142857h195.04762z m48.761904-487.619048H365.714286v97.52381h292.571428V195.047619z" p-id="4220" fill="#ffffff"></path></svg>
+                    &nbsp;
+                    保存
+                </el-button>
+                </span>
+                
         </span>
     </div>
     <div style="height: calc(100vh - 40px); width: calc(100% - 0px);">
@@ -123,6 +137,15 @@ export default {
         };
     },
     methods: {
+        saveData() {
+            const dataStore = useDataStore();
+            const data = {
+                videolist: dataStore.video_list,
+                category: dataStore.categorySource,
+                info: dataStore.all_data
+            };
+            dataStore.saveData(data);
+        },
         switchView() {
             const dataStore = useDataStore();
             this.leftShow = !this.leftShow
@@ -141,7 +164,10 @@ export default {
             handler() {
                 this.video_options = this.all_video_options[this.dataset_select].options;
                 const dataStore = useDataStore();
-                // dataStore.select_video = this.video_select;
+                // dataStore.$reset();
+                dataStore.dataSelect = this.dataset_select;
+                this.video_select = '';
+                dataStore.select_video = this.video_select;
                 if (this.dataset_select == 1) {
                     dataStore.categorySource = category_p;
                     dataStore.all_data = p_data;
@@ -157,6 +183,7 @@ export default {
                 dataStore.select_video = this.video_select;
                 dataStore.currentPlayTime = 0;
                 console.log(this.video_select);
+                dataStore.video_list.push(this.video_select);
             }
         }
     },
@@ -165,6 +192,31 @@ export default {
 </script>
 
 <style>
+#version {
+  position: relative;
+  padding-bottom: 0px; /* 控制线的位置 */
+}
+
+#version::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  border-bottom: 1px solid #00bd7e;
+}
+
+#version::before {
+  content: '';
+  position: absolute;
+  bottom: -5px;
+  right: -15px; /* 控制线的位置 */
+  width: 10px;
+  height: 18px;
+  border-left: 1px solid #00bd7e; /* 右侧的线 */
+  transform: rotate(45deg); /* 旋转45度 */
+}
+
 .el-select-dropdown__item:hover {
     background-color: #5a9cf8;
 }

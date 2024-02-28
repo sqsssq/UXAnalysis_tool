@@ -311,13 +311,19 @@
                     </el-button>
                 </div>
             </el-dialog>
-            <el-dialog v-model="tagConfig.addPoint" :title="'添加' + tagConfig.add_tag_level + '级标签'" width="15%" height="100px" :append-to="'#problems_tag'" :modal="false" :class="'add_main_dialog'">
-                <div v-loading="tagConfig.loadingTag"  element-loading-background="rgba(122, 122, 122, 0.8)" style="width: 100%; height: 40px;">
+            <el-dialog v-model="tagConfig.addPoint" :title="'添加' + tagConfig.add_tag_level + '级标签'" width="15%" :append-to="'#problems_tag'" :modal="false" :class="'add_main_dialog'">
+                <div v-loading="tagConfig.loadingTag"  element-loading-background="rgba(122, 122, 122, 0.8)" style="width: 100%; height: 100px; margin-top: -35px;">
+                    <h3 style="color: white; text-align: left;">标签名称</h3>
                 <span>
                                 <el-input v-model="tagConfig.tag_name" placeholder="Please input" />
                             </span>
+                            <br>
+                    <h3 style="color: white; text-align: left;">标签定义</h3>
+                            <span>
+                                <el-input v-model="tagConfig.description" placeholder="Please input" />
+                            </span>
                 </div>
-                <div style="padding: 20px 0px 10px 0px;">
+                <div style="padding: 30px 0px 10px 0px;">
                     <el-button @click="tagConfig.addPoint = false">取消</el-button>
                     <el-button type="primary" @click="addTag()">确定</el-button>
                 </div>
@@ -519,9 +525,11 @@ export default {
                 addPoint: false,
                 loadingTag: false,
                 tag_name: '',
+                tag_description: '',
                 add_tag_level: '',
                 selectData: []
             },
+            dataSelect: -1
         };
     },
     methods: {
@@ -570,24 +578,26 @@ export default {
             // }
             if (this.tagConfig.add_tag_level == '一') {
                 let l_id_cnt = this.dataSource.length + 1;
+                this.info_data.tag.push(l_id_cnt);
                 this.tagConfig.selectData.push({
                     id: id_cnt,
                     l_id: l_id_cnt,
                     level: 1,
                     label: this.tagConfig.tag_name,
-                    description: this.tagConfig.tag_name,
+                    description: this.tagConfig.description,
                     disabled: false,
                     children: []
                 })
             } else {
                 let cnt = this.tagConfig.selectData.children.length + 1;
+                this.info_data.second_tag[this.tagConfig.selectData.l_id - 1].push(cnt); 
                 this.tagConfig.selectData.children.push({
                     id: id_cnt,
                     l_id: 1,
                     cnt: cnt,
                     level: 2,
                     label: this.tagConfig.tag_name,
-                    description: this.tagConfig.tag_name,
+                    description: this.tagConfig.description,
                     disabled: false,
                     children: []
                 })
@@ -757,7 +767,7 @@ export default {
             this.playTag = !this.playTag;
         },
         calcMarker(data, all_data) {
-            // console.log(data);
+            console.log(data);
             let res_data = new Array();
             let time_data = new Object();
 
@@ -774,11 +784,12 @@ export default {
                 time_data[tmp.time] = res_data[res_data.length - 1];
             }
             // console.log(time_data);
+            console.log(this.dataSource)
             let noneDisabledTag = {};
 
             for (const d of res_data) {
                 for (const t of d.tag) {
-                    // console.log(t, this.dataSource[t - 1].id);
+                    console.log(t);
                     let t1 = this.dataSource[t - 1].id;
                     if (typeof noneDisabledTag[t1] == 'undefined') {
                         noneDisabledTag[t1] = 0;
@@ -844,6 +855,7 @@ export default {
             this.config.videoHeight = this.elHeight;
         }
         const dataStore = useDataStore();
+            this.dataSelect = dataStore.dataSelect;
         this.all_data = dataStore.all_data;
         this.dataSource = dataStore.categorySource;
         this.select_video = dataStore.select_video;
@@ -866,6 +878,8 @@ export default {
          * @return {*}
          */
         dataStore.$subscribe((mutations, state) => {
+            console.log(this.dataSelect, dataStore.dataSelect);
+            this.dataSelect = dataStore.dataSelect;
             this.all_data = state.all_data;
             this.dataSource = state.categorySource;
             // if (this.dataSource.length != 0) {
@@ -890,6 +904,14 @@ export default {
         });
     },
     watch: {
+        dataSelect: {
+            handler(newVal, oldVal) {
+                console.log(newVal, oldVal)
+                // Object.assign(this.$data, this.$options.data());
+                this.dataSelect = newVal;
+                console.log(this.$data)
+            }
+        },
         all_data: {
             handler() {
                 if (this.dataSource.length != 0) {
@@ -904,12 +926,14 @@ export default {
                 this.noneDisabledTag = {};
                 this.playTag = 1;
                 if (oldVal != '') {
+                    if (typeof this.all_data == 'object' && typeof this.all_data[oldVal] != 'undefined'){
                     if (typeof this.all_data[oldVal]['already_time'] == 'undefined') {
                         this.all_data[oldVal]['already_time'] = this.already_time;
                     }
-                    this.all_data[oldVal]['already_time'] = this.already_time;
+                    this.all_data[oldVal]['already_time'] = this.already_time;}
                 }
                 if (newVal != '') {
+                    if (typeof this.all_data == 'object' && typeof this.all_data[oldVal] != 'undefined'){
                     if (typeof this.all_data[newVal]['already_time'] == 'undefined') {
                         this.all_data[newVal]['already_time'] = {
                             nowTime: -1,
@@ -918,7 +942,7 @@ export default {
                         };
                     }
                     this.already_time = this.all_data[newVal]['already_time']
-                }
+                }}
                 const dataStore = useDataStore();
                 if (this.select_video != '') {
                     this.config.src = this.pathSetting + 'AI_Tool/' + this.select_video + '/video.mp4'
@@ -983,7 +1007,8 @@ export default {
         },
         sumTime: {
             handler() {
-                [this.marker_data, this.marker_time] = this.calcMarker(this.main_data, this.all_data);
+                if (this.dataSource.length != 0)
+                    [this.marker_data, this.marker_time] = this.calcMarker(this.main_data, this.all_data);
             }
         },
         noneDisabledTag: {

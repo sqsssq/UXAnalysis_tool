@@ -483,6 +483,7 @@ export default {
             d3.selectAll('#all-network').remove();
 
             const svg = d3.select('#networkSvg').append('g').attr('id', 'all-network').attr('transform', `translate(${this.elWidth / 2}, ${this.elHeight / 2})`);
+            d3.select('#networkSvg').on('.zoom', null)
             const path = svg.append("g")
                 .selectAll("path")
                 .data(root.descendants())
@@ -495,10 +496,23 @@ export default {
                 });
 
             // Make them clickable if they have children.
-            path.filter(d => d.children)
+            path.filter(d => {
+                return d.children
+            })
                 .style("cursor", "pointer")
                 .on("click", clicked);
 
+                path.filter(d => {
+                return d.children == undefined
+            })
+                .style("cursor", "pointer")
+                .on("click", (e, d) => {
+                    console.log(d);
+
+                    this.dialogVisible = !this.dialogVisible;
+                        this.config = d.data.config;
+                });
+                
             const format = d3.format(",d");
             path.append("title")
                 .text(d => `${d.ancestors().map(d => d.data.name).reverse().join("/")}\n${format(d.value)}`);
@@ -518,7 +532,6 @@ export default {
                 .attr("transform", d => labelTransform(d.current))
                 .attr('fill', 'white')
                 .text(d => {
-                    console.log(d.data.text)
                     return d.data.text
                 });
 
@@ -531,6 +544,7 @@ export default {
 
             // Handle zoom on click.
             function clicked(event, p) {
+                console.log(p)
                 parent.datum(p.parent || root);
 
                 root.each(d => d.target = {
@@ -554,7 +568,7 @@ export default {
                         return +this.getAttribute("fill-opacity") || arcVisible(d.target);
                     })
                     .attr("fill-opacity", d => arcVisible(d.target) ? (d.children ? .6 : .6) : .6)
-                    .attr("pointer-events", d => arcVisible(d.target) ? "auto" : "none")
+                    .attr("pointer-events", d => arcVisible(d.target) ? "auto" : "auto")
 
                     .attrTween("d", d => () => arc(d.current));
 

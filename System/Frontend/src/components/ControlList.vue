@@ -41,9 +41,15 @@
         </div>
         <div ref="wholeWidth" id="problem_tag" style="height: calc(100% - 80px)">
             <el-dialog v-model="addPoint" :title="'添加' + add_tag_level + '级标签'" width="15%" height="100px" :append-to="'#problems_tag'" :modal="false" :class="'add_dialog'">
-                <div v-loading="loadingTag"  element-loading-background="rgba(122, 122, 122, 0.8)" style="width: 100%; height: 40px;">
-                <span>
+                <div v-loading="loadingTag"  element-loading-background="rgba(122, 122, 122, 0.8)" style="width: 100%; height: 110px; margin-top: -10px;">
+                
+                    <h3 style="color: white; text-align: left;">标签名称</h3>
+                    <span>
                                 <el-input v-model="tag_name" placeholder="Please input" />
+                            </span>
+                    <h3 style="color: white; text-align: left;">标签定义</h3>
+                            <span>
+                                <el-input v-model="tag_description" placeholder="Please input" />
                             </span>
                 </div>
                 <div style="padding: 20px 0px 10px 0px;">
@@ -130,6 +136,7 @@ export default {
             showTree: true,
             selectAll: true,
             tag_name: "",
+            tag_description: "",
             add_tag_level: "",
             id_cnt: 12,
             selectData: [],
@@ -160,6 +167,7 @@ export default {
         },
         showDialog(tag_type, data) {
             this.tag_name = "";
+            this.tag_description = "";
             this.addPoint = true;
             this.selectData = data;
 
@@ -297,6 +305,11 @@ export default {
         });
     },
     watch: {
+        select_video: {
+            handler() {
+                console.log(this.select_video)
+            }
+        },
         noneDisabledTag: {
             handler() {
                 for (const i in this.dataSource) {
