@@ -24,6 +24,16 @@ const router = createRouter({
       // which is lazy-loaded when the route is visited.
       component: () => import("../views/BaselineView.vue"),
     },
+    {
+        path: "/empty",
+        name: "empty",
+        component: () => import("../views/Empty.vue"),
+    },
+    {
+        path: "/emptyBase",
+        name: "emptyBase",
+        component: () => import("../views/EmptyBaseline.vue"),
+    }
   ],
 });
 

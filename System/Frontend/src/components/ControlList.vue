@@ -118,7 +118,7 @@
 </template>
 
 <script>
-import { useDataStore } from "../stores/counter";
+import { useDataStore } from "@/stores/counter";
 
 export default {
     name: "PCV",
@@ -177,7 +177,7 @@ export default {
                 this.add_tag_level = '二';
             }
         },
-        async addTag() {
+        addTag() {
             let id_cnt = -1;
             for (const d of this.dataSource) {
                 id_cnt = Math.max(id_cnt, d.id);
@@ -198,9 +198,9 @@ export default {
                 test: 0
             };
             this.loadingTag = true;
-            const dataStore = useDataStore();
-            const data = await dataStore.queryNewTag(jsonData);
-            console.log(data);
+            // const dataStore = useDataStore();
+            // const data = await dataStore.queryNewTag(jsonData);
+            // console.log(data);
             // let new_data = data.data.info;
             // for (let i in this.all_data) {
             //     for (let j in this.all_data[i].info) {
@@ -216,7 +216,7 @@ export default {
                     l_id: l_id_cnt,
                     level: 1,
                     label: this.tag_name,
-                    description: this.tag_name,
+                    description: this.tag_description,
                     disabled: false,
                     children: []
                 })
@@ -228,7 +228,7 @@ export default {
                     cnt: cnt,
                     level: 2,
                     label: this.tag_name,
-                    description: this.tag_name,
+                    description: this.tag_description,
                     disabled: false,
                     children: []
                 })

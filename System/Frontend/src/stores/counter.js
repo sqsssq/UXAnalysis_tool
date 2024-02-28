@@ -78,7 +78,7 @@ export const useDataStore = defineStore("dataStore", {
             return data;
         },
         async saveData(param) {
-            const data = await saveDate(param);
+            const data = await saveData(param);
             return data;
         }
     }

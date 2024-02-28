@@ -11,32 +11,29 @@
         <div style=" height: 30px;text-align: left; font-size: 24px; color: white; font-weight: bold; justify-content: space-between; display: flex;">
             <span>视频分析</span>
             <span v-show="select_video != ''" style="font-size: 20px;">编号: {{ select_video }} 姓名: {{ user_info.name }} 性别:
-                                                {{ user_info.gender }} 年龄: {{ user_info.age }}</span>
+                                            {{ user_info.gender }} 年龄: {{ user_info.age }}</span>
         </div>
         <div style="width: 100%; height: calc(100% - 30px); margin-top: 10px;">
             <el-dialog v-model="showInfo" :title="(parseInt(info_data.time / 60 / 60).toString().padStart(2, '0')) + ':' + (parseInt(info_data.time / 60).toString().padStart(2, '0')) + ':' + ((info_data.time % 60).toString().padStart(2, '0'))" width="25%" :append-to="'#mainView'"
                 :modal="false" :class="'show_info_dialog'" :show-close="false">
     
-                <div v-loading="loadingTag" element-loading-background="rgba(122, 122, 122, 0.8)" id="dialogDiv" ref="dialogDiv" :style="{ width: '100%', height: info_data.status != -1 && info_data.status != 3 ? elHeight * .5 + 'px' : elHeight * .5 + 'px', color: 'white', textAlign: 'left', overflow: 'auto' }">
+                <div v-loading="loadingTag" element-loading-background="rgba(122, 122, 122, 0.8)" id="dialogDiv" ref="dialogDiv" :style="{ width: '100%', height: info_data.status != -1 && info_data.status != 3 ? 145 + 'px' : 145 + 'px', color: 'white', textAlign: 'left', overflow: 'auto' }">
                     <h2>
                         问题描述
                         <span>
-                                                            <el-popover placement="bottom" title="" :width="250" trigger="click"
-                                                                :popper-class="'marker_description'">
-                                                                <template #reference>
-                                                                    <a style="position: absolute; margin-top: 1px;"><svg t="1708679239889" class="icon" viewBox="0 0 1024 1024" version="1.1"
-                                                                            xmlns="http://www.w3.org/2000/svg" p-id="1495" width="30" height="30">
-                                                                            <path
-                                                                                d="M536 480v192a16 16 0 0 1-16 16h-16a16 16 0 0 1-16-16V480a16 16 0 0 1 16-16h16a16 16 0 0 1 16 16z m-32-128h16a16 16 0 0 1 16 16v32a16 16 0 0 1-16 16h-16a16 16 0 0 1-16-16v-32a16 16 0 0 1 16-16z m8 448c159.056 0 288-128.944 288-288s-128.944-288-288-288-288 128.944-288 288 128.944 288 288 288z m0 48c-185.568 0-336-150.432-336-336s150.432-336 336-336 336 150.432 336 336-150.432 336-336 336z"
-                                                                                fill="#ffffff" p-id="1496"></path>
-                                                                        </svg></a>
+                                                        <el-popover placement="bottom" title="" :width="250" trigger="click"
+                                                            :popper-class="'marker_description'">
+                                                            <template #reference>
+                                                                <a style="position: absolute; margin-top: 1px;"><svg t="1708679239889" class="icon" viewBox="0 0 1024 1024" version="1.1"
+                                                                        xmlns="http://www.w3.org/2000/svg" p-id="1495" width="30" height="30">
+                                                                        <path
+                                                                            d="M536 480v192a16 16 0 0 1-16 16h-16a16 16 0 0 1-16-16V480a16 16 0 0 1 16-16h16a16 16 0 0 1 16 16z m-32-128h16a16 16 0 0 1 16 16v32a16 16 0 0 1-16 16h-16a16 16 0 0 1-16-16v-32a16 16 0 0 1 16-16z m8 448c159.056 0 288-128.944 288-288s-128.944-288-288-288-288 128.944-288 288 128.944 288 288 288z m0 48c-185.568 0-336-150.432-336-336s150.432-336 336-336 336 150.432 336 336-150.432 336-336 336z"
+                                                                            fill="#ffffff" p-id="1496"></path>
+                                                                    </svg></a>
 </template>
                                 <div :style="{ fontSize: '16px', lineHeight: 1.5, color: 'white' }">
                                     <h3>用户描述</h3>
                                     {{ '"' + info_data.user_said + '"' }}
-                                    <h3>AI解释</h3>
-
-                                    {{ '"' + info_data.reason + '"' }}
                                 </div>
                             </el-popover>
                         </span>
@@ -49,7 +46,7 @@
                         <el-input v-model="info_data.description" :autosize="{ minRows: 3, maxRows: 3 }" type="textarea"
                             placeholder="Please input" />
                     </div>
-                    <h2>
+                    <!-- <h2>
                         一级标签 (可选)
                     </h2>
                     <div @click="focusTag('main')"
@@ -106,8 +103,8 @@
                             <el-button style="margin-top: 10px;" type="primary"
                                 @click="showAddDialog(1, dataSource)">添加一级标签</el-button>
                         </div>
-                    </el-collapse-transition>
-                    <h2>
+                    </el-collapse-transition> -->
+                    <!-- <h2>
                         二级标签 (可选)
                     </h2>
                     <div
@@ -184,8 +181,8 @@
                                 </div>
                             </el-collapse-transition>
                         </div>
-                    </div>
-                    <div v-if="info_data.status != -1 && info_data.status != 3">
+                    </div> -->
+                    <!-- <div v-if="info_data.status != -1 && info_data.status != 3">
                     <h2>
                         其他相同标签问题：
                     </h2>
@@ -233,7 +230,7 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> -->
                 </div>
                 <div style="padding: 5px 0px 10px 0px;">
                     <el-button type="primary" @click="chooseTime(info_data.time)">
@@ -334,7 +331,7 @@
             </el-dialog>
             <div id="mainView" ref="mainView" class="align-class" style="height: calc(100% - 95px); width: 100%;">
                 <div>
-                    <video-player :src="config.src" playsinline :controls="false" :volume="1"
+                    <video-player :src="config.src" playsinline :controls="false" :volume="0.2"
                         :height="1 * config.videoHeight" :playback-rates="[0.7, 1.0, 1.5, 2.0]" @mounted="handleMounted"
                         @ready="handleEvent($event)" @play="handleEvent($event)" @pause="handleEvent($event)"
                         @ended="handleEvent($event)" @loadeddata="handleEvent($event)" @waiting="handleEvent($event)"
@@ -371,7 +368,7 @@
                         </div>
                     </div>
 
-                    <div style="width: 100%; position: absolute; top: 1px;">
+                    <!-- <div style="width: 100%; position: absolute; top: 1px;">
                         <div v-for="(tag_d, tag_i) in calcMarkerData" :key="'marker' + tag_i"
                             :style="{ position: 'absolute', left: 'calc(' + tag_d.percentage + '% - 8px)' }">
                             <div v-if="selectShowLevel == 1">
@@ -396,7 +393,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div> -->
                     <div style="width: 100%; position: absolute; top: 36px;">
                         <div v-for="(d, i) in calcMarkerData" :key="'warning' + i"
                             :style="{ position: 'absolute', left: 'calc(' + d.percentage + '% - 8px)', opacity: d.status == 2 ? 1 : 0 }">
@@ -470,11 +467,11 @@
 </template>
 
 <script>
-import { useDataStore } from "../stores/counter";
+import { useDataStore } from "@/stores/counter";
 import { VideoPlayer } from '@videojs-player/vue'
 // import 'video.js/dist/video-js.css'
 import 'video.js/dist/video-js.css'
-import PreviewVideoPlayer from './utils/PreviewVideoPlayer.vue';
+import PreviewVideoPlayer from '../utils/PreviewVideoPlayer.vue';
 
 export default {
     name: "PCV",
@@ -594,7 +591,7 @@ export default {
                 })
             } else {
                 let cnt = this.tagConfig.selectData.children.length + 1;
-                this.info_data.second_tag[this.tagConfig.selectData.l_id - 1].push(cnt);
+                this.info_data.second_tag[this.tagConfig.selectData.l_id - 1].push(cnt); 
                 this.tagConfig.selectData.children.push({
                     id: id_cnt,
                     l_id: 1,
@@ -730,25 +727,24 @@ export default {
             this.info_data = this.marker_time[time];
         },
         async submitMarker() {
-            if (this.info_data.tag.length == 0) {
-                const dataStore = useDataStore();
-                let jsonData = {
-                    video: this.select_video,
-                    id: this.info_data.id,
-                    tagtime: this.info_data.time,
-                    description: this.info_data.description,
-                    category: this.dataSource,
-                    info: this.all_data,
-                    test: dataStore.dataSelect == 0 ? 1 : 0
-                };
-                this.loadingTag = true;
-                const data = await dataStore.queryRecommendation(jsonData);
-                // console.log(data);
-                this.loadingTag = false;
-                console.log(data);
-                this.info_data.tag = data.data.info[this.select_video].info[this.info_data.id - 1].tag;
-                this.info_data.second_tag = data.data.info[this.select_video].info[this.info_data.id - 1].second_tag;
-            }
+            // if (this.info_data.tag.length == 0) {
+            // let jsonData = {
+            //     video: this.select_video,
+            //     id: this.info_data.id,
+            //     tagtime: this.info_data.time,
+            //     description: this.info_data.description,
+            //     category: this.dataSource,
+            //     info: this.all_data,
+            //     test: 0
+            // };
+            // this.loadingTag = true;
+            // const dataStore = useDataStore();
+            // // const data = await dataStore.queryRecommendation(jsonData);
+            // // console.log(data);
+            // this.loadingTag = false;
+            // console.log(data);
+            // this.info_data.tag = data.data.info[this.select_video].info[this.info_data.id - 1].tag;
+            // this.info_data.second_tag = data.data.info[this.select_video].info[this.info_data.id - 1].second_tag;}
             this.info_data.status = 0;
         },
         translate(x, y, deg) {
@@ -773,7 +769,7 @@ export default {
             this.playTag = !this.playTag;
         },
         calcMarker(data, all_data) {
-            console.log(data);
+            // console.log(data);
             let res_data = new Array();
             let time_data = new Object();
 
@@ -790,12 +786,12 @@ export default {
                 time_data[tmp.time] = res_data[res_data.length - 1];
             }
             // console.log(time_data);
-            console.log(this.dataSource)
+            // console.log(this.dataSource)
             let noneDisabledTag = {};
 
             for (const d of res_data) {
                 for (const t of d.tag) {
-                    console.log(t);
+                    // console.log(t);
                     let t1 = this.dataSource[t - 1].id;
                     if (typeof noneDisabledTag[t1] == 'undefined') {
                         noneDisabledTag[t1] = 0;
@@ -861,7 +857,7 @@ export default {
             this.config.videoHeight = this.elHeight;
         }
         const dataStore = useDataStore();
-        this.dataSelect = dataStore.dataSelect;
+            this.dataSelect = dataStore.dataSelect;
         this.all_data = dataStore.all_data;
         this.dataSource = dataStore.categorySource;
         this.select_video = dataStore.select_video;
@@ -932,25 +928,23 @@ export default {
                 this.noneDisabledTag = {};
                 this.playTag = 1;
                 if (oldVal != '') {
-                    if (typeof this.all_data == 'object' && typeof this.all_data[oldVal] != 'undefined') {
-                        if (typeof this.all_data[oldVal]['already_time'] == 'undefined') {
-                            this.all_data[oldVal]['already_time'] = this.already_time;
-                        }
+                    if (typeof this.all_data == 'object' && typeof this.all_data[oldVal] != 'undefined'){
+                    if (typeof this.all_data[oldVal]['already_time'] == 'undefined') {
                         this.all_data[oldVal]['already_time'] = this.already_time;
                     }
+                    this.all_data[oldVal]['already_time'] = this.already_time;}
                 }
                 if (newVal != '') {
-                    if (typeof this.all_data == 'object' && typeof this.all_data[oldVal] != 'undefined') {
-                        if (typeof this.all_data[newVal]['already_time'] == 'undefined') {
-                            this.all_data[newVal]['already_time'] = {
-                                nowTime: -1,
-                                timeSlot: [],
-                                lastTime: -1
-                            };
-                        }
-                        this.already_time = this.all_data[newVal]['already_time']
+                    if (typeof this.all_data == 'object' && typeof this.all_data[oldVal] != 'undefined'){
+                    if (typeof this.all_data[newVal]['already_time'] == 'undefined') {
+                        this.all_data[newVal]['already_time'] = {
+                            nowTime: -1,
+                            timeSlot: [],
+                            lastTime: -1
+                        };
                     }
-                }
+                    this.already_time = this.all_data[newVal]['already_time']
+                }}
                 const dataStore = useDataStore();
                 if (this.select_video != '') {
                     this.config.src = this.pathSetting + 'AI_Tool/' + this.select_video + '/video.mp4'

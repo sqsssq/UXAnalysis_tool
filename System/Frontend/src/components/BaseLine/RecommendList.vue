@@ -9,8 +9,7 @@
     <PreviewVideoPlayer :dialogVisible="dialogVisible" :config="config" @showDialog="showDialog" />
     <div class="frameworkBody">
         <div style=" height: 30px;text-align: left; font-size: 24px; color: white; font-weight: bold; justify-content: space-between; display: flex;">
-            <span>视频推荐</span>
-            <span style="font-size: 20px;">相似度：高 → 低</span>
+            <span>视频列表</span>
         </div>
         <div style="height: calc(100% - 40px);">
     <div ref="recommendList" id="recommendList" style="height: calc(100% - 0px); margin-top: 10px; overflow-x: hidden; width: 100%; display: flex;">
@@ -43,8 +42,8 @@
 </template>
 
 <script>
-import { useDataStore } from "../stores/counter";
-import PreviewVideoPlayer from './utils/PreviewVideoPlayer.vue';
+import { useDataStore } from "@/stores/counter";
+import PreviewVideoPlayer from '../utils/PreviewVideoPlayer.vue';
 
 export default {
     name: "PCV",
@@ -133,24 +132,6 @@ export default {
                     });
                 }
             }
-            if (!(this.showTagList.length == 0 || (Math.max(...this.showTagList) == this.showTagList.length))){
-            for (let i in pre_data) {
-                let similarity_data = this.jaccardSimilarity((test_data.data), (pre_data[i].data));
-                pre_data[i].similarity = similarity_data;
-            }} else {
-                for (let i in pre_data) {
-                    let cnt = 0;
-                    let tmp_data = pre_data[i].data;
-                    for (let j in tmp_data) {
-                        for (let k in tmp_data[j]) {
-                            if (this.showTagList.indexOf(tmp_data[j][k]) != -1)
-                                cnt++;
-                        }
-                    }
-                    pre_data[i].similarity = cnt;
-                }
-            }
-            pre_data.sort((a, b) => b.similarity - a.similarity);
             return pre_data;
         }
     },
