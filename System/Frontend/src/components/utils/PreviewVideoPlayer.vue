@@ -55,14 +55,16 @@ export default {
             const dataStore = useDataStore();
             dataStore.select_video = this.config.video_id;
             dataStore.currentPlayTime = this.config.time;
+            dataStore.previewSelect = 1;
             dataStore.leftShow = 1;
+            console.log(dataStore.currentPlayTime)
         },
         handleEvent(log) {
-            console.log(log);
+            // console.log(log);
         },
         handleMounted(payload) {
             this.player = payload.player;
-            console.log(payload)
+            // console.log(payload)
         }
     },
     created() {},
@@ -87,7 +89,7 @@ export default {
         config: {
             handler(newVal) {
                 console.log(this.config)
-                this.video_url = '/AI_tool/' + this.config.video_id + '/video.mp4';
+                this.video_url = 'AI_tool/' + this.config.video_id + '/video.mp4';
                 this.video_name = this.config.name;
                 this.$nextTick(() => {
                     this.player.currentTime(this.config.time);

@@ -34,8 +34,13 @@
 <template>
     <div class="frameworkBody">
         <div style="height: 80px;">
-            <div style="text-align: left; font-size: 24px; color: white; font-weight: bold;">
+            <div style="text-align: left; font-size: 24px; color: white; font-weight: bold; justify-content: space-between; display: flex;">
                 推荐设置
+                <span>
+                    <el-button type="primary" @click="showProblem = !showProblem">
+                        <svg t="1709214608225" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="15144" width="20" height="20" transform="rotate(180)"><path d="M117.418667 192a32 32 0 0 1 31.744 27.648l0.256 4.352L149.333333 778.837333a32 32 0 0 1-63.701333 4.352L85.333333 778.837333 85.418667 224a32 32 0 0 1 32-32z m550.186666 76.970667l3.114667-3.584a32 32 0 0 1 41.642667-3.114667l3.584 3.114667 213.205333 213.205333a32 32 0 0 1 3.114667 41.642667l-3.114667 3.626666-213.162667 213.461334a32 32 0 0 1-48.384-41.642667l3.072-3.584 158.336-158.592H245.461333a32 32 0 0 1-31.701333-27.605333l-0.298667-4.352a32 32 0 0 1 27.648-31.701334l4.352-0.298666 584.106667-0.042667L670.72 310.613333a32 32 0 0 1-3.114667-41.642666l3.114667-3.584-3.114667 3.584z" fill="#ffffff" p-id="15145"></path></svg>
+                    </el-button>
+                </span>
             </div>
             <el-switch v-model="recommendTag" class="mb-2" style="--el-switch-on-color: #409eff; --el-switch-off-color: #409eff" active-text="二级标签推荐" inactive-text="一级标签推荐" />
         </div>
@@ -57,7 +62,8 @@
                     <el-button type="primary" @click="addTag()">确定</el-button>
                 </div>
             </el-dialog>
-            <div style="text-align: left; font-size: 24px; color: white; font-weight: bold; height: 40px; display: flex;">
+            <div style="text-align: left; font-size: 24px; color: white; font-weight: bold; height: 40px; display: flex; justify-content: space-between;">
+                <span style="display: flex;">
                 <span>可用性问题标签</span> &nbsp;
                 <span>
                         <el-popover
@@ -92,6 +98,10 @@
                     </div>
                 </el-popover>
                 </span>
+            </span>
+            <span>
+                <el-button type="primary">标签优化</el-button>
+            </span>
             </div>
             <div style="text-align: left; padding-left: 24px; height: 45px;width: 100%;">
                 <span>
@@ -115,6 +125,29 @@
             </div>
         </div>
     </div>
+            <Transition name="el-fade-in-linear">
+    <div v-show="showProblem" class="slide-out" style="height: 100%; width: 100%; position: absolute; top: 0px; background-color: #222c44; border-radius: 5px; z-index: 1000; padding: 10px 10px 5px 10px;">
+        <div style="text-align: left; font-size: 24px; color: white; font-weight: bold; justify-content: space-between; display: flex; height: 40px;">
+                可用性问题列表
+                <span>
+                    <el-button type="primary" @click="showProblem = !showProblem">
+                        <svg t="1709214608225" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="15144" width="20" height="20" transform="rotate(0)"><path d="M117.418667 192a32 32 0 0 1 31.744 27.648l0.256 4.352L149.333333 778.837333a32 32 0 0 1-63.701333 4.352L85.333333 778.837333 85.418667 224a32 32 0 0 1 32-32z m550.186666 76.970667l3.114667-3.584a32 32 0 0 1 41.642667-3.114667l3.584 3.114667 213.205333 213.205333a32 32 0 0 1 3.114667 41.642667l-3.114667 3.626666-213.162667 213.461334a32 32 0 0 1-48.384-41.642667l3.072-3.584 158.336-158.592H245.461333a32 32 0 0 1-31.701333-27.605333l-0.298667-4.352a32 32 0 0 1 27.648-31.701334l4.352-0.298666 584.106667-0.042667L670.72 310.613333a32 32 0 0 1-3.114667-41.642666l3.114667-3.584-3.114667 3.584z" fill="#ffffff" p-id="15145"></path></svg>
+                    </el-button>
+                </span>
+            </div>
+        <div style="height: calc(100% - 50px); width: 100%; overflow-y: auto; padding-right: 8px; margin-top: 10px;">
+            <div class="problem-card" v-for="(d, i) in calcInfoData" :key="'problem_card_' + i">
+                <div class="problem-card-time">
+                    {{ (parseInt(d.time / 60 / 60).toString().padStart(2, '0')) + ':' + (parseInt(d.time / 60).toString().padStart(2, '0')) + ':' + ((d.time % 60).toString().padStart(2, '0')) }}
+                </div>
+                <div class="problem-card-description">
+                    {{ d.description }}
+                </div>
+            </div>
+        </div>
+        
+    </div>
+            </Transition>
 </template>
 
 <script>
@@ -125,6 +158,7 @@ export default {
     props: [],
     data() {
         return {
+            showProblem: 0,
             showTable: 0,
             elHeight: 0,
             all_data: [],
@@ -151,8 +185,14 @@ export default {
             showTagList: [],
             changeTag: false,
             noneDisabledTag: {},
-            all_data: []
+            info_data: []
         };
+    },
+    computed: {
+        calcInfoData() {
+            this.info_data.sort((a, b) => a.time - b.time);
+            return this.info_data.filter(d => d.status != 3)
+        }
     },
     methods: {
         translate(x, y, deg) {
@@ -308,6 +348,7 @@ export default {
         select_video: {
             handler() {
                 console.log(this.select_video)
+                this.info_data = this.all_data[this.select_video]['info'];
             }
         },
         noneDisabledTag: {
@@ -376,6 +417,40 @@ export default {
 </script>
 
 <style>
+.slide-enter-active, .slide-leave-active {
+  transition: transform 4s;
+}
+.slide-enter, .slide-leave-to {
+  transform: translateX(100%);
+}
+.slide-leave, .slide-enter-to {
+  transform: translateX(0);
+}
+.problem-card {
+    width: 100%;
+    /* height: 10px; */
+    margin-bottom: 10px;
+    padding: 10px 10px 10px 20px;
+    border-radius: 5px;
+    background-color: rgba(0, 0, 0, .3);
+    display: flex;
+    justify-content: space-between;
+}
+
+.problem-card-time {
+    font-size: 18px;
+    color: white;
+    width: 30%;
+    text-align: left;
+}
+
+.problem-card-description {
+    font-size: 18px;
+    color: white;
+    width: 70%;
+    text-align: left;
+}
+
 .tag_description {
     margin-top: -15px;
 }

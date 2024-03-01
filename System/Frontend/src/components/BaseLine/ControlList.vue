@@ -121,10 +121,10 @@ export default {
 .problem-card {
     width: 100%;
     /* height: 10px; */
-    margin-top: 10px;
+    margin-bottom: 10px;
     padding: 10px 10px 10px 20px;
     border-radius: 5px;
-    background-color: rgba(0, 0, 0, .5);
+    background-color: rgba(0, 0, 0, .3);
     display: flex;
     justify-content: space-between;
 }

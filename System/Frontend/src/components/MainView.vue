@@ -533,7 +533,8 @@ export default {
                 add_tag_level: '',
                 selectData: []
             },
-            dataSelect: -1
+            dataSelect: -1,
+            previewTime: -1
         };
     },
     methods: {
@@ -550,7 +551,7 @@ export default {
             this.player.pause();
             this.playTag = 1;
         },
-        async addTag() {
+        addTag() {
             let id_cnt = -1;
             for (const d of this.dataSource) {
                 id_cnt = Math.max(id_cnt, d.id);
@@ -642,6 +643,7 @@ export default {
             }
         },
         selectTag(data, id, info, unique_id) {
+            console.log(data);
             const index = data.indexOf(id);
             if (index == -1) {
                 data.push(id);
@@ -748,6 +750,13 @@ export default {
                 console.log(data);
                 this.info_data.tag = data.data.info[this.select_video].info[this.info_data.id - 1].tag;
                 this.info_data.second_tag = data.data.info[this.select_video].info[this.info_data.id - 1].second_tag;
+                for (let i in this.info_data.tag) {
+                    if (typeof this.info_data.second_tag[this.info_data.tag[i]] == 'undefined') {
+                        this.info_data.second_tag[this.info_data.tag[i]] = [];
+                    }
+                }
+
+                console.log(this.info_data);
             }
             this.info_data.status = 0;
         },
@@ -773,7 +782,7 @@ export default {
             this.playTag = !this.playTag;
         },
         calcMarker(data, all_data) {
-            console.log(data);
+            // console.log(data);
             let res_data = new Array();
             let time_data = new Object();
 
@@ -790,12 +799,12 @@ export default {
                 time_data[tmp.time] = res_data[res_data.length - 1];
             }
             // console.log(time_data);
-            console.log(this.dataSource)
+            // console.log(this.dataSource)
             let noneDisabledTag = {};
 
             for (const d of res_data) {
                 for (const t of d.tag) {
-                    console.log(t);
+                    // console.log(t);
                     let t1 = this.dataSource[t - 1].id;
                     if (typeof noneDisabledTag[t1] == 'undefined') {
                         noneDisabledTag[t1] = 0;
@@ -884,7 +893,7 @@ export default {
          * @return {*}
          */
         dataStore.$subscribe((mutations, state) => {
-            console.log(this.dataSelect, dataStore.dataSelect);
+            // console.log(this.dataSelect, dataStore.dataSelect);
             this.dataSelect = dataStore.dataSelect;
             this.all_data = state.all_data;
             this.dataSource = state.categorySource;
@@ -894,6 +903,7 @@ export default {
             this.showTagList = state.showTagList;
             this.selectShowLevel = state.selectShowLevel;
             this.select_video = dataStore.select_video;
+            this.previewTime = dataStore.currentPlayTime;
 
             if (this.showTagList.length == 0) {
                 let tagTmp = [];
@@ -910,12 +920,25 @@ export default {
         });
     },
     watch: {
+        previewTime: {
+            handler() {
+                const dataStore = useDataStore();
+                if (this.select_video != '') {
+                    this.config.src = this.pathSetting + 'AI_Tool/' + this.select_video + '/video.mp4'
+                    this.main_data = this.all_data[this.select_video];
+                    this.$nextTick(() => {
+                        this.player.currentTime(dataStore.currentPlayTime);
+                        console.log(dataStore.currentPlayTime);
+                    })
+                }
+            }
+        },
         dataSelect: {
             handler(newVal, oldVal) {
-                console.log(newVal, oldVal)
+                // console.log(newVal, oldVal)
                 // Object.assign(this.$data, this.$options.data());
                 this.dataSelect = newVal;
-                console.log(this.$data)
+                // console.log(this.$data)
             }
         },
         all_data: {
@@ -957,6 +980,7 @@ export default {
                     this.main_data = this.all_data[this.select_video];
                     this.$nextTick(() => {
                         this.player.currentTime(dataStore.currentPlayTime);
+                        console.log(dataStore.currentPlayTime);
                     })
                 }
             }
@@ -972,6 +996,7 @@ export default {
                 if (!isNaN(this.state.duration))
                     this.sumTime = parseInt(this.state.duration);
                 if (this.sumTime != 0) {
+                    console.log(this.currentPlayTime, this.sumTime, this.progressBar);
                     this.progressBar = (this.currentPlayTime / this.sumTime) * 100;
                 }
                 if (this.showInfo == true && typeof this.marker_time[this.repeatTime + 1] != 'undefined') {

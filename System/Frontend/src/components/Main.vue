@@ -173,6 +173,7 @@ export default {
         let dataStore = useDataStore();
         dataStore.$subscribe(() => {
             this.leftShow = dataStore.leftShow;
+            this.video_select = dataStore.select_video;
         })
     },
     watch: {
@@ -196,9 +197,13 @@ export default {
         video_select: {
             handler() {
                 const dataStore = useDataStore();
-                dataStore.select_video = this.video_select;
-                dataStore.currentPlayTime = 0;
-                console.log(this.video_select);
+                if (dataStore.previewSelect != 1){
+                    dataStore.select_video = this.video_select;
+                    dataStore.currentPlayTime = 0;
+                    console.log(this.video_select);
+                } else {
+                    dataStore.previewSelect = 0;
+                }
                 dataStore.video_list.push(this.video_select);
             }
         }
