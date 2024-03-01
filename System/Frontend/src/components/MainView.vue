@@ -316,15 +316,15 @@
                 </div>
             </el-dialog>
             <el-dialog v-model="tagConfig.addPoint" :title="'添加' + tagConfig.add_tag_level + '级标签'" width="15%" :append-to="'#problems_tag'" :modal="false" :class="'add_main_dialog'">
-                <div v-loading="tagConfig.loadingTag"  element-loading-background="rgba(122, 122, 122, 0.8)" style="width: 100%; height: 100px; margin-top: -35px;">
+                <div v-loading="tagConfig.loadingTag"  element-loading-background="rgba(122, 122, 122, 1)" style="width: 100%; height: 100px; margin-top: -35px;">
                     <h3 style="color: white; text-align: left;">标签名称</h3>
                 <span>
-                                <el-input v-model="tagConfig.tag_name" placeholder="Please input" />
+                                <el-input v-model="tagConfig.tag_name" placeholder="Please input"  :input-style="{ 'font-size': '18px' }"/>
                             </span>
                             <br>
                     <h3 style="color: white; text-align: left;">标签定义</h3>
                             <span>
-                                <el-input v-model="tagConfig.description" placeholder="Please input" />
+                                <el-input v-model="tagConfig.description" placeholder="Please input"  :autosize="{ minRows: 3, maxRows: 3 }" type="textarea"/>
                             </span>
                 </div>
                 <div style="padding: 30px 0px 10px 0px;">
@@ -494,7 +494,7 @@ export default {
                 src: '',
                 videoHeight: 1
             },
-            pathSetting: '',
+            pathSetting: 'http://43.153.168.84:8080/',
             defaultShowTag: 0,
             noneDisabledTag: {},
             select_video: '',
@@ -745,11 +745,17 @@ export default {
                 };
                 this.loadingTag = true;
                 const data = await dataStore.queryRecommendation(jsonData);
-                // console.log(data);
-                this.loadingTag = false;
                 console.log(data);
-                this.info_data.tag = data.data.info[this.select_video].info[this.info_data.id - 1].tag;
-                this.info_data.second_tag = data.data.info[this.select_video].info[this.info_data.id - 1].second_tag;
+                this.loadingTag = false;
+                let cnt_id = -1;
+                for (let i in data.data.info[this.select_video].info) {
+                    if (this.info_data.id == data.data.info[this.select_video].info[i].id) {
+                        cnt_id = i;
+                        break;
+                    }
+                }
+                this.info_data.tag = data.data.info[this.select_video].info[cnt_id].tag;
+                this.info_data.second_tag = data.data.info[this.select_video].info[cnt_id].second_tag;
                 for (let i in this.info_data.tag) {
                     if (typeof this.info_data.second_tag[this.info_data.tag[i]] == 'undefined') {
                         this.info_data.second_tag[this.info_data.tag[i]] = [];

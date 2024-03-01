@@ -89,8 +89,9 @@ export default {
         config: {
             handler(newVal) {
                 console.log(this.config)
-                this.video_url = 'AI_tool/' + this.config.video_id + '/video.mp4';
+                this.video_url = 'http://43.153.168.84:8080/AI_Tool/' + this.config.video_id + '/video.mp4';
                 this.video_name = this.config.name;
+                console.log(this.video_url);
                 this.$nextTick(() => {
                     this.player.currentTime(this.config.time);
                 })

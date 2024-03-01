@@ -37,45 +37,82 @@
             <div style="text-align: left; font-size: 24px; color: white; font-weight: bold; justify-content: space-between; display: flex;">
                 推荐设置
                 <span>
-                    <el-button type="primary" @click="showProblem = !showProblem">
-                        <svg t="1709214608225" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="15144" width="20" height="20" transform="rotate(180)"><path d="M117.418667 192a32 32 0 0 1 31.744 27.648l0.256 4.352L149.333333 778.837333a32 32 0 0 1-63.701333 4.352L85.333333 778.837333 85.418667 224a32 32 0 0 1 32-32z m550.186666 76.970667l3.114667-3.584a32 32 0 0 1 41.642667-3.114667l3.584 3.114667 213.205333 213.205333a32 32 0 0 1 3.114667 41.642667l-3.114667 3.626666-213.162667 213.461334a32 32 0 0 1-48.384-41.642667l3.072-3.584 158.336-158.592H245.461333a32 32 0 0 1-31.701333-27.605333l-0.298667-4.352a32 32 0 0 1 27.648-31.701334l4.352-0.298666 584.106667-0.042667L670.72 310.613333a32 32 0 0 1-3.114667-41.642666l3.114667-3.584-3.114667 3.584z" fill="#ffffff" p-id="15145"></path></svg>
-                    </el-button>
-                </span>
+                                                <el-button type="primary" @click="showProblem = !showProblem">
+                                                    <svg t="1709214608225" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="15144" width="20" height="20" transform="rotate(180)"><path d="M117.418667 192a32 32 0 0 1 31.744 27.648l0.256 4.352L149.333333 778.837333a32 32 0 0 1-63.701333 4.352L85.333333 778.837333 85.418667 224a32 32 0 0 1 32-32z m550.186666 76.970667l3.114667-3.584a32 32 0 0 1 41.642667-3.114667l3.584 3.114667 213.205333 213.205333a32 32 0 0 1 3.114667 41.642667l-3.114667 3.626666-213.162667 213.461334a32 32 0 0 1-48.384-41.642667l3.072-3.584 158.336-158.592H245.461333a32 32 0 0 1-31.701333-27.605333l-0.298667-4.352a32 32 0 0 1 27.648-31.701334l4.352-0.298666 584.106667-0.042667L670.72 310.613333a32 32 0 0 1-3.114667-41.642666l3.114667-3.584-3.114667 3.584z" fill="#ffffff" p-id="15145"></path></svg>
+                                                </el-button>
+                                            </span>
             </div>
             <el-switch v-model="recommendTag" class="mb-2" style="--el-switch-on-color: #409eff; --el-switch-off-color: #409eff" active-text="二级标签推荐" inactive-text="一级标签推荐" />
         </div>
         <div ref="wholeWidth" id="problem_tag" style="height: calc(100% - 80px)">
             <el-dialog v-model="addPoint" :title="'添加' + add_tag_level + '级标签'" width="15%" height="100px" :append-to="'#problems_tag'" :modal="false" :class="'add_dialog'">
-                <div v-loading="loadingTag"  element-loading-background="rgba(122, 122, 122, 0.8)" style="width: 100%; height: 110px; margin-top: -10px;">
-                
+                <div v-loading="loadingTag" element-loading-background="rgba(122, 122, 122, 0.8)" style="width: 100%; height: 110px; margin-top: -10px;">
+    
                     <h3 style="color: white; text-align: left;">标签名称</h3>
                     <span>
-                                <el-input v-model="tag_name" placeholder="Please input" />
-                            </span>
+                                            <el-input v-model="tag_name" placeholder="Please input"  :input-style="{ 'font-size': '18px' }"/>
+                                        </span>
                     <h3 style="color: white; text-align: left;">标签定义</h3>
-                            <span>
-                                <el-input v-model="tag_description" placeholder="Please input" />
-                            </span>
+                    <span>
+                                            <el-input v-model="tag_description"  :autosize="{ minRows: 3, maxRows: 3 }" type="textarea" placeholder="Please input" />
+                                        </span>
                 </div>
                 <div style="padding: 20px 0px 10px 0px;">
                     <el-button @click="addPoint = false">取消</el-button>
                     <el-button type="primary" @click="addTag()">确定</el-button>
                 </div>
             </el-dialog>
+            <el-dialog v-model="optimizeShowTag" :title="'标签优化'" width="22%" height="100px" :append-to="'#problems_tag'" :modal="false" :class="'optimize_dialog'">
+                <div v-loading="optimizeLoading" element-loading-background="rgba(122, 122, 122, 0.8)" style="width: 100%; height: 400px; margin-top: -10px; overflow-y: auto;">
+                    <div v-for="(d, i) in calcUnion" :keys="'union_tag_' + i" style="width: 100%; background-color: rgba(0, 0, 0, .3); padding: 10px 10px; border-radius: 5px; margin-top: 10px;">
+                        <h2 style="color: white; text-align: left;">{{ (d.level == 1 ? '一' : '二') + '级标签优化' }}</h2>
+                        <h3 style="color: white; text-align: left;">原始标签</h3>
+                        <div style="display: flex; flex-wrap: wrap;">
+                            <div v-for="(dd, ii) in d.tag_detail" :key="'tag_detail_' + ii" class="align-class" :style="{ backgroundColor: colorMap[dd.id] + '40', padding: '3px 8px 3px 5px', 'border-radius': '100px', marginRight: '10px', marginTop: '5px', 'font-size': '15px', cursor: 'pointer', 'color': 'white' }"
+                                @click="selectTag(info_data.second_tag[d], dd.cnt, 0, dd.id)">
+                                <div :style="{ backgroundColor: colorMap[dd.id], width: '15px', height: '15px', 'margin': '0px 3px 0px 3px', borderRadius: dd.level == 1 ? '100px' : '0px' }">
+    
+                                </div>
+                                <div>
+                                    {{ dd.label }}
+                                </div>
+                            </div>
+                        </div>
+                        <h3 style="color: white; text-align: left; margin-top: 10px;">新标签名称</h3>
+                        <span>
+                                                            <el-input v-model="d.combined_name" placeholder="Please input" :input-style="{ 'font-size': '18px' }" />
+                                                        </span>
+                        <h3 style="color: white; text-align: left; margin-top: 10px;">新标签定义</h3>
+                        <span>
+                                                            <el-input v-model="d.combined_label" :autosize="{ minRows: 4, maxRows: 4 }" type="textarea"
+                                                    placeholder="Please input" />
+                                                        </span>
+                        <div style="margin-top: 15px">
+    
+                            <el-button type="primary" @click="unionTag(d, 1)">确定</el-button>
+                            <el-button type="danger" @click="unionTag(d, 0)">取消</el-button>
+                        </div>
+                    </div>
+                </div>
+                <!-- <div style="padding: 20px 0px 10px 0px;">
+                                                <el-button @click="addPoint = false">取消</el-button>
+                                                <el-button type="primary" @click="addTag()">确定</el-button>
+                                            </div> -->
+            </el-dialog>
             <div style="text-align: left; font-size: 24px; color: white; font-weight: bold; height: 40px; display: flex; justify-content: space-between;">
                 <span style="display: flex;">
-                <span>可用性问题标签</span> &nbsp;
+                                            <span>可用性问题标签</span> &nbsp;
                 <span>
-                        <el-popover
-                            placement="bottom"
-                            title="标签解释"
-                            :width="elWidth * .8"
-                            trigger="click"
-                            :popper-class="'tag_description'"
-                        >
-                            <template #reference>
-                            <a><svg t="1708679239889" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1495" width="30" height="35"><path d="M536 480v192a16 16 0 0 1-16 16h-16a16 16 0 0 1-16-16V480a16 16 0 0 1 16-16h16a16 16 0 0 1 16 16z m-32-128h16a16 16 0 0 1 16 16v32a16 16 0 0 1-16 16h-16a16 16 0 0 1-16-16v-32a16 16 0 0 1 16-16z m8 448c159.056 0 288-128.944 288-288s-128.944-288-288-288-288 128.944-288 288 128.944 288 288 288z m0 48c-185.568 0-336-150.432-336-336s150.432-336 336-336 336 150.432 336 336-150.432 336-336 336z" fill="#ffffff" p-id="1496"></path></svg></a>
-                            </template>
+                                                    <el-popover
+                                                        placement="bottom"
+                                                        title="标签解释"
+                                                        :width="elWidth * .8"
+                                                        trigger="click"
+                                                        :popper-class="'tag_description'"
+                                                    >
+                                                        <template #reference>
+                                                        <a><svg t="1708679239889" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1495" width="30" height="35"><path d="M536 480v192a16 16 0 0 1-16 16h-16a16 16 0 0 1-16-16V480a16 16 0 0 1 16-16h16a16 16 0 0 1 16 16z m-32-128h16a16 16 0 0 1 16 16v32a16 16 0 0 1-16 16h-16a16 16 0 0 1-16-16v-32a16 16 0 0 1 16-16z m8 448c159.056 0 288-128.944 288-288s-128.944-288-288-288-288 128.944-288 288 128.944 288 288 288z m0 48c-185.568 0-336-150.432-336-336s150.432-336 336-336 336 150.432 336 336-150.432 336-336 336z" fill="#ffffff" p-id="1496"></path></svg></a>
+</template>
                     <div :style="{ height: (elHeight * .8) + 'px', fontSize: '20px', lineHeight: 1.5}">
                         <div style="color: #777;">
                             灰色字体代表当前视频中未出现此标签
@@ -86,8 +123,8 @@
                             <div style="font-size: 18px; padding-right: 10px;">
                                 {{ data.description }}
                             </div>
-                            <div v-for="(child, j) in data.children">
-                                <div :style="{ display: 'flex', alignItems: 'center'}"><div :style="{float: 'left', 'margin': '0px 10px 0px 0px', width: '20px', height: '20px', 'background-color': colorMap[child.id], 'borderRadius': child.level == 1 ? '20px' : '0px', }"></div> {{ (i + 1) + '-' + (j + 1) +  '   ' + child.label }}</div>
+                            <div v-for="(child, j) in data.children" :style="{ color: child.disabled == true ? '#777' : 'white'}">
+                                <div :style="{ display: 'flex', alignItems: 'center'}"><div :style="{float: 'left', 'margin': '0px 10px 0px 0px', width: '20px', height: '20px', 'background-color': colorMap[child.id], 'borderRadius': child.level == 1 ? '20px' : '0px',}"></div> {{ (i + 1) + '-' + (j + 1) +  '   ' + child.label }}</div>
                                 <div style="font-size: 18px; padding-right: 10px;">
                                     {{ child.description }}
                                 </div>
@@ -100,7 +137,7 @@
                 </span>
             </span>
             <span>
-                <el-button type="primary">标签优化</el-button>
+                <el-button type="primary" @click="showOptimize()">标签优化</el-button>
             </span>
             </div>
             <div style="text-align: left; padding-left: 24px; height: 45px;width: 100%;">
@@ -115,10 +152,10 @@
                 <el-tree ref="treeRef" v-if="showTree" :data="dataSource" show-checkbox node-key="id" :default-expand-all="expandTag" :expand-on-click-node="false" :props="defaultProps" @check="checkStatus">
 <template #default="{ node, data }">
     <span class="custom-tree-node">
-                                                                    <span :style="{color: data.disabled == true ? '#777' : 'white'}"> <div :style="{float: 'left', 'margin': '5px 10px 0px 0px', width: '20px', height: '20px', 'background-color': colorMap[data.id], 'borderRadius': node.level == 1 ? '20px' : '0px', }"></div> {{ node.label }}</span>
+                                                                                                <span :style="{color: data.disabled == true ? '#777' : 'white'}"> <div :style="{float: 'left', 'margin': '5px 10px 0px 0px', width: '20px', height: '20px', 'background-color': colorMap[data.id], 'borderRadius': node.level == 1 ? '20px' : '0px', }"></div> {{ node.label }}</span>
     <span style="padding-top: 5px;">
-                                                                        <a v-if="node.level == 1" @click="showDialog(2, data)"> <svg t="1706082110613" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4198" width="20" height="20"><path d="M832 1024H192c-106.048 0-192-86.016-192-192V192a192 192 0 0 1 192-192h640a192 192 0 0 1 192 192v640c0 105.984-85.952 192-192 192z m64-832a64 64 0 0 0-64-64H192a64 64 0 0 0-64 64v640c0 35.392 28.608 64 64 64h640c35.392 0 64-28.608 64-64V192z m-192 384h-128v128c0 35.392-28.608 64-64 64s-64-28.608-64-64v-128h-128a64 64 0 1 1 0-128h128v-128a64 64 0 1 1 128 0v128h128a64 64 0 1 1 0 128z" fill="white" p-id="4199"></path></svg> </a>
-                                                                    </span>
+                                                                                                    <a v-if="node.level == 1" @click="showDialog(2, data)"> <svg t="1706082110613" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4198" width="20" height="20"><path d="M832 1024H192c-106.048 0-192-86.016-192-192V192a192 192 0 0 1 192-192h640a192 192 0 0 1 192 192v640c0 105.984-85.952 192-192 192z m64-832a64 64 0 0 0-64-64H192a64 64 0 0 0-64 64v640c0 35.392 28.608 64 64 64h640c35.392 0 64-28.608 64-64V192z m-192 384h-128v128c0 35.392-28.608 64-64 64s-64-28.608-64-64v-128h-128a64 64 0 1 1 0-128h128v-128a64 64 0 1 1 128 0v128h128a64 64 0 1 1 0 128z" fill="white" p-id="4199"></path></svg> </a>
+                                                                                                </span>
     </span>
 </template>
                 </el-tree>
@@ -152,12 +189,15 @@
 
 <script>
 import { useDataStore } from "@/stores/counter";
+import tag_info from '@/assets/AI_tool/TagOp_test.json';
 
 export default {
     name: "PCV",
     props: [],
     data() {
         return {
+            optimizeShowTag: false,
+            optimizeLoading: 0,
             showProblem: 0,
             showTable: 0,
             elHeight: 0,
@@ -185,16 +225,177 @@ export default {
             showTagList: [],
             changeTag: false,
             noneDisabledTag: {},
-            info_data: []
+            info_data: [],
+            union_data: []
         };
     },
     computed: {
         calcInfoData() {
             this.info_data.sort((a, b) => a.time - b.time);
             return this.info_data.filter(d => d.status != 3)
+        },
+        calcUnion() {
+            let union_data = [];
+            for (let i in this.union_data) {
+                // if (this.union_data[i].parent != "" && this.union_data[i].status == -1 && this.union_data[this.union_data[i].parent].status == 1) {
+                //     this.union_data[i].status = 0;
+                // }
+                if (this.union_data[i].status == 0) {
+                    union_data.push(this.union_data[i]);
+                }
+            }
+            return union_data;
         }
     },
     methods: {
+        unionTag(data, tag) {
+            if (tag == 1) {
+                data.status = 1;
+                console.log(data);
+                let union_tag = new Array();
+                let union_data = data;
+                // for (let i in union_data) {
+                for (let j in union_data.tag_info) {
+                    let t_tag = [];
+                    let l_1_pos = -1;
+                    let l_2_pos = -1;
+                    let unique_id = union_data.tag_info[j].id;
+                    for (let k in this.dataSource) {
+                        if (this.dataSource[k].id == unique_id) {
+                            t_tag = this.dataSource[k];
+                            l_1_pos = k;
+                        }
+                        for (let kk in this.dataSource[k].children) {
+                            if (this.dataSource[k].children[kk].id == unique_id) {
+                                t_tag = this.dataSource[k].children[kk];
+                                l_1_pos = parseInt(k);
+                                l_2_pos = parseInt(kk);
+                            }
+                        }
+                    }
+                    union_tag.push({ tag: t_tag, level_1: parseInt(l_1_pos), level_2: parseInt(l_2_pos) });
+                }
+                // }
+                let union_obj = new Object();
+                // if (data.level == 1) {
+                console.log(union_tag)
+                let main_tag = union_tag[0];
+                union_tag.splice(0, 1);
+                console.log(main_tag)
+                for (let i in union_tag) {
+                    let tmp = union_tag[i].tag;
+                    union_obj[tmp.id] = main_tag.tag.id;
+                    for (let j in tmp.children) {
+                        main_tag.tag.children.push(tmp.children[j]);
+                    }
+                    main_tag.tag.label = data.combined_name;
+                    main_tag.tag.description = data.combined_label;
+                    // console.log(tmp);
+                    if (union_tag[i].level_2 == -1) {
+                        this.dataSource.splice(union_tag[i].level_1, 1);
+                    } else {
+                        this.dataSource[union_tag[i].level_1].children.splice(union_tag[i].level_2, 1);
+                    }
+                }
+                let tag_obj = new Object();
+                for (let i in this.dataSource) {
+                    if (typeof union_obj[this.dataSource[i].id] == 'undefined') {
+                        tag_obj[this.dataSource[i].id] = {
+                            level: 1,
+                            tag: parseInt(i) + 1,
+                            sec_tag: -1
+                        };
+                        this.dataSource[i].l_id = parseInt(i) + 1;
+                        for (let j in this.dataSource[i].children) {
+                            if (typeof union_obj[this.dataSource[i].children[j].id] == 'undefined') {
+                                tag_obj[this.dataSource[i].children[j].id] = {
+                                    level: 2,
+                                    tag: parseInt(i) + 1,
+                                    sec_tag: parseInt(j) + 1
+                                };
+                                this.dataSource[i].children[j].cnt = parseInt(j) + 1;
+                            }
+                        }
+                    }
+                }
+
+                for (let p in this.all_data) {
+                    for (let i in this.all_data[p].info) {
+                        let tmp = this.all_data[p].info[i];
+                        let tag_t = [];
+                        let sec_tag_t = {};
+                        for (let kk in tmp.unique_tag) {
+                            let k = tmp.unique_tag[kk];
+                            if (typeof union_obj[tmp.unique_tag[kk]] != 'undefined') {
+                                k = union_obj[tmp.unique_tag[kk]];
+                                let u_index = tmp.unique_tag.indexOf(union_obj[tmp.unique_tag[kk]]);
+                                if (u_index != -1) {
+                                    tmp.unique_tag.splice(kk, 1);
+                                } else {
+                                    tmp.unique_tag[kk] = union_obj[tmp.unique_tag[kk]];
+                                }
+                            }
+                            if (tag_t.indexOf(tag_obj[k].tag) == -1) {
+                                tag_t.push(tag_obj[k].tag);
+                            }
+                            if (typeof sec_tag_t[tag_obj[k].tag] == 'undefined') {
+                                sec_tag_t[tag_obj[k].tag] = [];
+                            }
+                            if (tag_obj[k].sec_tag != -1) {
+                                sec_tag_t[tag_obj[k].tag].push(tag_obj[k].sec_tag);
+                            }
+                        }
+                        tmp.tag = tag_t;
+                        tmp.second_tag = sec_tag_t;
+                    }
+                }
+                // }
+            }
+            if (tag == 0) {
+                data.status = 2;
+            }
+            for (let i in this.union_data) {
+                if (this.union_data[i].parent != "" && this.union_data[i].status == -1 && this.union_data[this.union_data[i].parent].status == 1) {
+                    this.union_data[i].status = 0;
+                }
+            }
+            let z_cnt = 0;
+            for (let i in this.union_data) {
+                if (this.union_data[i].status == 0) {
+                    z_cnt++;
+                }
+            }
+            if (z_cnt == 0) this.optimizeShowTag = !this.optimizeShowTag;
+        },
+        showOptimize() {
+            this.optimizeShowTag = !this.optimizeShowTag;
+            console.log(tag_info);
+            let union_data = tag_info['change_list'];
+            for (let i in union_data) {
+                union_data[i]['tag_detail'] = [];
+                for (let j in union_data[i].tag_info) {
+                    let t_tag = [];
+                    let unique_id = union_data[i].tag_info[j].id;
+                    for (let k in this.dataSource) {
+                        if (this.dataSource[k].id == unique_id) {
+                            t_tag = this.dataSource[k];
+                            break;
+                        }
+                        for (let kk in this.dataSource[k].children) {
+                            if (this.dataSource[k].children[kk].id == unique_id) {
+                                t_tag = this.dataSource[k].children[kk];
+                                break;
+                            }
+                        }
+                    }
+                    union_data[i]['tag_detail'].push(t_tag);
+                }
+            }
+            // this.union_data = Object.values(union_data);
+            this.union_data = union_data;
+            // console.log(this.union_data);
+
+        },
         translate(x, y, deg) {
             return `translate(${x}, ${y}) rotate(${deg})`;
         },
@@ -203,7 +404,6 @@ export default {
             const dataStore = useDataStore();
             dataStore.showTagList = showTagList;
             this.showTagList = showTagList;
-            console.log(showTagList)
         },
         showDialog(tag_type, data) {
             this.tag_name = "";
@@ -275,7 +475,7 @@ export default {
             }
             this.noneDisabledTag = this.calcDisabledData(this.all_data);
             this.addPoint = false;
-            
+
             this.loadingTag = false;
         },
         calcDisabledData(data) {
@@ -417,15 +617,21 @@ export default {
 </script>
 
 <style>
-.slide-enter-active, .slide-leave-active {
-  transition: transform 4s;
+.slide-enter-active,
+.slide-leave-active {
+    transition: transform 4s;
 }
-.slide-enter, .slide-leave-to {
-  transform: translateX(100%);
+
+.slide-enter,
+.slide-leave-to {
+    transform: translateX(100%);
 }
-.slide-leave, .slide-enter-to {
-  transform: translateX(0);
+
+.slide-leave,
+.slide-enter-to {
+    transform: translateX(0);
 }
+
 .problem-card {
     width: 100%;
     /* height: 10px; */
@@ -480,6 +686,21 @@ export default {
 }
 
 .add_dialog .el-dialog__body {
+    padding: 3px 20px 3px 20px;
+}
+
+.optimize_dialog {
+    --el-dialog-bg-color: #454647;
+    color: white;
+    position: absolute;
+    right: calc((30vw - 30px) / 2 - 11%);
+    top: 10%;
+    border-radius: 15px;
+    padding-bottom: 30px
+    /* left: 100px; */
+}
+
+.optimize_dialog .el-dialog__body {
     padding: 3px 20px 3px 20px;
 }
 

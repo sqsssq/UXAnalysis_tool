@@ -491,7 +491,7 @@ export default {
                 src: '',
                 videoHeight: 1
             },
-            pathSetting: '',
+            pathSetting: 'http://43.153.168.84:8080/',
             defaultShowTag: 0,
             noneDisabledTag: {},
             select_video: '',
