@@ -81,3 +81,17 @@ export async function saveData(param) {
     })
     return data;
 }
+
+export async function tagOptimize(param) {
+    const url = `${TEST_URL_PREFIX}/TagOp`;
+    const jsonString = JSON.stringify(param);
+    const data = await axios({
+        method: "post",
+        url: url,
+        headers: {
+            "Content-Type": "application/json",
+        },
+        data: jsonString
+    });
+    return data;
+}

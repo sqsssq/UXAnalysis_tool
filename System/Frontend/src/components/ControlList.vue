@@ -189,7 +189,6 @@
 
 <script>
 import { useDataStore } from "@/stores/counter";
-import tag_info from '@/assets/AI_tool/TagOp_test.json';
 
 export default {
     name: "PCV",
@@ -197,7 +196,7 @@ export default {
     data() {
         return {
             optimizeShowTag: false,
-            optimizeLoading: 0,
+            optimizeLoading: false,
             showProblem: 0,
             showTable: 0,
             elHeight: 0,
@@ -367,10 +366,18 @@ export default {
             }
             if (z_cnt == 0) this.optimizeShowTag = !this.optimizeShowTag;
         },
-        showOptimize() {
+        async showOptimize() {
             this.optimizeShowTag = !this.optimizeShowTag;
-            console.log(tag_info);
-            let union_data = tag_info['change_list'];
+            // console.log(tag_info);
+            this.optimizeLoading = true;
+            const dataStore = useDataStore();
+            const data = await dataStore.tagOptimize({
+                category: this.dataSource
+            });
+            this.optimizeLoading = false;
+            console.log(data);
+            
+            let union_data = data.data['change_list'];
             for (let i in union_data) {
                 union_data[i]['tag_detail'] = [];
                 for (let j in union_data[i].tag_info) {
@@ -427,16 +434,16 @@ export default {
             }
             id_cnt += 1;
 
-            // this.id_cnt++;
-            let jsonData = {
-                tag: this.tag_name,
-                id: id_cnt,
-                parent_id: this.add_tag_level == '一' ? 0 : this.selectData.id,
-                level: this.add_tag_level == '一' ? 1 : 2,
-                category: this.dataSource,
-                info: this.all_data,
-                test: 0
-            };
+            // // this.id_cnt++;
+            // let jsonData = {
+            //     tag: this.tag_name,
+            //     id: id_cnt,
+            //     parent_id: this.add_tag_level == '一' ? 0 : this.selectData.id,
+            //     level: this.add_tag_level == '一' ? 1 : 2,
+            //     category: this.dataSource,
+            //     info: this.all_data,
+            //     test: 0
+            // };
             this.loadingTag = true;
             // const dataStore = useDataStore();
             // const data = await dataStore.queryNewTag(jsonData);

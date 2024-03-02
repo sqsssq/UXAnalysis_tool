@@ -6,7 +6,7 @@
  */
 import {
     fetchAllData,
-    fetchHello, uploadData, queryRecommendation, queryNewTag, saveData
+    fetchHello, uploadData, queryRecommendation, queryNewTag, saveData, tagOptimize
 } from "../service/module/dataService";
 import {
     ref,
@@ -80,6 +80,10 @@ export const useDataStore = defineStore("dataStore", {
         },
         async saveData(param) {
             const data = await saveData(param);
+            return data;
+        },
+        async tagOptimize(param) {
+            const data = await tagOptimize(param);
             return data;
         }
     }
