@@ -46,7 +46,7 @@
         </div>
         <div ref="wholeWidth" id="problem_tag" style="height: calc(100% - 80px)">
             <el-dialog v-model="addPoint" :title="'添加' + add_tag_level + '级标签'" width="15%" height="100px" :append-to="'#problems_tag'" :modal="false" :class="'add_dialog'">
-                <div v-loading="loadingTag" element-loading-background="rgba(122, 122, 122, 0.8)" style="width: 100%; height: 110px; margin-top: -10px;">
+                <div v-loading="loadingTag" element-loading-background="#454647" style="width: 100%; height: 170px; margin-top: -10px;">
     
                     <h3 style="color: white; text-align: left;">标签名称</h3>
                     <span>
@@ -58,14 +58,14 @@
                                         </span>
                 </div>
                 <div style="padding: 20px 0px 10px 0px;">
-                    <el-button @click="addPoint = false">取消</el-button>
                     <el-button type="primary" @click="addTag()">确定</el-button>
+                    <el-button @click="addPoint = false">取消</el-button>
                 </div>
             </el-dialog>
             <el-dialog v-model="optimizeShowTag" :title="'标签优化'" width="22%" height="100px" :append-to="'#problems_tag'" :modal="false" :class="'optimize_dialog'">
-                <div v-loading="optimizeLoading" element-loading-background="rgba(122, 122, 122, 0.8)" style="width: 100%; height: 400px; margin-top: -10px; overflow-y: auto;">
+                <div v-loading="optimizeLoading" element-loading-background="#454647" style="width: 100%; height: 400px; margin-top: -10px; overflow-y: auto;">
                     <div v-for="(d, i) in calcUnion" :keys="'union_tag_' + i" style="width: 100%; background-color: rgba(0, 0, 0, .3); padding: 10px 10px; border-radius: 5px; margin-top: 10px;">
-                        <h2 style="color: white; text-align: left;">{{ (d.level == 1 ? '一' : '二') + '级标签优化' }}</h2>
+                        <h2 style="color: white; text-align: left;">{{ '建议合并以下' + (d.level == 1 ? '一' : '二') + '级标签' }}</h2>
                         <h3 style="color: white; text-align: left;">原始标签</h3>
                         <div style="display: flex; flex-wrap: wrap;">
                             <div v-for="(dd, ii) in d.tag_detail" :key="'tag_detail_' + ii" class="align-class" :style="{ backgroundColor: colorMap[dd.id] + '40', padding: '3px 8px 3px 5px', 'border-radius': '100px', marginRight: '10px', marginTop: '5px', 'font-size': '15px', cursor: 'pointer', 'color': 'white' }"
@@ -604,6 +604,7 @@ export default {
         },
         selectAll: {
             handler() {
+                const dataStore = useDataStore();
                 let showTagList = [];
                 if (this.selectAll) {
                     for (const d of this.dataSource) {
@@ -611,10 +612,11 @@ export default {
                     }
                     this.$refs.treeRef.setCheckedKeys(showTagList);
                     showTagList = [...this.$refs.treeRef.getCheckedKeys(), ...this.$refs.treeRef.getHalfCheckedKeys()];
+                    dataStore.select_all = true;
                 } else {
                     this.$refs.treeRef.setCheckedNodes([], false);
+                    dataStore.select_all = false;
                 }
-                const dataStore = useDataStore();
                 this.showTagList = showTagList;
                 dataStore.showTagList = showTagList;
             }

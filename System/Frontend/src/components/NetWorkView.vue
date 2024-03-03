@@ -513,9 +513,9 @@ export default {
                         this.config = d.data.config;
                 });
                 
-            const format = d3.format(",d");
-            path.append("title")
-                .text(d => `${d.ancestors().map(d => d.data.name).reverse().join("/")}\n${format(d.value)}`);
+            // const format = d3.format(",d");
+            // path.append("title")
+            //     .text(d => `${d.ancestors().map(d => d.data.name).reverse().join("/")}\n${format(d.value)}`);
 
             const label = svg.append("g")
                 .attr("pointer-events", "none")
