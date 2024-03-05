@@ -15,15 +15,18 @@
         <div style="height: calc(100% - 40px);">
             <div ref="recommendList" id="recommendList" style="height: calc(100% - 0px); margin-top: 10px; overflow-x: hidden; width: 100%; display: flex;">
                 <div v-for="(d, i) in video_list" ref="video_element" :key="'video' + i" id="video_list" style="border: 0px solid white; height: 100%; color: white; font-size: 20px; padding: 3px 10px 5px 10px;">
-                    <div style="height: 30px; float: left;">
-                        {{ d.id }}
+                    <div style="height: 30px; display: flex; justify-content: space-between;">
+                        <div>{{ d.id[0] == 'P' ? 'V' + d.id.substr(1) : d.id }}</div>
+                        <div style="height: 100%; width: calc(100% - 40px); display: flex; align-items: center; justify-content: end; border-left: 1px solid white; border-right: 1px solid white;">
+                            <div :style="{width: (100 * d.similarity / max_similarity) + '%', height: '50%', backgroundColor: 'white'}"></div>
+                        </div>
                     </div>
                     <!-- <div style="width: 400px;"></div> -->
                     <!-- <div style="width: 00px;"></div> -->
-                    <div style="height: calc(100% - 30px); ">
-                        <img :src="'AI_Tool/' + d.id + '/fig.png'" alt="" style="height: 95%;">
-                        <div class="play_button" @click="showPreview(d.id)">
-                            <div style="position: absolute; top: calc(30px + 50% - 40px); left: calc(50% - 40px); background-color: white; border-radius: 80px; height: 80px;">
+                    <div style="height: calc(100% - 35px);">
+                        <img :src="'AI_Tool/' + d.id + '/fig.png'" alt="" style="height: 100%;">
+                        <div class="play_button align-class" @click="showPreview(d.id)">
+                            <div style="background-color: white; border-radius: 80px; height: 80px;">
                                 <svg t="1705932141588" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4359" width="80" height="80"><path d="M374.272 333.312v355.328c0 30.208 20.992 40.448 45.568 26.112l288.768-175.104c25.088-15.872 25.088-40.448 0-54.784L419.84 309.76c-7.68-5.12-14.336-6.656-20.992-6.656-14.336-2.56-24.576 9.216-24.576 30.208zM1024 512c0 282.624-229.376 512-512 512S0 794.624 0 512 229.376 0 512 0s512 229.376 512 512z" p-id="4360" fill="#8a8a8a"></path></svg>
                             </div>
                         </div>
@@ -61,6 +64,7 @@ export default {
             category: [],
             showTagList: [],
             dialogVisible: false,
+            max_similarity: 1
         };
     },
     methods: {
@@ -154,6 +158,7 @@ export default {
                 }
             }
             pre_data.sort((a, b) => b.similarity - a.similarity);
+            this.max_similarity = pre_data[0].similarity;
             return pre_data;
         }
     },
@@ -183,6 +188,11 @@ export default {
 </script>
 
 <style scoped>
+.align-class {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 .scroll-button {
     opacity: .5;
     transition: .5s;
@@ -202,7 +212,7 @@ export default {
     left: 0px;
     opacity: 0;
     transition: .5s;
-    cursor: hand;
+    cursor: pointer;
 }
 
 .play_button:hover {

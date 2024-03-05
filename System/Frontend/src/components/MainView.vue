@@ -10,7 +10,7 @@
     <div class="frameworkBody">
         <div style=" height: 30px;text-align: left; font-size: 24px; color: white; font-weight: bold; justify-content: space-between; display: flex;">
             <span>视频分析</span>
-            <span v-show="select_video != ''" style="font-size: 20px;">编号: {{ select_video }} 姓名: {{ user_info.name }} 性别:
+            <span v-show="select_video != ''" style="font-size: 20px;">编号: {{ 'V' + select_video.substr(1) }} 性别:
                                                     {{ user_info.gender }} 年龄: {{ user_info.age }}</span>
         </div>
         <div style="width: 100%; height: calc(100% - 30px); margin-top: 10px;">
@@ -342,7 +342,7 @@
                         @timeupdate="handleEvent(player?.currentTime())" />
                 </div>
             </div>
-            <div style="width: 100%; height: 85px; background-color: rgba(83, 83, 83, 0);">
+            <div style="width: 100%; height: 95px; background-color: rgba(83, 83, 83, 0);">
                 <div style="height: 50px; width: 100%; padding: 0px 0px 0px 0px;" class="align-class">
                     <div style="height: 0px; width: 100%;" class="align-class">
                         <div @click="clickBar" style="width: 100%; height: 50px; cursor: pointer;" class="align-class">
@@ -397,7 +397,7 @@
                             </div>
                         </div>
                     </div>
-                    <div style="width: 100%; position: absolute; top: 36px;">
+                    <!-- <div style="width: 100%; position: absolute; top: 36px;">
                         <div v-for="(d, i) in calcMarkerData" :key="'warning' + i"
                             :style="{ position: 'absolute', left: 'calc(' + d.percentage + '% - 8px)', opacity: d.status == 2 ? 1 : 0 }">
                             <svg t="1706257862659" class="icon" viewBox="0 0 1024 1024" version="1.1"
@@ -407,7 +407,7 @@
                                     fill="#ecb050" fill-opacity=".96" p-id="9467"></path>
                             </svg>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
                 <div
                     style="justify-content: space-between; display: flex; position: absolute; bottom: 0px; height: 30px; width: 100%;">
@@ -706,11 +706,13 @@ export default {
                 }
             }
         },
-        selectTag(data, id, info, unique_id) {
+        selectTag(data, id, info, unique_id, unique_tag) {
             console.log(data);
             const index = data.indexOf(id);
+            const u_index = unique_tag.indexOf(unique_id);
             if (index == -1) {
                 data.push(id);
+                unique_tag.push(unique_id);
                 if (typeof info != 'number') {
                     info.second_tag[id] = [];
                     this.showLevelTag.showSecondTag.push(false);
@@ -722,6 +724,7 @@ export default {
                 // if (typeof this.allTagTimeData[this.dataSource])
             } else {
                 data.splice(index, 1);
+                unique_tag.splice(u_index, 1);
                 if (typeof info != "number") {
                     this.showLevelTag.showSecondTag.splice(index, 1);
                     this.noneDisabledTag[unique_id]--;

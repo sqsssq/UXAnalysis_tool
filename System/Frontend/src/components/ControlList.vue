@@ -102,7 +102,7 @@
             <div style="text-align: left; font-size: 24px; color: white; font-weight: bold; height: 40px; display: flex; justify-content: space-between;">
                 <span style="display: flex;">
                                             <span>可用性问题标签</span> &nbsp;
-                <span>
+                <!-- <span>
                                                     <el-popover
                                                         placement="bottom"
                                                         title="标签解释"
@@ -134,7 +134,7 @@
                     </div>
                     </div>
                 </el-popover>
-                </span>
+                </span> -->
             </span>
             <span>
                 <el-button type="primary" @click="showOptimize()">标签优化</el-button>
@@ -152,10 +152,22 @@
                 <el-tree ref="treeRef" v-if="showTree" :data="dataSource" show-checkbox node-key="id" :default-expand-all="expandTag" :expand-on-click-node="false" :props="defaultProps" @check="checkStatus">
 <template #default="{ node, data }">
     <span class="custom-tree-node">
-                                                                                                <span :style="{color: data.disabled == true ? '#777' : 'white'}"> <div :style="{float: 'left', 'margin': '5px 10px 0px 0px', width: '20px', height: '20px', 'background-color': colorMap[data.id], 'borderRadius': node.level == 1 ? '20px' : '0px', }"></div> {{ node.label }}</span>
+        <span :style="{color: data.disabled == true ? '#777' : 'white', display: 'flex', alignItems: 'center', paddingTop: '0px'}"> 
+            <div :style="{'margin': '0px 10px 0px 0px', width: '20px', height: '20px', 'background-color': colorMap[data.id], 'borderRadius': node.level == 1 ? '20px' : '0px', }"></div> <div style="margin-top: 0px; margin-right: 10px;">{{ node.label }}</div>
+            <div style="margin-top: 7px;">
+            <el-tooltip
+                class="box-item"
+                effect="dark"
+                placement="top"
+            >
+            <template #content> <div style="width: 150px; font-size: 16px;">{{ data.description }}</div> </template>
+            <a><svg t="1708679239889" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1495" width="30" height="35"><path d="M536 480v192a16 16 0 0 1-16 16h-16a16 16 0 0 1-16-16V480a16 16 0 0 1 16-16h16a16 16 0 0 1 16 16z m-32-128h16a16 16 0 0 1 16 16v32a16 16 0 0 1-16 16h-16a16 16 0 0 1-16-16v-32a16 16 0 0 1 16-16z m8 448c159.056 0 288-128.944 288-288s-128.944-288-288-288-288 128.944-288 288 128.944 288 288 288z m0 48c-185.568 0-336-150.432-336-336s150.432-336 336-336 336 150.432 336 336-150.432 336-336 336z" fill="#ffffff" p-id="1496"></path></svg></a>
+            </el-tooltip>
+            </div>
+        </span>
     <span style="padding-top: 5px;">
-                                                                                                    <a v-if="node.level == 1" @click="showDialog(2, data)"> <svg t="1706082110613" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4198" width="20" height="20"><path d="M832 1024H192c-106.048 0-192-86.016-192-192V192a192 192 0 0 1 192-192h640a192 192 0 0 1 192 192v640c0 105.984-85.952 192-192 192z m64-832a64 64 0 0 0-64-64H192a64 64 0 0 0-64 64v640c0 35.392 28.608 64 64 64h640c35.392 0 64-28.608 64-64V192z m-192 384h-128v128c0 35.392-28.608 64-64 64s-64-28.608-64-64v-128h-128a64 64 0 1 1 0-128h128v-128a64 64 0 1 1 128 0v128h128a64 64 0 1 1 0 128z" fill="white" p-id="4199"></path></svg> </a>
-                                                                                                </span>
+        <a v-if="node.level == 1" @click="showDialog(2, data)"> <svg t="1706082110613" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4198" width="20" height="20"><path d="M832 1024H192c-106.048 0-192-86.016-192-192V192a192 192 0 0 1 192-192h640a192 192 0 0 1 192 192v640c0 105.984-85.952 192-192 192z m64-832a64 64 0 0 0-64-64H192a64 64 0 0 0-64 64v640c0 35.392 28.608 64 64 64h640c35.392 0 64-28.608 64-64V192z m-192 384h-128v128c0 35.392-28.608 64-64 64s-64-28.608-64-64v-128h-128a64 64 0 1 1 0-128h128v-128a64 64 0 1 1 128 0v128h128a64 64 0 1 1 0 128z" fill="white" p-id="4199"></path></svg> </a>
+    </span>
     </span>
 </template>
                 </el-tree>
@@ -172,8 +184,21 @@
                     </el-button>
                 </span>
             </div>
+        <!-- <div style="height: calc(100% - 50px); width: 100%; overflow-y: auto; padding-right: 8px; margin-top: 10px;">
+            <div class="problem-card" v-for="(d, i) in calcInfoData" :key="'problem_card_' + i">
+                <div class="problem-card-time">
+                    {{ (parseInt(d.time / 60 / 60).toString().padStart(2, '0')) + ':' + (parseInt(d.time / 60).toString().padStart(2, '0')) + ':' + ((d.time % 60).toString().padStart(2, '0')) }}
+                </div>
+                <div class="problem-card-description">
+                    {{ d.description }}
+                </div>
+            </div>
+        </div> -->
+
         <div style="height: calc(100% - 50px); width: 100%; overflow-y: auto; padding-right: 8px; margin-top: 10px;">
             <div class="problem-card" v-for="(d, i) in calcInfoData" :key="'problem_card_' + i">
+                <div class="problem-card-icon"><svg v-if="d.status == 2" t="1709486366176" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4381" width="20" height="20"><path d="M512 0C229.23 0 0 229.23 0 512s229.23 512 512 512 512-229.23 512-512S794.77 0 512 0z m80 768a80 80 0 0 1-160 0v-32a80 80 0 0 1 160 0v32z m0-256a80 80 0 0 1-160 0V256a80 80 0 0 1 160 0v256z" fill="#fda33e" p-id="4382"></path></svg>
+                    <svg v-else-if="d.status == 1" t="1709486728584" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="7086" width="20" height="20"><path d="M731.733333 294.4L450.133333 631.466667l-134.4-134.4-53.333333 53.333333 194.133333 194.133333L789.333333 345.6l-57.6-51.2zM512 992C247.466667 992 32 776.533333 32 512S247.466667 32 512 32 992 247.466667 992 512 776.533333 992 512 992z" p-id="7087" fill="#00FF7F"></path></svg></div>
                 <div class="problem-card-time">
                     {{ (parseInt(d.time / 60 / 60).toString().padStart(2, '0')) + ':' + (parseInt(d.time / 60).toString().padStart(2, '0')) + ':' + ((d.time % 60).toString().padStart(2, '0')) }}
                 </div>
@@ -231,7 +256,7 @@ export default {
     computed: {
         calcInfoData() {
             this.info_data.sort((a, b) => a.time - b.time);
-            return this.info_data.filter(d => d.status != 3)
+            return this.info_data.filter(d => d.status != 3 && d.status != 0 && d.status != 4)
         },
         calcUnion() {
             let union_data = [];
@@ -650,6 +675,11 @@ export default {
     background-color: rgba(0, 0, 0, .3);
     display: flex;
     justify-content: space-between;
+}
+
+.problem-card-icon {
+    width: 30px;
+    padding-top: 3px;
 }
 
 .problem-card-time {

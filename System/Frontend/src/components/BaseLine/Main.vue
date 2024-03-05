@@ -1,3 +1,10 @@
+<!--
+ * @Description: 
+ * @Author: Qing Shi
+ * @Date: 2024-02-28 11:41:27
+ * @LastEditors: Qing Shi
+ * @LastEditTime: 2024-03-03 22:17:46
+-->
 <template>
     <div id="navBar">
         <span style="font-weight: 800; padding-left: 10px;position: absolute;">
@@ -106,34 +113,34 @@ export default {
                 label: 'User Study',
                 options: [{
                     value: 'P1',
-                    label: 'P1'
+                    label: 'V1'
                 }, {
                     value: 'P2',
-                    label: 'P2'
+                    label: 'V2'
                 }, {
                     value: 'P3',
-                    label: 'P3'
+                    label: 'V3'
                 }, {
                     value: 'P4',
-                    label: 'P4'
+                    label: 'V4'
                 }, {
                     value: 'P5',
-                    label: 'P5'
+                    label: 'V5'
                 }, {
                     value: 'P6',
-                    label: 'P6'
+                    label: 'V6'
                 }, {
                     value: 'P7',
-                    label: 'P7'
+                    label: 'V7'
                 }, {
                     value: 'P8',
-                    label: 'P8'
+                    label: 'V8'
                 }, {
                     value: 'P9',
-                    label: 'P9'
+                    label: 'V9'
                 }, {
                     value: 'P10',
-                    label: 'P10'
+                    label: 'V10'
                 }]
             }]
         };
@@ -191,7 +198,24 @@ export default {
                 dataStore.select_video = this.video_select;
                 dataStore.currentPlayTime = 0;
                 console.log(this.video_select);
-                dataStore.video_list.push(this.video_select);
+                    // 获取当前时间
+                const now = Date.now();
+                function formatTimestamp(timestamp) {
+                    const now = new Date(timestamp);
+                    // 获取月、日、小时、分钟和秒，并补零
+                    const month = (now.getMonth() + 1).toString().padStart(2, '0');
+                    const day = now.getDate().toString().padStart(2, '0');
+                    const hours = now.getHours().toString().padStart(2, '0');
+                    const minutes = now.getMinutes().toString().padStart(2, '0');
+                    const seconds = now.getSeconds().toString().padStart(2, '0');
+
+                    // 格式化时间戳
+                    const formattedTimestamp = `${month}/${day} ${hours}:${minutes}:${seconds}`;
+
+                    return formattedTimestamp;
+                }
+                console.log(formatTimestamp(now), now);
+                dataStore.video_list.push({video: this.video_select, time: now, date: now});
             }
         }
     },

@@ -10,8 +10,8 @@
     <div class="frameworkBody">
         <div style=" height: 30px;text-align: left; font-size: 24px; color: white; font-weight: bold; justify-content: space-between; display: flex;">
             <span>视频分析</span>
-            <span v-show="select_video != ''" style="font-size: 20px;">编号: {{ select_video }} 姓名: {{ user_info.name }} 性别:
-                                            {{ user_info.gender }} 年龄: {{ user_info.age }}</span>
+            <span v-show="select_video != ''" style="font-size: 20px;">编号: {{ 'V' + select_video.substr(1) }} 性别:
+                                                    {{ user_info.gender }} 年龄: {{ user_info.age }}</span>
         </div>
         <div style="width: 100%; height: calc(100% - 30px); margin-top: 10px;">
             <el-dialog v-model="showInfo" :title="(parseInt(info_data.time / 60 / 60).toString().padStart(2, '0')) + ':' + (parseInt(info_data.time / 60).toString().padStart(2, '0')) + ':' + ((info_data.time % 60).toString().padStart(2, '0'))" width="25%" :append-to="'#mainView'"
@@ -354,7 +354,7 @@
                         </div>
                         <div v-for="(d, i) in calcMarkerData" :key="'main_' + i" class="progress_marker"
                             @click="clickMarker(d)"
-                            :style="{ backgroundColor: d.status == 1 ? '#00FF7F' : '#5a9cf8', height: '12px', width: '8px', position: 'absolute', 'border-radius': '4px', left: 'calc(' + d.percentage + '% - 4px)' }">
+                            :style="{ backgroundColor: markerColor[d.status], height: '12px', width: '8px', position: 'absolute', 'border-radius': '4px', left: 'calc(' + d.percentage + '% - 4px)' }">
                         </div>
 
                         <div id="playBar"
@@ -394,7 +394,7 @@
                             </div>
                         </div>
                     </div> -->
-                    <div style="width: 100%; position: absolute; top: 36px;">
+                    <!-- <div style="width: 100%; position: absolute; top: 36px;">
                         <div v-for="(d, i) in calcMarkerData" :key="'warning' + i"
                             :style="{ position: 'absolute', left: 'calc(' + d.percentage + '% - 8px)', opacity: d.status == 2 ? 1 : 0 }">
                             <svg t="1706257862659" class="icon" viewBox="0 0 1024 1024" version="1.1"
@@ -404,7 +404,7 @@
                                     fill="#ecb050" fill-opacity=".96" p-id="9467"></path>
                             </svg>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
                 <div
                     style="justify-content: space-between; display: flex; position: absolute; bottom: 0px; height: 30px; width: 100%;">
@@ -446,6 +446,7 @@
                             </div>
                         </div>
                     </div>
+                    
                     <div>
                         <div class="align-class" style="height: 30px;">
                             <!-- <svg t="1706256096074" class="icon" viewBox="0 0 1024 1024" version="1.1"
@@ -455,7 +456,34 @@
                                     p-id="5232" fill="#ffffff"></path>
                             </svg>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -->
                             <!-- <svg t="1706256389483" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="7089" width="25" height="25"><path d="M554.016 88v84q92 12 164.992 67.008t108 139.008 24.992 176q-16 116-99.008 199.008t-199.008 96.992v86.016q116-12 208-79.008t139.008-170.016 35.008-216.992q-8-100-60.992-184t-136.992-136.992-184-63.008v2.016z m-312 754.016q100 82.016 228 96v-84q-92-12-168-70.016l-60 58.016zM302.016 244q74.016-58.016 168-70.016V87.968q-130.016 12-228 94.016l60 62.016zM242.016 302.016L182.016 242.016q-82.016 98.016-94.016 228h84q14.016-94.016 70.016-168z m-68 252H88q12 128 94.016 228l60-60q-58.016-76-68-168zM426.016 704l256-192-256-192v384z" p-id="7090" fill="#ffffff"></path></svg>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -->
-                            <el-button type="primary" @click="AddMarker(currentPlayTime)">
+                            <el-popover :visible="showPop" placement="top" :width="300" trigger="click">
+<template #reference>
+    <a @click="showPop = !showPop">
+                                <svg t="1709351288980" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="9658" width="25" height="25"><path d="M276.885468 0h470.228952v73.282434h-470.228952zM41.770992 172.091583h940.457903v73.282434H41.770992zM383.02286 298.259506h73.282434v486.656431h-73.282434zM567.694594 298.259506h73.282434v486.656431h-73.282434z" p-id="9659" fill="#ffffff"></path><path d="M775.267088 298.259506l-47.511445 652.457938H296.305313L248.7328 298.259506h-73.282434l50.381673 691.725109a36.641217 36.641217 0 0 0 36.641217 34.015263h499.602994a36.641217 36.641217 0 0 0 36.641217-34.015263l50.07633-691.725109z" p-id="9660" fill="#ffffff"></path></svg>
+                            <div v-if="calcDeleteData.length > 0" style="position: absolute; top: -5px; right: -5px; background-color: red; width: 15px; height: 15px; font-size: 10px; color: white; border-radius: 100px;">
+                                {{ calcDeleteData.length }}
+                            </div>
+                            </a>
+</template>
+    <div style="max-height: 300px; width: 100%; padding: 0px 0px; overflow-y: auto;">
+        <div v-for="(d_d, d_i) in calcDeleteData" :key="'delete_el' + d_i" style="background-color: rgba(0, 0, 0, .3); height: auto;margin-bottom: 10px; padding: 10px; color: white; font-size: 18px;">
+            <!-- {{ d_d }} -->
+            <div>
+                <span style="font-style: italic; font-weight: bold; text-decoration: underline; color: rgb(64, 158, 255);">时间:</span>&nbsp;{{ (parseInt(d_d.time / 60 / 60).toString().padStart(2, '0')) + ':' + (parseInt(d_d.time / 60).toString().padStart(2, '0')) + ':' + ((d_d.time % 60).toString().padStart(2, '0')) }}
+            </div>
+            <div>
+                <span style="font-style: italic; font-weight: bold; text-decoration: underline; color: rgb(64, 158, 255);">描述:</span>&nbsp;{{ d_d.description }}
+            </div>
+            <div style="width: 100%; justify-content: center; display: flex; margin-top: 10px;">
+                <el-button type="success" @click="reviseTag(d_d, 0)">恢复</el-button>
+                <el-button type="danger" @click="reviseTag(d_d, 4)">删除</el-button>
+
+            </div>
+        </div>
+    </div>
+    </el-popover>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            <el-button style="margin-top: -8px;" type="primary" @click="AddMarker(currentPlayTime)">
                                 添加可用性问题
                             </el-button>
                         </div>
@@ -479,6 +507,7 @@ export default {
     data() {
         return {
             all_data: [],
+            showPop: false,
             dialogVisible: false,
             selectShowLevel: 1,
             loadingTag: false,
@@ -508,6 +537,7 @@ export default {
             player: {},
             state: {},
             progressBar: 0,
+            markerColor: ['#5a9cf8', '#00FF7F', '#fda33e'],
             colorMap: ['', '#F6D962', '#D5A138', '#EF753A', '#F08F70', '#EB7D81', '#B76E90', '#986EA4', '#9286B3', '#8796BC', '#A3BFCE', '#B4D3B4', '#D1EFFF', '#89D1FF', '#1B90FF', '#0057D2', '#002A86', '#E2D8FF', '#B894FF', '#7858FF', '#470CED', '#1C0C6E', '#FFDCF3', '#FF8AF0', '#F31DED', '#A100C2', '#510080', '#FFDCE8', '#FEADC8', '#FA4F96', '#BA066C', '#71014B', '#FFD5EA', '#FF8CB2', '#EE3939', '#AA0808', '#5A0404', '#FFF3B8', '#FFC933', '#E76500', '#A93E00', '#6D1900', '#EBF5CB', '#97DD40', '#36A41D', '#256F3A', '#164323', '#C2FCEE', '#2CE0BF', '#049F9A', '#046C7A', '#02414C', '#EAECEE', '#A9B4BE', '#5B738B', '#354A5F', '#1A2733'],
             dataSource: [],
             showInfo: false,
@@ -534,6 +564,12 @@ export default {
         };
     },
     methods: {
+        reviseTag(data, type) {
+            data.status = type;
+            if (this.calcDeleteData.length == 0) {
+                this.showPop = false;
+            }
+        },
         showAddDialog(tag_type, data) {
             this.tagConfig.tag_name = "";
             this.tagConfig.addPoint = true;
@@ -845,7 +881,10 @@ export default {
     created() {},
     computed: {
         calcMarkerData() {
-            return this.marker_data.filter(d => d.status != 3)
+            return this.marker_data.filter(d => d.status != 3 && d.status != 4)
+        },
+        calcDeleteData() {
+            return this.marker_data.filter(d => d.status == 3);
         }
     },
     mounted() {

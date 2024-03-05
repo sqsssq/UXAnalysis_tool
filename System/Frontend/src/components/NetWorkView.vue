@@ -11,9 +11,9 @@
         <div style=" height: 30px;text-align: left; font-size: 24px; color: white; font-weight: bold; justify-content: space-between; display: flex;">
             <span>总体分析</span>
             <span style="font-size: 20px;">
-                    <el-button type="warning" @click="viewTag = !viewTag">
+                    <!-- <el-button type="warning" @click="viewTag = !viewTag">
                         {{ viewTag == false ? '网络图':'旭日图'}}
-                    </el-button>
+                    </el-button> -->
                     <el-button type="success" @click="overviewTag = true">
                         概览模式
                     </el-button>
@@ -45,7 +45,7 @@ export default {
         return {
             elWidth: 0,
             elHeight: 0,
-            viewTag: true,
+            viewTag: false,
             select_video: '',
             all_data: [],
             category_data: [],
