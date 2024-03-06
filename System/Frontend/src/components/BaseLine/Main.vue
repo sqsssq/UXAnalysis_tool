@@ -6,6 +6,18 @@
  * @LastEditTime: 2024-03-03 22:17:46
 -->
 <template>
+    <div style="width: 100%; height: 100%;">
+        <div class="firework" :style="{position: 'absolute', zIndex: 100, height: 'calc(100% - 9px)', width: '100%', pointerEvents: saveTag == true ? 'auto' : 'none', color: 'white', backgroundColor: 'rgba(0, 0, 0, .7)', transition: '1s', opacity: saveTag == true ? 1 : 0 }">
+            <div style="position: absolute; top: calc(50% - 250px); left: calc(50% - 256px);">
+            <h1 style="font-family: STKaiti;">保存成功</h1>
+            <div style="font-size: 25px; font-family: STKaiti;">感谢您参加用户实验！</div>
+            <div style="font-size: 25px; font-family: STKaiti;">祝您有美好的一天！</div>
+            <h1 style="font-family: STKaiti;">Save Successful</h1>
+            <div style="font-size: 25px; font-family: STKaiti, sans-serif;;">Thank you for participating in the User Study!</div>
+            <div style="font-size: 25px; font-family: STKaiti;">Have a nice day!</div>
+                <el-button style="margin-top: 20px; z-index: 1000" type="primary" @click="closeFire()">确认</el-button>
+        </div>
+        </div>
     <div id="navBar">
         <span style="font-weight: 800; padding-left: 10px;position: absolute;">
             UX Analysis Tool
@@ -67,6 +79,7 @@
         <div v-if="leftShow == 0" class="framework" id="networkView" style="position: absolute; left: calc(10px); top: calc(5px); height: calc(100% - 10px); width: calc(70vw - 0px);">
             <NetworkView/>
         </div>
+        </div>
     </div>
 </template>
 
@@ -76,6 +89,7 @@ import MainView from './MainView.vue';
 import RecommendList from './RecommendList.vue';
 import NetworkView from './NetWorkView.vue';
 import { useDataStore } from "@/stores/counter";
+import { Fireworks } from 'fireworks-js';
 import p_data from '@/assets/AI_tool/info_p.json';
 import t_data from '@/assets/AI_tool/info_t.json';
 import category_p from '@/assets/AI_tool/category_p.json';
@@ -89,6 +103,7 @@ export default {
             leftShow: 1,
             video_select: '',
             dataset_select: '',
+            saveTag: false,
             dataset_options: [{
                 label: 'Training',
                 value: 0
@@ -146,6 +161,66 @@ export default {
         };
     },
     methods: {
+        closeFire() {
+            this.fireworks_item.stop();
+            this.fireworks_item.clear();
+            this.saveTag = false;
+        },
+        playFireworks() {
+            if (this.fireworks_item == null){
+            const container = document.querySelector('.firework')
+            this.fireworks_item = new Fireworks(container, {
+                autoresize: true,
+                opacity: 0.5,
+                acceleration: 1.05,
+                friction: 0.97,
+                gravity: 1.5,
+                particles: 50,
+                traceLength: 3,
+                traceSpeed: 10,
+                explosion: 5,
+                intensity: 30,
+                flickering: 50,
+                lineStyle: 'round',
+                hue: {
+                    min: 0,
+                    max: 360
+                },
+                delay: {
+                    min: 30,
+                    max: 60
+                },
+                rocketsPoint: {
+                    min: 50,
+                    max: 50
+                },
+                lineWidth: {
+                    explosion: {
+                        min: 1,
+                        max: 3
+                    },
+                    trace: {
+                        min: 1,
+                        max: 2
+                    }
+                },
+                brightness: {
+                    min: 50,
+                    max: 80
+                },
+                decay: {
+                    min: 0.015,
+                    max: 0.03
+                },
+                mouse: {
+                    click: false,
+                    move: false,
+                    max: 1
+                }
+            })}
+            this.fireworks_item.start();
+            this.saveTag = true;
+        },
         saveData() {
             const dataStore = useDataStore();
             const data = {
@@ -160,6 +235,7 @@ export default {
             console.log(data.videolist);
             const res = dataStore.saveData(data);
             console.log(res);
+            this.playFireworks();
         },
         switchView() {
             const dataStore = useDataStore();
