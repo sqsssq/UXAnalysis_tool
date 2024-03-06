@@ -43,6 +43,9 @@ export const useDataStore = defineStore("dataStore", {
             currentPlayTime: 0,
             leftShow: 1,
             video_list: [],
+            time_list: [],
+            reuse_list: [],
+            changeTag_list: [],
             dataSelect: -1,
             previewSelect: 0,
             select_all: 1

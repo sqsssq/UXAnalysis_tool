@@ -350,8 +350,8 @@ export default {
                                     const source_name = i + ' ' + (parseInt(time / 60 / 60).toString().padStart(2, '0')) + ':' + (parseInt(time / 60).toString().padStart(2, '0')) + ':' + ((time % 60).toString().padStart(2, '0'));
                                     const target_name = this.category_data[tag].label;
                                     const target_id = this.category_data[tag].id;
-                                    const status = this.all_data[i].info[j].status
-                                    if (status != 3) {
+                                    const status = this.all_data[i].info[j].repeat_status;
+                                    if (this.all_data[i].info[j].status != 3) {
                                         let status_color = ['#5a9cf8', '#00FF7F', '#ecb050'];
                                         if (typeof t_data[target_id] == 'undefined') {
                                             t_data[target_id] = {
@@ -400,9 +400,9 @@ export default {
                                         const target_id = this.category_data[tag].id;
                                         const sec_target_name = this.category_data[tag].children[sec_tag].label;
                                         const sec_target_id = this.category_data[tag].children[sec_tag].id;
-                                        const status = this.all_data[i].info[j].status
-                                        if (status != 3) {
-                                            let status_color = ['#5a9cf8', '#00FF7F', '#ecb050'];
+                                        const status = this.all_data[i].info[j].repeat_status;
+                                        if (this.all_data[i].info[j].status != 3) {
+                                            let status_color = ['#5a9cf8', '#00FF7F'];
 
                                             if (typeof t_data[target_id] == 'undefined') {
                                                 t_data[target_id] = {

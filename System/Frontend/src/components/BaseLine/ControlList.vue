@@ -38,8 +38,8 @@
         </div>
         <div style="height: calc(100% - 50px); width: 100%; overflow-y: auto; padding-right: 8px; margin-top: 10px;">
             <div class="problem-card" v-for="(d, i) in calcInfoData" :key="'problem_card_' + i">
-                <div class="problem-card-icon"><svg v-if="d.status == 2" t="1709486366176" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4381" width="20" height="20"><path d="M512 0C229.23 0 0 229.23 0 512s229.23 512 512 512 512-229.23 512-512S794.77 0 512 0z m80 768a80 80 0 0 1-160 0v-32a80 80 0 0 1 160 0v32z m0-256a80 80 0 0 1-160 0V256a80 80 0 0 1 160 0v256z" fill="#fda33e" p-id="4382"></path></svg>
-                    <svg v-else-if="d.status == 1" t="1709486728584" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="7086" width="20" height="20"><path d="M731.733333 294.4L450.133333 631.466667l-134.4-134.4-53.333333 53.333333 194.133333 194.133333L789.333333 345.6l-57.6-51.2zM512 992C247.466667 992 32 776.533333 32 512S247.466667 32 512 32 992 247.466667 992 512 776.533333 992 512 992z" p-id="7087" fill="#00FF7F"></path></svg></div>
+                <!-- <div class="problem-card-icon"><svg v-if="d.status == 2" t="1709486366176" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4381" width="20" height="20"><path d="M512 0C229.23 0 0 229.23 0 512s229.23 512 512 512 512-229.23 512-512S794.77 0 512 0z m80 768a80 80 0 0 1-160 0v-32a80 80 0 0 1 160 0v32z m0-256a80 80 0 0 1-160 0V256a80 80 0 0 1 160 0v256z" fill="#fda33e" p-id="4382"></path></svg>
+                    <svg v-else-if="d.status == 1" t="1709486728584" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="7086" width="20" height="20"><path d="M731.733333 294.4L450.133333 631.466667l-134.4-134.4-53.333333 53.333333 194.133333 194.133333L789.333333 345.6l-57.6-51.2zM512 992C247.466667 992 32 776.533333 32 512S247.466667 32 512 32 992 247.466667 992 512 776.533333 992 512 992z" p-id="7087" fill="#00FF7F"></path></svg></div> -->
                 <div class="problem-card-time">
                     {{ (parseInt(d.time / 60 / 60).toString().padStart(2, '0')) + ':' + (parseInt(d.time / 60).toString().padStart(2, '0')) + ':' + ((d.time % 60).toString().padStart(2, '0')) }}
                 </div>
@@ -81,7 +81,7 @@ export default {
     computed: {
         calcInfoData() {
             this.info_data.sort((a, b) => a.time - b.time);
-            return this.info_data.filter(d => d.status != 3 && d.status != 0 && d.status != 4)
+            return this.info_data.filter(d => d.status != 3 && d.repeat_status == 1 && d.status != 4)
         }
     },
     mounted () {

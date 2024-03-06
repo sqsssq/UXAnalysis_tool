@@ -152,8 +152,12 @@ export default {
                 videolist: dataStore.video_list,
                 category: dataStore.categorySource,
                 info: dataStore.all_data,
+                reuse_list: dataStore.reuse_list,
+                changeTag_list: dataStore.changeTag_list,
+                time_list: dataStore.time_list,
                 type: "baseline"
             };
+            console.log(data.videolist);
             const res = dataStore.saveData(data);
             console.log(res);
         },
@@ -215,7 +219,7 @@ export default {
                     return formattedTimestamp;
                 }
                 console.log(formatTimestamp(now), now);
-                dataStore.video_list.push({video: this.video_select, time: now, date: now});
+                dataStore.video_list.push({video: this.video_select, time: now, date: formatTimestamp(now), video_time: dataStore.currentPlayTime });
             }
         }
     },

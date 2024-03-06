@@ -6,7 +6,7 @@
  * @LastEditTime: 2024-01-24 15:13:23
 -->
 <template>
-    <el-dialog ref="videoDialog" v-model="visible" :title="'视频预览 ' + video_name" width="50%"  :class="'show_info_dialog'">
+    <el-dialog ref="videoDialog" v-model="visible" :title="'视频预览 ' + video_name" width="50%"  :class="'show_info_dialog_pre'">
         <div :style="{width: '100%', 'padding-left': (.5 * .05 * elWidth - 20) + 'px'}">
             <video-player :src="video_url" playsinline controls :volume="0.2" :width=".5 * .9 * elWidth" :playback-rates="[0.7, 1.0, 1.5, 2.0]" @mounted="handleMounted" @ready="handleEvent($event)" @play="handleEvent($event)" @pause="handleEvent($event)"
                 @ended="handleEvent($event)" @loadeddata="handleEvent($event)" @waiting="handleEvent($event)" @playing="handleEvent($event)" @canplay="handleEvent($event)" @canplaythrough="handleEvent($event)" @timeupdate="handleEvent(player?.currentTime())"
@@ -103,6 +103,11 @@ export default {
 </script>
 
 <style scoped>
+.show_info_dialog_pre {
+    --el-dialog-bg-color: #454647AA;
+    color: white;
+    /* border-radius: 15px; */
+}
 :deep(.video-js .vjs-big-play-button .vjs-icon-placeholder:before) {
     position: relative;
 }
