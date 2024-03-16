@@ -9,9 +9,9 @@
     <PreviewVideoPlayer :dialogVisible="dialogVisible" :config="preview_config" @showDialog="showDialog" />
     <div class="frameworkBody">
         <div style=" height: 30px;text-align: left; font-size: 24px; color: white; font-weight: bold; justify-content: space-between; display: flex;">
-            <span>视频分析</span>
-            <span v-show="select_video != ''" style="font-size: 20px;">编号: {{ 'V' + select_video.substr(1) }} 性别:
-                                                    {{ user_info.gender }} 年龄: {{ user_info.age }}</span>
+            <span>Usability Test Video</span>
+            <span v-show="select_video != ''" style="font-size: 20px;">Code: {{ 'V' + select_video.substr(1) }} Gender:
+                                                    {{ user_info.gender }} Age: {{ user_info.age }}</span>
         </div>
         <div style="width: 100%; height: calc(100% - 30px); margin-top: 10px;">
             <el-dialog v-model="showInfo" :title="(parseInt(info_data.time / 60 / 60).toString().padStart(2, '0')) + ':' + (parseInt(info_data.time / 60).toString().padStart(2, '0')) + ':' + ((info_data.time % 60).toString().padStart(2, '0'))" width="20%" :append-to="'#mainView'"
@@ -19,7 +19,7 @@
     
                 <div v-loading="loadingTag" element-loading-background="rgba(122, 122, 122, 0.8)" id="dialogDiv" ref="dialogDiv" :style="{ width: '100%', height: info_data.status != -1 && info_data.status != 3 ? 150 + 'px' : 150 + 'px', color: 'white', textAlign: 'left', overflow: 'auto' }">
                     <h2>
-                        问题描述
+                        Problem Description
                         <span v-if="info_data.user_said != ''">
                                                                 <el-popover placement="bottom" title="" :width="250" trigger="click"
                                                                     :popper-class="'marker_description'">
@@ -32,20 +32,14 @@
                                                                             </svg></a>
 </template>
                                 <div :style="{ fontSize: '16px', lineHeight: 1.5, color: 'white' }">
-                                    <h3>用户描述</h3>
+                                    <h3>User Description</h3>
                                     {{ '"' + info_data.user_said + '"' }}
-                                    <!-- <h3>AI解释</h3>
-
-                                    {{ '"' + info_data.reason + '"' }} -->
                                 </div>
                             </el-popover>
                         </span>
                     </h2>
                     
                     <div style="margin-bottom: 10px; padding-right: 10px;">
-                        <!-- <div style="font-size: 16px;">
-                            {{ '"' + info_data.user_said + '"' }}
-                        </div> -->
                         <el-input v-model="info_data.description" :autosize="{ minRows: 3, maxRows: 3 }" type="textarea"
                             placeholder="Please input" />
                     </div>
@@ -59,7 +53,7 @@
                                 <path
                                     d="M209.92 988.16c-15.36 0-30.72-15.36-30.72-30.72s15.36-30.72 30.72-30.72h471.04c153.6 0 281.6-128 281.6-281.6s-128-281.6-281.6-281.6H102.4l220.16 220.16c5.12 5.12 10.24 10.24 10.24 20.48 0 5.12-5.12 15.36-10.24 20.48-5.12 5.12-10.24 10.24-20.48 10.24-5.12 0-15.36-5.12-20.48-10.24L10.24 353.28c-5.12-5.12-10.24-10.24-10.24-20.48 0-5.12 5.12-15.36 10.24-20.48L281.6 40.96c5.12-5.12 10.24-10.24 20.48-10.24 5.12 0 15.36 5.12 20.48 10.24 0 10.24 5.12 15.36 5.12 25.6 0 5.12-5.12 15.36-10.24 20.48L97.28 307.2h583.68a343.04 343.04 0 0 1 0 686.08H209.92z"
                                     fill="#ffffff" p-id="4225"></path>
-                            </svg> &nbsp; 初始位置
+                            </svg> &nbsp; Rewind
                         </div>
                     </el-button>
                     <el-button type="primary" @click="playVideo()">
@@ -69,7 +63,7 @@
                                 <path
                                     d="M817.088 484.96l-512-323.744C295.232 154.976 282.752 154.592 272.576 160.224 262.336 165.856 256 176.608 256 188.256l0 647.328c0 11.648 6.336 22.4 16.576 28.032 4.8 2.656 10.112 3.968 15.424 3.968 5.952 0 11.904-1.664 17.088-4.928l512-323.616C826.368 533.184 832 522.976 832 512 832 501.024 826.368 490.816 817.088 484.96z"
                                     fill="#ffffff" p-id="4212"></path>
-                            </svg> &nbsp; 播放视频
+                            </svg> &nbsp; Play
                         </div>
                         <div v-else class="align-class">
                             <svg t="1706534722560" class="icon" viewBox="0 0 1024 1024" version="1.1"
@@ -77,7 +71,7 @@
                                 <path
                                     d="M304 176h80v672h-80zM712 176h-64c-4.4 0-8 3.6-8 8v656c0 4.4 3.6 8 8 8h64c4.4 0 8-3.6 8-8V184c0-4.4-3.6-8-8-8z"
                                     p-id="4219" fill="#ffffff"></path>
-                            </svg> &nbsp; 暂停视频
+                            </svg> &nbsp; Pause
                         </div>
                     </el-button>
                 </div>
@@ -89,18 +83,8 @@
                                 d="M511.6 63.6c-246.9 0-448 201.2-448 448 0 247.3 201.2 448 448 448s448-200.7 448-448c0-246.9-200.7-448-448-448z m259.9 318.5L474.6 699.3c-7 7.3-16.5 12.1-27.4 12.1-10.5 0-20.5-4.7-27.4-12.1L252 520c-7-7.3-11.5-17.8-11.5-29.4 0-23.1 17.5-41.4 38.9-41.4 10.5 0 20.5 4.7 27.4 12.1l140.7 149.9 270-287.8c7-7.3 16.5-12.1 27.4-12.1 21.5 0 38.9 18.3 38.9 41.4-0.8 11.6-5.3 22.1-12.3 29.4z m0 0"
                                 p-id="11130" fill="#ffffff"></path>
                         </svg>&nbsp;
-                        确认
+                        Yes
                     </el-button>
-                    <!-- <el-button type="warning" @click="clickDecision(2)">
-                        <svg t="1706257862659" class="icon" viewBox="0 0 1024 1024" version="1.1"
-                            xmlns="http://www.w3.org/2000/svg" p-id="9466" width="15" height="15">
-                            <path
-                                d="M512 64c126.677333 3.328 232.192 47.146667 316.501333 131.498667C912.853333 279.808 956.672 385.28 960 512c-3.328 126.677333-47.146667 232.192-131.498667 316.501333C744.192 912.853333 638.72 956.672 512 960c-126.677333-3.328-232.192-47.146667-316.501333-131.498667C111.146667 744.192 67.328 638.72 64 512c3.328-126.677333 47.146667-232.192 131.498667-316.501333C279.808 111.146667 385.28 67.328 512 64zM512 256c-17.322667 0-31.658667 6.357333-43.008 19.029333A58.197333 58.197333 0 0 0 453.973333 320l23.04 256a35.925333 35.925333 0 0 0 11.477334 22.485333 34.048 34.048 0 0 0 23.466666 8.533334 33.621333 33.621333 0 0 0 23.466667-8.533334 36.138667 36.138667 0 0 0 11.52-22.485333l23.04-256a57.984 57.984 0 0 0-15.018667-44.970667A55.381333 55.381333 0 0 0 511.914667 256H512z m0 512c14.677333-0.64 26.88-5.674667 36.522667-15.018667 9.642667-9.344 14.506667-21.333333 14.506666-35.968A49.578667 49.578667 0 0 0 512 665.984a49.493333 49.493333 0 0 0-50.986667 51.029333c0 14.677333 4.821333 26.666667 14.506667 35.968 9.642667 9.301333 21.802667 14.293333 36.48 15.018667z"
-                                fill="white" fill-opacity=".96" p-id="9467"></path>
-                        </svg>&nbsp;
-                        待定
-                    </el-button> -->
-                    <!-- <el-button type="danger" @click="clickDecision(3)"> -->
                     <el-button type="danger" @click="clickDecision(typeof info_data['humanAdd'] != 'undefined' ? 3 : 9)">
                         <svg t="1707272411978" class="icon" viewBox="0 0 1024 1024" version="1.1"
                             xmlns="http://www.w3.org/2000/svg" p-id="7920" width="15" height="15">
@@ -108,7 +92,7 @@
                                 d="M512 64.5C264.85 64.5 64.5 264.85 64.5 512S264.85 959.5 512 959.5 959.5 759.15 959.5 512 759.15 64.5 512 64.5z m235.21 599.09c16.06 13.81 17.89 38.03 4.08 54.09-7.59 8.83-18.31 13.36-29.1 13.36-8.85 0-17.74-3.05-24.98-9.26L512 562.59 326.79 721.78a38.22 38.22 0 0 1-24.98 9.26c-10.79 0-21.52-4.53-29.1-13.36-13.81-16.06-11.98-40.28 4.08-54.09L453.15 512 276.79 360.42c-16.06-13.81-17.89-38.03-4.08-54.09 13.81-16.07 38.01-17.89 54.09-4.1L512 461.42l185.2-159.19c16.08-13.8 40.29-11.96 54.09 4.1 13.81 16.06 11.98 40.28-4.08 54.09L570.85 512.01l176.36 151.58z"
                                 p-id="7921" fill="white"></path>
                         </svg>&nbsp;
-                        取消
+                        Cancel
                     </el-button>
                 </div>
                 <div v-else style="padding: 5px 0px 10px 0px;">
@@ -119,7 +103,7 @@
                                 d="M511.6 63.6c-246.9 0-448 201.2-448 448 0 247.3 201.2 448 448 448s448-200.7 448-448c0-246.9-200.7-448-448-448z m259.9 318.5L474.6 699.3c-7 7.3-16.5 12.1-27.4 12.1-10.5 0-20.5-4.7-27.4-12.1L252 520c-7-7.3-11.5-17.8-11.5-29.4 0-23.1 17.5-41.4 38.9-41.4 10.5 0 20.5 4.7 27.4 12.1l140.7 149.9 270-287.8c7-7.3 16.5-12.1 27.4-12.1 21.5 0 38.9 18.3 38.9 41.4-0.8 11.6-5.3 22.1-12.3 29.4z m0 0"
                                 p-id="11130" fill="#ffffff"></path>
                         </svg>&nbsp;
-                        确认
+                        Yes
                     </el-button>
                     <el-button type="danger" @click="clickDecision(3)">
                         <svg t="1707272411978" class="icon" viewBox="0 0 1024 1024" version="1.1"
@@ -128,27 +112,16 @@
                                 d="M512 64.5C264.85 64.5 64.5 264.85 64.5 512S264.85 959.5 512 959.5 959.5 759.15 959.5 512 759.15 64.5 512 64.5z m235.21 599.09c16.06 13.81 17.89 38.03 4.08 54.09-7.59 8.83-18.31 13.36-29.1 13.36-8.85 0-17.74-3.05-24.98-9.26L512 562.59 326.79 721.78a38.22 38.22 0 0 1-24.98 9.26c-10.79 0-21.52-4.53-29.1-13.36-13.81-16.06-11.98-40.28 4.08-54.09L453.15 512 276.79 360.42c-16.06-13.81-17.89-38.03-4.08-54.09 13.81-16.07 38.01-17.89 54.09-4.1L512 461.42l185.2-159.19c16.08-13.8 40.29-11.96 54.09 4.1 13.81 16.06 11.98 40.28-4.08 54.09L570.85 512.01l176.36 151.58z"
                                 p-id="7921" fill="white"></path>
                         </svg>&nbsp;
-                        取消
+                        Cancel
                     </el-button>
                 </div>
-                <!-- <div v-if="info_data.status != -1 && typeof info_data['humanAdd'] != 'undefined'" style="padding: 5px 0px 10px 0px;">
-                    <el-button type="danger" @click="clickDecision(3)">
-                        <svg t="1707272411978" class="icon" viewBox="0 0 1024 1024" version="1.1"
-                            xmlns="http://www.w3.org/2000/svg" p-id="7920" width="15" height="15">
-                            <path
-                                d="M512 64.5C264.85 64.5 64.5 264.85 64.5 512S264.85 959.5 512 959.5 959.5 759.15 959.5 512 759.15 64.5 512 64.5z m235.21 599.09c16.06 13.81 17.89 38.03 4.08 54.09-7.59 8.83-18.31 13.36-29.1 13.36-8.85 0-17.74-3.05-24.98-9.26L512 562.59 326.79 721.78a38.22 38.22 0 0 1-24.98 9.26c-10.79 0-21.52-4.53-29.1-13.36-13.81-16.06-11.98-40.28 4.08-54.09L453.15 512 276.79 360.42c-16.06-13.81-17.89-38.03-4.08-54.09 13.81-16.07 38.01-17.89 54.09-4.1L512 461.42l185.2-159.19c16.08-13.8 40.29-11.96 54.09 4.1 13.81 16.06 11.98 40.28-4.08 54.09L570.85 512.01l176.36 151.58z"
-                                p-id="7921" fill="white"></path>
-                        </svg>&nbsp;
-                        删除
-                    </el-button>
-                </div> -->
             </el-dialog>
             <el-dialog v-model="showDefault" :title="(parseInt(info_data.time / 60 / 60).toString().padStart(2, '0')) + ':' + (parseInt(info_data.time / 60).toString().padStart(2, '0')) + ':' + ((info_data.time % 60).toString().padStart(2, '0'))" width="20%" :append-to="'#mainView'"
                 :modal="false" :class="'show_info_dialog'" :show-close="false">
     
-                <div v-loading="loadingTag" element-loading-background="rgba(122, 122, 122, 0.8)" id="defaultDialogDiv" ref="defaultDialogDiv" :style="{ width: '100%', height: info_data.status != -1 && info_data.status != 3 ? 250 + 'px' : 150 + 'px', color: 'white', textAlign: 'left', overflow: 'auto' }">
+                <div v-loading="loadingTag" element-loading-background="rgba(122, 122, 122, 0.8)" id="defaultDialogDiv" ref="defaultDialogDiv" :style="{ width: '100%', height: info_data.status != -1 && info_data.status != 3 ? 150 + 'px' : 150 + 'px', color: 'white', textAlign: 'left', overflow: 'auto' }">
                     <h2>
-                        问题描述
+                        Problem Description
                         <span v-if="info_data.default.user_said != ''">
                     <el-popover placement="bottom" title="" :width="250" trigger="click"
                                                                     :popper-class="'marker_description'">
@@ -161,7 +134,7 @@
                                                                             </svg></a>
 </template>
                                 <div :style="{ fontSize: '16px', lineHeight: 1.5, color: 'white' }">
-                                    <h3>用户描述</h3>
+                                    <h3>User Description</h3>
                                     {{ '"' + info_data.default.user_said + '"' }}
                                     <!-- <h3>AI解释</h3>
 
@@ -189,7 +162,7 @@
                                 <path
                                     d="M209.92 988.16c-15.36 0-30.72-15.36-30.72-30.72s15.36-30.72 30.72-30.72h471.04c153.6 0 281.6-128 281.6-281.6s-128-281.6-281.6-281.6H102.4l220.16 220.16c5.12 5.12 10.24 10.24 10.24 20.48 0 5.12-5.12 15.36-10.24 20.48-5.12 5.12-10.24 10.24-20.48 10.24-5.12 0-15.36-5.12-20.48-10.24L10.24 353.28c-5.12-5.12-10.24-10.24-10.24-20.48 0-5.12 5.12-15.36 10.24-20.48L281.6 40.96c5.12-5.12 10.24-10.24 20.48-10.24 5.12 0 15.36 5.12 20.48 10.24 0 10.24 5.12 15.36 5.12 25.6 0 5.12-5.12 15.36-10.24 20.48L97.28 307.2h583.68a343.04 343.04 0 0 1 0 686.08H209.92z"
                                     fill="#ffffff" p-id="4225"></path>
-                            </svg> &nbsp; 初始位置
+                            </svg> &nbsp; Rewind
                         </div>
                     </el-button>
                     <el-button type="primary" @click="playVideo()">
@@ -199,7 +172,7 @@
                                 <path
                                     d="M817.088 484.96l-512-323.744C295.232 154.976 282.752 154.592 272.576 160.224 262.336 165.856 256 176.608 256 188.256l0 647.328c0 11.648 6.336 22.4 16.576 28.032 4.8 2.656 10.112 3.968 15.424 3.968 5.952 0 11.904-1.664 17.088-4.928l512-323.616C826.368 533.184 832 522.976 832 512 832 501.024 826.368 490.816 817.088 484.96z"
                                     fill="#ffffff" p-id="4212"></path>
-                            </svg> &nbsp; 播放视频
+                            </svg> &nbsp; Play
                         </div>
                         <div v-else class="align-class">
                             <svg t="1706534722560" class="icon" viewBox="0 0 1024 1024" version="1.1"
@@ -207,7 +180,7 @@
                                 <path
                                     d="M304 176h80v672h-80zM712 176h-64c-4.4 0-8 3.6-8 8v656c0 4.4 3.6 8 8 8h64c4.4 0 8-3.6 8-8V184c0-4.4-3.6-8-8-8z"
                                     p-id="4219" fill="#ffffff"></path>
-                            </svg> &nbsp; 暂停视频
+                            </svg> &nbsp; Pause
                         </div>
                     </el-button>
                 </div>
@@ -219,7 +192,7 @@
                                 d="M511.6 63.6c-246.9 0-448 201.2-448 448 0 247.3 201.2 448 448 448s448-200.7 448-448c0-246.9-200.7-448-448-448z m259.9 318.5L474.6 699.3c-7 7.3-16.5 12.1-27.4 12.1-10.5 0-20.5-4.7-27.4-12.1L252 520c-7-7.3-11.5-17.8-11.5-29.4 0-23.1 17.5-41.4 38.9-41.4 10.5 0 20.5 4.7 27.4 12.1l140.7 149.9 270-287.8c7-7.3 16.5-12.1 27.4-12.1 21.5 0 38.9 18.3 38.9 41.4-0.8 11.6-5.3 22.1-12.3 29.4z m0 0"
                                 p-id="11130" fill="#ffffff"></path>
                         </svg>&nbsp;
-                        复用
+                        Reuse
                     </el-button>
                     <!-- <el-button type="warning" @click="clickDecision(2)">
                         <svg t="1706257862659" class="icon" viewBox="0 0 1024 1024" version="1.1"
@@ -237,25 +210,8 @@
                                 d="M512 64.5C264.85 64.5 64.5 264.85 64.5 512S264.85 959.5 512 959.5 959.5 759.15 959.5 512 759.15 64.5 512 64.5z m235.21 599.09c16.06 13.81 17.89 38.03 4.08 54.09-7.59 8.83-18.31 13.36-29.1 13.36-8.85 0-17.74-3.05-24.98-9.26L512 562.59 326.79 721.78a38.22 38.22 0 0 1-24.98 9.26c-10.79 0-21.52-4.53-29.1-13.36-13.81-16.06-11.98-40.28 4.08-54.09L453.15 512 276.79 360.42c-16.06-13.81-17.89-38.03-4.08-54.09 13.81-16.07 38.01-17.89 54.09-4.1L512 461.42l185.2-159.19c16.08-13.8 40.29-11.96 54.09 4.1 13.81 16.06 11.98 40.28-4.08 54.09L570.85 512.01l176.36 151.58z"
                                 p-id="7921" fill="white"></path>
                         </svg>&nbsp;
-                        关闭
+                        Close
                     </el-button>
-                </div>
-            </el-dialog>
-            <el-dialog v-model="tagConfig.addPoint" :title="'添加' + tagConfig.add_tag_level + '级标签'" width="15%" :append-to="'#problems_tag'" :modal="false" :class="'add_main_dialog'">
-                <div v-loading="tagConfig.loadingTag"  element-loading-background="rgba(122, 122, 122, 1)" style="width: 100%; height: 160px; margin-top: -35px;">
-                    <h3 style="color: white; text-align: left;">标签名称</h3>
-                <span>
-                                <el-input v-model="tagConfig.tag_name" placeholder="Please input"  :input-style="{ 'font-size': '18px' }"/>
-                            </span>
-                            <br>
-                    <h3 style="color: white; text-align: left;">标签定义</h3>
-                            <span>
-                                <el-input v-model="tagConfig.description" placeholder="Please input"  :autosize="{ minRows: 3, maxRows: 3 }" type="textarea"/>
-                            </span>
-                </div>
-                <div style="padding: 30px 0px 10px 0px;">
-                    <el-button type="primary" @click="addTag()">确定</el-button>
-                    <el-button @click="tagConfig.addPoint = false">取消</el-button>
                 </div>
             </el-dialog>
             <div id="mainView" ref="mainView" class="align-class" style="height: calc(100% - 105px); width: 100%;">
@@ -307,8 +263,7 @@
                 placement="top"
             >
             <template #content> <div style="width: 250px; font-size: 16px; padding: 10px;">
-                <!-- <h2 style="margin-bottom: 10px;">人工建议</h2> -->
-            <h3>问题描述:</h3>
+            <h3>Problem Description:</h3>
             <div>{{ tag_d.description }}</div>
             </div> </template>
                             <div v-if="selectShowLevel == 1">
@@ -330,12 +285,10 @@
                 placement="top"
             >
             <template #content> <div style="width: 250px; font-size: 16px; padding: 10px;">
-            <h3>问题描述:</h3>
+            <h3>Problem Description:</h3>
             <div>{{ tag_d.default.description }}</div>
             </div> </template>
-            <!-- <a><svg t="1708679239889" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1495" width="30" height="35"><path d="M536 480v192a16 16 0 0 1-16 16h-16a16 16 0 0 1-16-16V480a16 16 0 0 1 16-16h16a16 16 0 0 1 16 16z m-32-128h16a16 16 0 0 1 16 16v32a16 16 0 0 1-16 16h-16a16 16 0 0 1-16-16v-32a16 16 0 0 1 16-16z m8 448c159.056 0 288-128.944 288-288s-128.944-288-288-288-288 128.944-288 288 128.944 288 288 288z m0 48c-185.568 0-336-150.432-336-336s150.432-336 336-336 336 150.432 336 336-150.432 336-336 336z" fill="#ffffff" p-id="1496"></path></svg></a> -->
                             <div @click="clickMarker(tag_d, 1)" style=" cursor: pointer">
-                                <!-- <div v-for="(d, i) in tag_d.default.tag" :key="'tag' + i"> -->
                                 <div :style="{ height: '16px', width: '16px', backgroundColor: 'white', borderRadius: '10px', border: '1px solid #777', opacity: 1 }">
                                 </div>
                                 <div style="margin-top: -20px;">
@@ -344,7 +297,6 @@
                                     <path d="M2.5 6.25024C2.5 5.79191 2.875 5.41691 3.33333 5.41691H6.66667L5.45833 2.37524C5.29167 1.95858 5.5 1.45858 5.91667 1.29191C6.33333 1.12524 6.83333 1.33358 7 1.75024L8.45833 5.37524H11.5L12.9583 1.75024C13.125 1.33358 13.625 1.12524 14.0417 1.29191C14.4583 1.45858 14.6667 1.95858 14.5 2.37524L13.3333 5.41691H16.6667C17.125 5.41691 17.5 5.79191 17.5 6.25024V17.9169C17.5 18.3752 17.125 18.7502 16.6667 18.7502H3.33333C2.875 18.7502 2.5 18.3752 2.5 17.9169V6.25024ZM4.16667 7.08358V17.0836H15.8333V7.08358H4.16667ZM20 14.1669V10.0002C20 9.54191 19.625 9.16691 19.1667 9.16691C18.7083 9.16691 18.3333 9.54191 18.3333 10.0002V14.1669C18.3333 14.6252 18.7083 15.0002 19.1667 15.0002C19.625 15.0002 20 14.6252 20 14.1669ZM0.833333 15.0002C1.29167 15.0002 1.66667 14.6252 1.66667 14.1669V10.0002C1.66667 9.54191 1.29167 9.16691 0.833333 9.16691C0.375 9.16691 0 9.54191 0 10.0002V14.1669C0 14.6252 0.375 15.0002 0.833333 15.0002Z" fill="black"/>
                                 </svg>
                             </div>
-                            <!-- </div> -->
                             </div>
             </el-tooltip>
                         </div>
@@ -442,8 +394,8 @@
                             </div>
             </div>
             <div style="width: 100%; justify-content: center; display: flex; margin-top: 10px;">
-                <el-button type="success" @click="reviseTag(d_d, 0)">恢复</el-button>
-                <el-button type="danger" @click="reviseTag(d_d, 4)">删除</el-button>
+                <el-button type="success" @click="reviseTag(d_d, 0)">Recover</el-button>
+                <el-button type="danger" @click="reviseTag(d_d, 4)">Delete</el-button>
 
             </div>
         </div>
@@ -451,7 +403,7 @@
     </el-popover>
                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                             <el-button style="margin-top: -8px;" type="primary" @click="AddMarker(currentPlayTime)">
-                                添加可用性问题
+                                Add Problem
                             </el-button>
                         </div>
                     </div>
@@ -567,140 +519,8 @@ export default {
                 this.showPop = false;
             }
         },
-        showAddDialog(tag_type, data) {
-            this.tagConfig.tag_name = "";
-            this.tagConfig.addPoint = true;
-            this.tagConfig.selectData = data;
-
-            if (tag_type == 1) {
-                this.tagConfig.add_tag_level = '一';
-            } else {
-                this.tagConfig.add_tag_level = '二';
-            }
-            this.player.pause();
-
-            this.timeChangeTag = !this.timeChangeTag;
-            this.timeChangeType = 'pause';
-            this.playTag = 1;
-        },
-        addTag() {
-            let id_cnt = -1;
-            for (const d of this.dataSource) {
-                id_cnt = Math.max(id_cnt, d.id);
-                for (const dd of d.children) {
-                    id_cnt = Math.max(id_cnt, dd.id);
-                }
-            }
-            id_cnt += 1;
-
-            // this.id_cnt++;
-            let jsonData = {
-                tag: this.tagConfig.tag_name,
-                id: id_cnt,
-                parent_id: this.tagConfig.add_tag_level == '一' ? 0 : this.tagConfig.selectData.id,
-                level: this.tagConfig.add_tag_level == '一' ? 1 : 2,
-                category: this.dataSource,
-                info: this.all_data,
-                test: 0
-            };
-            this.tagConfig.loadingTag = true;
-            // const dataStore = useDataStore();
-            // const data = await dataStore.queryNewTag(jsonData);
-            // let new_data = data.data.info;
-            // for (let i in this.all_data) {
-            //     for (let j in this.all_data[i].info) {
-            //         this.all_data[i].info[j].tag = new_data[i].info[j].tag;
-            //         this.all_data[i].info[j].second_tag = new_data[i].info[j].second_tag;
-            //     }
-            // }
-            if (this.tagConfig.add_tag_level == '一') {
-                let l_id_cnt = this.dataSource.length + 1;
-                this.info_data.tag.push(l_id_cnt);
-                this.tagConfig.selectData.push({
-                    id: id_cnt,
-                    l_id: l_id_cnt,
-                    level: 1,
-                    label: this.tagConfig.tag_name,
-                    description: this.tagConfig.description,
-                    disabled: false,
-                    children: []
-                })
-            } else {
-                let cnt = this.tagConfig.selectData.children.length + 1;
-                this.info_data.second_tag[this.tagConfig.selectData.l_id - 1].push(cnt);
-                this.tagConfig.selectData.children.push({
-                    id: id_cnt,
-                    l_id: 1,
-                    cnt: cnt,
-                    level: 2,
-                    label: this.tagConfig.tag_name,
-                    description: this.tagConfig.description,
-                    disabled: false,
-                    children: []
-                })
-            }
-            this.tagConfig.addPoint = false;
-            this.tagConfig.loadingTag = false;
-        },
         showDialog(data) {
             this.dialogVisible = data;
-        },
-        selectPreview(data, id) {
-            // console.log(data);
-            this.player.pause();
-            this.timeChangeTag = !this.timeChangeTag;
-            this.timeChangeType = 'pause';
-            this.playTag = 1;
-            const time = data.time;
-            const video_id = id;
-            const name = id + ' ' + (parseInt(time / 60 / 60).toString().padStart(2, '0')) + ':' + (parseInt(time / 60).toString().padStart(2, '0')) + ':' + ((time % 60).toString().padStart(2, '0'));
-            this.preview_config = {
-                time: time,
-                video_id: video_id,
-                name: name
-            };
-            this.dialogVisible = !this.dialogVisible;
-        },
-        focusTag(id) {
-            if (id == 'main') {
-                this.showLevelTag.showFirstTag = !this.showLevelTag.showFirstTag;
-                for (let i in this.showLevelTag.showSecondTag) {
-                    this.showLevelTag.showSecondTag[i] = false;
-                }
-            } else {
-                this.showLevelTag.showFirstTag = false;
-                this.showLevelTag.showSecondTag[id] = !this.showLevelTag.showSecondTag[id];
-                for (let i in this.showLevelTag.showSecondTag) {
-                    if (i != id)
-                        this.showLevelTag.showSecondTag[i] = false;
-                }
-            }
-        },
-        selectTag(data, id, info, unique_id, unique_tag) {
-            console.log(data, id, info, unique_id, unique_tag);
-            const index = data.indexOf(id);
-            const u_index = unique_tag.indexOf(unique_id);
-            if (index == -1) {
-                data.push(id);
-                unique_tag.push(unique_id);
-                if (typeof info != 'number') {
-                    info.second_tag[id] = [];
-                    this.showLevelTag.showSecondTag.push(false);
-                    if (typeof this.noneDisabledTag[unique_id] == 'undefined') {
-                        this.noneDisabledTag[unique_id] = 0;
-                    }
-                    this.noneDisabledTag[unique_id]++;
-                }
-                // if (typeof this.allTagTimeData[this.dataSource])
-            } else {
-                data.splice(index, 1);
-                unique_tag.splice(u_index, 1);
-                if (typeof info != "number") {
-                    this.showLevelTag.showSecondTag.splice(index, 1);
-                    this.noneDisabledTag[unique_id]--;
-                }
-            }
-            // console.log()
         },
         clickDecision(tag) {
             if (tag == 9) {
@@ -815,6 +635,7 @@ export default {
             this.info_data = this.marker_time[time];
         },
         async submitMarker() {
+
             // if (this.info_data.tag.length == 0) {
             //     const dataStore = useDataStore();
             //     let jsonData = {
@@ -860,6 +681,7 @@ export default {
             //     console.log(this.info_data);
             // }
             this.info_data.status = 0;
+            this.clickDecision(1)
         },
         translate(x, y, deg) {
             return `translate(${x}, ${y}) rotate(${deg})`;

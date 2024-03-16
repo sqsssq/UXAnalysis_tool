@@ -25,15 +25,15 @@ const router = createRouter({
       component: () => import("../views/BaselineView.vue"),
     },
     {
-        path: "/empty",
-        name: "empty",
-        component: () => import("../views/Empty.vue"),
+        path: "/en",
+        name: "en",
+        component: () => import("../views/HomeView_en.vue"),
     },
     {
-        path: "/emptyBase",
-        name: "emptyBase",
-        component: () => import("../views/EmptyBaseline.vue"),
-    }
+        path: "/baseline_en",
+        name: "baseline_en",
+        component: () => import("../views/BaselineView_en.vue"),
+    },
   ],
 });
 

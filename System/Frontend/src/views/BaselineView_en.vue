@@ -5,9 +5,16 @@
  * @LastEditTime: 2023-02-13 11:02:16
 -->
 <template>
+    <div class="common-layout" style="width: 100%; height: 100vh; background-color: #121826;" v-loading="!initSign" :element-loading-text="loadingText"
+          element-loading-background="rgba(0, 0, 0, 0.8)">
+      <Main :msgH="msgH"/>
+      <!-- #e6e6e6 -->
+    </div>
   </template>
   
   <script>
+  import Main from '../components/BaseLineEN/Main.vue';
+  import { useDataStore } from "../stores/counter";
   
   
   export default {
@@ -16,9 +23,6 @@
       return {
         msgH: null,
       };
-    },
-    created() {
-        this.$router.replace({ path: '/baseline' })
     },
     computed: {
       initSign() {
@@ -35,7 +39,7 @@
       fetchData() {
       }
     },
-    components: {  }
+    components: { Main }
   };
   </script>
   <style scoped>

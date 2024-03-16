@@ -9,9 +9,9 @@
     <PreviewVideoPlayer :dialogVisible="dialogVisible" :config="preview_config" @showDialog="showDialog" />
     <div class="frameworkBody">
         <div style=" height: 30px;text-align: left; font-size: 24px; color: white; font-weight: bold; justify-content: space-between; display: flex;">
-            <span>视频分析</span>
-            <span v-show="select_video != ''" style="font-size: 20px;">编号: {{ 'V' + select_video.substr(1) }} 性别:
-                                                        {{ user_info.gender }} 年龄: {{ user_info.age }}</span>
+            <span>Usability Test Video</span>
+            <span v-show="select_video != ''" style="font-size: 20px;">Code: {{ 'V' + select_video.substr(1) }} Gender:
+                                                        {{ user_info.gender }} Age: {{ user_info.age }}</span>
         </div>
         <div style="width: 100%; height: calc(100% - 30px); margin-top: 10px;">
             <el-dialog v-model="showInfo" :title="(parseInt(info_data.time / 60 / 60).toString().padStart(2, '0')) + ':' + (parseInt(info_data.time / 60).toString().padStart(2, '0')) + ':' + ((info_data.time % 60).toString().padStart(2, '0'))" width="20%" :append-to="'#mainView'"
@@ -19,7 +19,7 @@
     
                 <div v-loading="loadingTag" element-loading-background="rgba(122, 122, 122, 0.8)" id="dialogDiv" ref="dialogDiv" :style="{ width: '100%', height: info_data.status != -1 && info_data.status != 3 ? elHeight * .4 + 'px' : elHeight * .4 + 'px', color: 'white', textAlign: 'left', overflow: 'auto' }">
                     <h2>
-                        问题描述
+                        Problem Description
                         <span v-if="info_data.user_said != ''">
                                                                     <el-popover placement="bottom" title="" :width="250" trigger="click"
                                                                         :popper-class="'marker_description'">
@@ -32,9 +32,9 @@
                                                                                 </svg></a>
 </template>
                                 <div :style="{ fontSize: '16px', lineHeight: 1.5, color: 'white' }">
-                                    <h3>用户描述</h3>
+                                    <h3>User Description</h3>
                                     {{ '"' + info_data.user_said + '"' }}
-                                    <h3>AI解释</h3>
+                                    <h3>AI Explanation</h3>
 
                                     {{ '"' + info_data.reason + '"' }}
                                 </div>
@@ -50,7 +50,7 @@
                             placeholder="Please input" />
                     </div>
                     <h2>
-                        一级标签 (可选)
+                        Primary Classification
                     </h2>
                     <div @click="focusTag('main')"
                         :style="{ display: 'flex', flexWrap: 'wrap', backgroundColor: showLevelTag.showFirstTag == true ? '#666666AA' : '#45464700', padding: '0px 3px 0px 3px', 'border-top-left-radius': '10px', 'border-top-right-radius': '10px', cursor: 'pointer' }">
@@ -72,7 +72,7 @@
                                     :style="{ backgroundColor: '#409eff', width: '15px', height: '15px', 'margin': '0px 3px 0px 3px', borderRadius: '20px' }">
                                 </div>
                                 <div>
-                                    选择一级标签</div>
+                                    Select Classification</div>
                             </div>
                         </div>
                     </div>
@@ -81,7 +81,7 @@
                             style="background-color: #666666AA; padding: 3px 3px 8px 3px; border-bottom-left-radius: 10px; border-bottom-right-radius: 10px;">
                             <hr>
                             <div>
-                                最多选择2个标签，建议选择一个
+                                No more than 2 classifications
                             </div>
                             <div style="display: flex; flex-wrap: wrap;">
                                 <div v-for="(d, i) in dataSource" :key="'type_tag' + d" class="align-class"
@@ -104,11 +104,11 @@
 
                             </div>
                             <el-button style="margin-top: 10px;" type="primary"
-                                @click="showAddDialog(1, dataSource)">添加一级标签</el-button>
+                                @click="showAddDialog(1, dataSource)">Add Classification</el-button>
                         </div>
                     </el-collapse-transition>
                     <h2>
-                        二级标签 (可选)
+                        Secondary Classification
                     </h2>
                     <div
                         :style="{ padding: '0px 3px 0px 3px', 'border-top-left-radius': '10px', 'border-top-right-radius': '10px' }">
@@ -145,7 +145,7 @@
                                             :style="{ backgroundColor: '#409eff', width: '15px', height: '15px', 'margin': '0px 3px 0px 3px', borderRadius: '0px' }">
                                         </div>
                                         <div>
-                                            选择二级标签</div>
+                                            Select Classification</div>
                                     </div>
                                 </div>
                             </div>
@@ -155,7 +155,7 @@
                                     style="background-color: #666666AA; padding: 3px 3px 8px 3px; border-bottom-left-radius: 10px; border-bottom-right-radius: 10px;">
                                     <hr>
                                     <div>
-                                        最多选择2个标签，建议选择一个
+                                        No more than 2 classification
                                     </div>
                                     <div style="display: flex; flex-wrap: wrap;">
                                         <div v-for="dd in dataSource[d - 1].children" :key="'type_tag' + d"
@@ -180,14 +180,14 @@
 
                                     </div>
                                     <el-button style="margin-top: 10px;" type="primary"
-                                        @click="showAddDialog(2, dataSource[d - 1])">添加二级标签</el-button>
+                                        @click="showAddDialog(2, dataSource[d - 1])">Add Classification</el-button>
                                 </div>
                             </el-collapse-transition>
                         </div>
                     </div>
                     <div v-if="info_data.status != -1 && info_data.status != 3">
                     <h2>
-                        其他相同标签问题：
+                        Same Usability Problem: 
                     </h2>
                     <div>
                         <div v-for="d in info_data.tag" :key="'type_tag' + d">
@@ -246,7 +246,7 @@
                                 <path
                                     d="M209.92 988.16c-15.36 0-30.72-15.36-30.72-30.72s15.36-30.72 30.72-30.72h471.04c153.6 0 281.6-128 281.6-281.6s-128-281.6-281.6-281.6H102.4l220.16 220.16c5.12 5.12 10.24 10.24 10.24 20.48 0 5.12-5.12 15.36-10.24 20.48-5.12 5.12-10.24 10.24-20.48 10.24-5.12 0-15.36-5.12-20.48-10.24L10.24 353.28c-5.12-5.12-10.24-10.24-10.24-20.48 0-5.12 5.12-15.36 10.24-20.48L281.6 40.96c5.12-5.12 10.24-10.24 20.48-10.24 5.12 0 15.36 5.12 20.48 10.24 0 10.24 5.12 15.36 5.12 25.6 0 5.12-5.12 15.36-10.24 20.48L97.28 307.2h583.68a343.04 343.04 0 0 1 0 686.08H209.92z"
                                     fill="#ffffff" p-id="4225"></path>
-                            </svg> &nbsp; 初始位置
+                            </svg> &nbsp; Rewind
                         </div>
                     </el-button>
                     <el-button type="primary" @click="playVideo()">
@@ -256,7 +256,7 @@
                                 <path
                                     d="M817.088 484.96l-512-323.744C295.232 154.976 282.752 154.592 272.576 160.224 262.336 165.856 256 176.608 256 188.256l0 647.328c0 11.648 6.336 22.4 16.576 28.032 4.8 2.656 10.112 3.968 15.424 3.968 5.952 0 11.904-1.664 17.088-4.928l512-323.616C826.368 533.184 832 522.976 832 512 832 501.024 826.368 490.816 817.088 484.96z"
                                     fill="#ffffff" p-id="4212"></path>
-                            </svg> &nbsp; 播放视频
+                            </svg> &nbsp; Play
                         </div>
                         <div v-else class="align-class">
                             <svg t="1706534722560" class="icon" viewBox="0 0 1024 1024" version="1.1"
@@ -264,7 +264,7 @@
                                 <path
                                     d="M304 176h80v672h-80zM712 176h-64c-4.4 0-8 3.6-8 8v656c0 4.4 3.6 8 8 8h64c4.4 0 8-3.6 8-8V184c0-4.4-3.6-8-8-8z"
                                     p-id="4219" fill="#ffffff"></path>
-                            </svg> &nbsp; 暂停视频
+                            </svg> &nbsp; Pause
                         </div>
                     </el-button>
                 </div>
@@ -276,7 +276,7 @@
                                 d="M511.6 63.6c-246.9 0-448 201.2-448 448 0 247.3 201.2 448 448 448s448-200.7 448-448c0-246.9-200.7-448-448-448z m259.9 318.5L474.6 699.3c-7 7.3-16.5 12.1-27.4 12.1-10.5 0-20.5-4.7-27.4-12.1L252 520c-7-7.3-11.5-17.8-11.5-29.4 0-23.1 17.5-41.4 38.9-41.4 10.5 0 20.5 4.7 27.4 12.1l140.7 149.9 270-287.8c7-7.3 16.5-12.1 27.4-12.1 21.5 0 38.9 18.3 38.9 41.4-0.8 11.6-5.3 22.1-12.3 29.4z m0 0"
                                 p-id="11130" fill="#ffffff"></path>
                         </svg>&nbsp;
-                        确认
+                        Yes
                     </el-button>
                     <!-- <el-button type="warning" @click="clickDecision(2)">
                         <svg t="1706257862659" class="icon" viewBox="0 0 1024 1024" version="1.1"
@@ -295,7 +295,7 @@
                                 d="M512 64.5C264.85 64.5 64.5 264.85 64.5 512S264.85 959.5 512 959.5 959.5 759.15 959.5 512 759.15 64.5 512 64.5z m235.21 599.09c16.06 13.81 17.89 38.03 4.08 54.09-7.59 8.83-18.31 13.36-29.1 13.36-8.85 0-17.74-3.05-24.98-9.26L512 562.59 326.79 721.78a38.22 38.22 0 0 1-24.98 9.26c-10.79 0-21.52-4.53-29.1-13.36-13.81-16.06-11.98-40.28 4.08-54.09L453.15 512 276.79 360.42c-16.06-13.81-17.89-38.03-4.08-54.09 13.81-16.07 38.01-17.89 54.09-4.1L512 461.42l185.2-159.19c16.08-13.8 40.29-11.96 54.09 4.1 13.81 16.06 11.98 40.28-4.08 54.09L570.85 512.01l176.36 151.58z"
                                 p-id="7921" fill="white"></path>
                         </svg>&nbsp;
-                        取消
+                        Cancel
                     </el-button>
                 </div>
                 <div v-else style="padding: 5px 0px 10px 0px;">
@@ -306,7 +306,7 @@
                                 d="M511.6 63.6c-246.9 0-448 201.2-448 448 0 247.3 201.2 448 448 448s448-200.7 448-448c0-246.9-200.7-448-448-448z m259.9 318.5L474.6 699.3c-7 7.3-16.5 12.1-27.4 12.1-10.5 0-20.5-4.7-27.4-12.1L252 520c-7-7.3-11.5-17.8-11.5-29.4 0-23.1 17.5-41.4 38.9-41.4 10.5 0 20.5 4.7 27.4 12.1l140.7 149.9 270-287.8c7-7.3 16.5-12.1 27.4-12.1 21.5 0 38.9 18.3 38.9 41.4-0.8 11.6-5.3 22.1-12.3 29.4z m0 0"
                                 p-id="11130" fill="#ffffff"></path>
                         </svg>&nbsp;
-                        确认
+                        Yes
                     </el-button>
                     <el-button type="danger" @click="clickDecision(3)">
                         <svg t="1707272411978" class="icon" viewBox="0 0 1024 1024" version="1.1"
@@ -315,7 +315,7 @@
                                 d="M512 64.5C264.85 64.5 64.5 264.85 64.5 512S264.85 959.5 512 959.5 959.5 759.15 959.5 512 759.15 64.5 512 64.5z m235.21 599.09c16.06 13.81 17.89 38.03 4.08 54.09-7.59 8.83-18.31 13.36-29.1 13.36-8.85 0-17.74-3.05-24.98-9.26L512 562.59 326.79 721.78a38.22 38.22 0 0 1-24.98 9.26c-10.79 0-21.52-4.53-29.1-13.36-13.81-16.06-11.98-40.28 4.08-54.09L453.15 512 276.79 360.42c-16.06-13.81-17.89-38.03-4.08-54.09 13.81-16.07 38.01-17.89 54.09-4.1L512 461.42l185.2-159.19c16.08-13.8 40.29-11.96 54.09 4.1 13.81 16.06 11.98 40.28-4.08 54.09L570.85 512.01l176.36 151.58z"
                                 p-id="7921" fill="white"></path>
                         </svg>&nbsp;
-                        取消
+                        Cancel
                     </el-button>
                 </div>
                 <!-- <div v-if="info_data.status != -1 && typeof info_data['humanAdd'] != 'undefined'" style="padding: 5px 0px 10px 0px;"> -->
@@ -326,7 +326,7 @@
                                 d="M511.6 63.6c-246.9 0-448 201.2-448 448 0 247.3 201.2 448 448 448s448-200.7 448-448c0-246.9-200.7-448-448-448z m259.9 318.5L474.6 699.3c-7 7.3-16.5 12.1-27.4 12.1-10.5 0-20.5-4.7-27.4-12.1L252 520c-7-7.3-11.5-17.8-11.5-29.4 0-23.1 17.5-41.4 38.9-41.4 10.5 0 20.5 4.7 27.4 12.1l140.7 149.9 270-287.8c7-7.3 16.5-12.1 27.4-12.1 21.5 0 38.9 18.3 38.9 41.4-0.8 11.6-5.3 22.1-12.3 29.4z m0 0"
                                 p-id="11130" fill="#ffffff"></path>
                         </svg>&nbsp;
-                        确认
+                        Yes
                     </el-button> -->
                     <!-- <el-button type="warning" @click="clickDecision(2)">
                         <svg t="1706257862659" class="icon" viewBox="0 0 1024 1024" version="1.1"
@@ -354,7 +354,7 @@
     
                 <div v-loading="loadingTag" element-loading-background="rgba(122, 122, 122, 0.8)" id="defaultDialogDiv" ref="defaultDialogDiv" :style="{ width: '100%', height: info_data.status != -1 && info_data.status != 3 ? elHeight * .4 + 'px' : elHeight * .4 + 'px', color: 'white', textAlign: 'left', overflow: 'auto' }">
                     <h2>
-                        问题描述
+                        Problem Description
                         <span v-if="info_data.default.user_said != ''">
                     <el-popover placement="bottom" title="" :width="250" trigger="click"
                                                                     :popper-class="'marker_description'">
@@ -367,9 +367,9 @@
                                                                                 </svg></a>
 </template>
                                 <div :style="{ fontSize: '16px', lineHeight: 1.5, color: 'white' }">
-                                    <h3>用户描述</h3>
+                                    <h3>User Description</h3>
                                     {{ '"' + info_data.default.user_said + '"' }}
-                                    <h3>AI解释</h3>
+                                    <h3>AI Explanation</h3>
 
                                     {{ '"' + info_data.default.reason + '"' }}
                                 </div>
@@ -413,7 +413,7 @@
                         </div> -->
                     <!-- </div> -->
                     <h2>
-                        标签
+                        Classification
                     </h2>
                     <div
                         :style="{ padding: '0px 3px 0px 3px', 'border-top-left-radius': '10px', 'border-top-right-radius': '10px' }">
@@ -467,7 +467,7 @@
                                 <path
                                     d="M209.92 988.16c-15.36 0-30.72-15.36-30.72-30.72s15.36-30.72 30.72-30.72h471.04c153.6 0 281.6-128 281.6-281.6s-128-281.6-281.6-281.6H102.4l220.16 220.16c5.12 5.12 10.24 10.24 10.24 20.48 0 5.12-5.12 15.36-10.24 20.48-5.12 5.12-10.24 10.24-20.48 10.24-5.12 0-15.36-5.12-20.48-10.24L10.24 353.28c-5.12-5.12-10.24-10.24-10.24-20.48 0-5.12 5.12-15.36 10.24-20.48L281.6 40.96c5.12-5.12 10.24-10.24 20.48-10.24 5.12 0 15.36 5.12 20.48 10.24 0 10.24 5.12 15.36 5.12 25.6 0 5.12-5.12 15.36-10.24 20.48L97.28 307.2h583.68a343.04 343.04 0 0 1 0 686.08H209.92z"
                                     fill="#ffffff" p-id="4225"></path>
-                            </svg> &nbsp; 初始位置
+                            </svg> &nbsp; Rewind
                         </div>
                     </el-button>
                     <el-button type="primary" @click="playVideo()">
@@ -477,7 +477,7 @@
                                 <path
                                     d="M817.088 484.96l-512-323.744C295.232 154.976 282.752 154.592 272.576 160.224 262.336 165.856 256 176.608 256 188.256l0 647.328c0 11.648 6.336 22.4 16.576 28.032 4.8 2.656 10.112 3.968 15.424 3.968 5.952 0 11.904-1.664 17.088-4.928l512-323.616C826.368 533.184 832 522.976 832 512 832 501.024 826.368 490.816 817.088 484.96z"
                                     fill="#ffffff" p-id="4212"></path>
-                            </svg> &nbsp; 播放视频
+                            </svg> &nbsp; Play
                         </div>
                         <div v-else class="align-class">
                             <svg t="1706534722560" class="icon" viewBox="0 0 1024 1024" version="1.1"
@@ -485,7 +485,7 @@
                                 <path
                                     d="M304 176h80v672h-80zM712 176h-64c-4.4 0-8 3.6-8 8v656c0 4.4 3.6 8 8 8h64c4.4 0 8-3.6 8-8V184c0-4.4-3.6-8-8-8z"
                                     p-id="4219" fill="#ffffff"></path>
-                            </svg> &nbsp; 暂停视频
+                            </svg> &nbsp; Pause
                         </div>
                     </el-button>
                 </div>
@@ -497,7 +497,7 @@
                                 d="M511.6 63.6c-246.9 0-448 201.2-448 448 0 247.3 201.2 448 448 448s448-200.7 448-448c0-246.9-200.7-448-448-448z m259.9 318.5L474.6 699.3c-7 7.3-16.5 12.1-27.4 12.1-10.5 0-20.5-4.7-27.4-12.1L252 520c-7-7.3-11.5-17.8-11.5-29.4 0-23.1 17.5-41.4 38.9-41.4 10.5 0 20.5 4.7 27.4 12.1l140.7 149.9 270-287.8c7-7.3 16.5-12.1 27.4-12.1 21.5 0 38.9 18.3 38.9 41.4-0.8 11.6-5.3 22.1-12.3 29.4z m0 0"
                                 p-id="11130" fill="#ffffff"></path>
                         </svg>&nbsp;
-                        复用
+                        Reuse
                     </el-button>
                     <!-- <el-button type="warning" @click="clickDecision(2)">
                         <svg t="1706257862659" class="icon" viewBox="0 0 1024 1024" version="1.1"
@@ -515,11 +515,11 @@
                                 d="M512 64.5C264.85 64.5 64.5 264.85 64.5 512S264.85 959.5 512 959.5 959.5 759.15 959.5 512 759.15 64.5 512 64.5z m235.21 599.09c16.06 13.81 17.89 38.03 4.08 54.09-7.59 8.83-18.31 13.36-29.1 13.36-8.85 0-17.74-3.05-24.98-9.26L512 562.59 326.79 721.78a38.22 38.22 0 0 1-24.98 9.26c-10.79 0-21.52-4.53-29.1-13.36-13.81-16.06-11.98-40.28 4.08-54.09L453.15 512 276.79 360.42c-16.06-13.81-17.89-38.03-4.08-54.09 13.81-16.07 38.01-17.89 54.09-4.1L512 461.42l185.2-159.19c16.08-13.8 40.29-11.96 54.09 4.1 13.81 16.06 11.98 40.28-4.08 54.09L570.85 512.01l176.36 151.58z"
                                 p-id="7921" fill="white"></path>
                         </svg>&nbsp;
-                        关闭
+                        Close
                     </el-button>
                 </div>
             </el-dialog>
-            <el-dialog v-model="tagConfig.addPoint" :title="'添加' + tagConfig.add_tag_level + '级标签'" width="15%" :append-to="'#problems_tag'" :modal="false" :class="'add_main_dialog'">
+            <el-dialog v-model="tagConfig.addPoint" :title="'Add ' + tagConfig.add_tag_level + ' Classification'" width="15%" :append-to="'#problems_tag'" :modal="false" :class="'add_main_dialog'">
                 <div v-loading="tagConfig.loadingTag"  element-loading-background="rgba(122, 122, 122, 1)" style="width: 100%; height: 160px; margin-top: -35px;">
                     <h3 style="color: white; text-align: left;">标签名称</h3>
                 <span>
@@ -532,8 +532,8 @@
                             </span>
                 </div>
                 <div style="padding: 30px 0px 10px 0px;">
-                    <el-button type="primary" @click="addTag()">确定</el-button>
-                    <el-button @click="tagConfig.addPoint = false">取消</el-button>
+                    <el-button type="primary" @click="addTag()">Yes</el-button>
+                    <el-button @click="tagConfig.addPoint = false">Cancel</el-button>
                 </div>
             </el-dialog>
             <div id="mainView" ref="mainView" class="align-class" style="height: calc(100% - 105px); width: 100%;">
@@ -585,12 +585,12 @@
                 placement="top"
             >
 <template #content>
-    <div style="width: 250px; font-size: 16px; padding: 10px;">
-        <h2 style="margin-bottom: 10px;">人工建议</h2>
-        <h3>问题描述:</h3>
+    <div style="width: 300px; font-size: 16px; padding: 10px;">
+        <h2 style="margin-bottom: 10px;">Manual Advice</h2>
+        <h3>Problem Description:</h3>
         <div>{{ tag_d.description }}</div>
         <hr style="margin-top: 10px; margin-bottom: 10px;">
-        <h3>标签：</h3>
+        <h3>Classification:</h3>
         <div :style="{ padding: '0px 3px 0px 3px', 'border-top-left-radius': '10px', 'border-top-right-radius': '10px' }">
             <div v-for="(d, i) in tag_d.tag" :key="'type_first_tag' + d">
                 <!-- <hr v-if="i > 0" style="margin-top: 10px;"> -->
@@ -652,12 +652,12 @@
                 placement="top"
             >
 <template #content>
-    <div style="width: 250px; font-size: 16px; padding: 10px;">
-        <h2 style="margin-bottom: 10px;">AI 建议</h2>
-        <h3>问题描述:</h3>
+    <div style="width: 300px; font-size: 16px; padding: 10px;">
+        <h2 style="margin-bottom: 10px;">AI Advice</h2>
+        <h3>Problem Description:</h3>
         <div>{{ tag_d.default.description }}</div>
         <hr style="margin-top: 10px; margin-bottom: 10px;">
-        <h3>标签：</h3>
+        <h3>Classification:</h3>
         <div :style="{ padding: '0px 3px 0px 3px', 'border-top-left-radius': '10px', 'border-top-right-radius': '10px' }">
             <div v-for="(d, i) in tag_d.default.tag" :key="'type_first_tag' + d">
                 <hr v-if="i > 0" style="margin-top: 10px;">
@@ -670,7 +670,7 @@
                         </div> &nbsp;
                     </div>
                 </div>
-                <div :style="{ display: 'flex', flexWrap: 'wrap', backgroundColor: showLevelTag.showSecondTag[i] == true ? '#666666AA' : '#45464700', padding: '0px 3px 0px 3px', 'border-top-left-radius': '10px', 'border-top-right-radius': '10px', }">
+                <div :style="{ display: 'flex', flexWrap: 'wrap', backgroundColor: '#45464700', padding: '0px 3px 0px 3px', 'border-top-left-radius': '10px', 'border-top-right-radius': '10px', }">
                     <div v-if="typeof tag_d.default.second_tag[d] != 'undefined' && tag_d.default.second_tag[d].length > 0" style="display: flex; flex-wrap: wrap;">
                         <div v-for="(dd, ii) in tag_d.default.second_tag[d]" :key="'type_second_tag' + dd" class="align-class" :style="{ backgroundColor: colorMap[dataSource[d - 1].children[dd - 1].id] + '40', padding: '3px 8px 3px 5px', 'border-radius': '100px', marginRight: '10px', marginTop: '5px', 'font-size': '15px' }">
                             <div :style="{ backgroundColor: colorMap[dataSource[d - 1].children[dd - 1].id], width: '15px', height: '15px', 'margin': '0px 3px 0px 3px', borderRadius: '0px' }">
@@ -787,13 +787,13 @@
         <div v-for="(d_d, d_i) in calcDeleteData" :key="'delete_el' + d_i" style="background-color: rgba(0, 0, 0, .3); height: auto;margin-bottom: 10px; padding: 10px; color: white; font-size: 18px;">
             <!-- {{ d_d }} -->
             <div>
-                <span style="font-style: italic; font-weight: bold; text-decoration: underline; color: rgb(64, 158, 255);">时间:</span>&nbsp;{{ (parseInt(d_d.time / 60 / 60).toString().padStart(2, '0')) + ':' + (parseInt(d_d.time / 60).toString().padStart(2, '0')) + ':' + ((d_d.time % 60).toString().padStart(2, '0')) }}
+                <span style="font-style: italic; font-weight: bold; text-decoration: underline; color: rgb(64, 158, 255);">Time:</span>&nbsp;{{ (parseInt(d_d.time / 60 / 60).toString().padStart(2, '0')) + ':' + (parseInt(d_d.time / 60).toString().padStart(2, '0')) + ':' + ((d_d.time % 60).toString().padStart(2, '0')) }}
             </div>
             <div>
-                <span style="font-style: italic; font-weight: bold; text-decoration: underline; color: rgb(64, 158, 255);">描述:</span>&nbsp;{{ d_d.description }}
+                <span style="font-style: italic; font-weight: bold; text-decoration: underline; color: rgb(64, 158, 255);">Description:</span>&nbsp;{{ d_d.description }}
             </div>
             <div>
-                <span style="font-style: italic; font-weight: bold; text-decoration: underline; color: rgb(64, 158, 255);">标签:</span>
+                <span style="font-style: italic; font-weight: bold; text-decoration: underline; color: rgb(64, 158, 255);">Classification:</span>
                 <div v-for="(d, i) in d_d.tag" :key="'type_first_tag' + d" style="display: flex; flex-wrap: wrap;">
                             <div class="align-class"
                                 :style="{backgroundColor: colorMap[dataSource[d - 1].id] + '40', padding: '3px 8px 3px 5px', 'border-radius': '100px', marginRight: '10px', marginTop: '5px', 'font-size': '15px', justifyContent: 'left' }">
@@ -822,8 +822,8 @@
                             </div>
             </div>
             <div style="width: 100%; justify-content: center; display: flex; margin-top: 10px;">
-                <el-button type="success" @click="reviseTag(d_d, 0)">恢复</el-button>
-                <el-button type="danger" @click="reviseTag(d_d, 4)">删除</el-button>
+                <el-button type="success" @click="reviseTag(d_d, 0)">Recover</el-button>
+                <el-button type="danger" @click="reviseTag(d_d, 4)">Delete</el-button>
 
             </div>
         </div>
@@ -831,7 +831,7 @@
     </el-popover>
                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                             <el-button style="margin-top: -8px;" type="primary" @click="AddMarker(currentPlayTime)">
-                                添加可用性问题
+                                Add Problem
                             </el-button>
                         </div>
                     </div>
@@ -842,11 +842,11 @@
 </template>
 
 <script>
-import { useDataStore } from "../stores/counter";
+import { useDataStore } from "@/stores/counter";
 import { VideoPlayer } from '@videojs-player/vue'
 // import 'video.js/dist/video-js.css'
 import 'video.js/dist/video-js.css'
-import PreviewVideoPlayer from './utils/PreviewVideoPlayer.vue';
+import PreviewVideoPlayer from '../utils/PreviewVideoPlayer_en.vue';
 
 export default {
     name: "PCV",
@@ -955,9 +955,9 @@ export default {
             this.tagConfig.selectData = data;
 
             if (tag_type == 1) {
-                this.tagConfig.add_tag_level = '一';
+                this.tagConfig.add_tag_level = 'Primary';
             } else {
-                this.tagConfig.add_tag_level = '二';
+                this.tagConfig.add_tag_level = 'Secondary';
             }
             this.player.pause();
             this.timeChangeTag = !this.timeChangeTag;
@@ -979,8 +979,8 @@ export default {
             // let jsonData = {
             //     tag: this.tagConfig.tag_name,
             //     id: id_cnt,
-            //     parent_id: this.tagConfig.add_tag_level == '一' ? 0 : this.tagConfig.selectData.id,
-            //     level: this.tagConfig.add_tag_level == '一' ? 1 : 2,
+            //     parent_id: this.tagConfig.add_tag_level == 'Primary' ? 0 : this.tagConfig.selectData.id,
+            //     level: this.tagConfig.add_tag_level == 'Primary' ? 1 : 2,
             //     category: this.dataSource,
             //     info: this.all_data,
             //     test: 0
@@ -1016,7 +1016,7 @@ export default {
             console.log(this.tagConfig.selectData, this.tagConfig.selectData.l_id,this.info_data.second_tag);
             let unique_id = id_cnt;
             let label = this.tagConfig.tag_name;
-            if (this.tagConfig.add_tag_level == '一') {
+            if (this.tagConfig.add_tag_level == 'Primary') {
                 let l_id_cnt = this.dataSource.length + 1;
                 this.info_data.tag.push(l_id_cnt);
                 this.info_data.second_tag[l_id_cnt] = [];
@@ -1146,6 +1146,8 @@ export default {
             for (let i in this.showLevelTag.showSecondTag) {
                 this.showLevelTag.showSecondTag[i] = false;
             }
+            // console.log(this.showLevelTag);
+            // showLevelTag: { showFirstTag: false, showSecondTag: [] },
         },
         chooseTime(time) {
             this.timeBeforeChange = this.currentPlayTime;
@@ -1301,6 +1303,7 @@ export default {
 
                 console.log(this.info_data);
             }
+
             this.showLevelTag.showFirstTag = false;
             for (let i in this.showLevelTag.showSecondTag) {
                 this.showLevelTag.showSecondTag[i] = false;
